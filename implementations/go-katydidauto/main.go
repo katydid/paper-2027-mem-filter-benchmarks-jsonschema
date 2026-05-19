@@ -30,6 +30,7 @@ func validateAll(parser reflect.Parser, matcher jsonschema.Matcher, instances []
 }
 
 func main() {
+	log.SetFlags(log.Lshortfile)
 	if len(os.Args) < 2 {
 		log.Fatal("Please provide the example folder path as an argument")
 	}
@@ -41,6 +42,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error constructing schema file path: %v", err)
 	}
+	schemaData, err := os.ReadFile(schemaFile)
+	if err != nil {
+		log.Fatalf("Error reading schema data: %v", err)
+	}
 
 	instanceFile, err := filepath.Abs(filepath.Join(exampleFolder, "instances.jsonl"))
 	if err != nil {
@@ -49,7 +54,7 @@ func main() {
 
 	// Compile the JSON schema
 	compile_start := time.Now()
-	matcher, err := jsonschema.Compile([]byte(schemaFile))
+	matcher, err := jsonschema.Compile([]byte(schemaData))
 	compile_duration := time.Since(compile_start)
 
 	if err != nil {
