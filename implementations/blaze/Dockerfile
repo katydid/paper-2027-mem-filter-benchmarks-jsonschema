@@ -1,6 +1,5 @@
 # syntax=docker.io/docker/dockerfile:1.7-labs
 FROM gcc:latest
-ARG BLAZE_BRANCH="main"
 
 RUN apt-get update && apt-get install -y --no-install-recommends cmake time && rm -rf /var/lib/apt/lists/*
 
@@ -9,8 +8,8 @@ COPY --exclude=./main.cc . /app
 RUN echo "int main(int argc, char**argv){}" > /app/main.cc
 
 # This serves to cache the following layers only if the commit has changed
-ADD "https://api.github.com/repos/sourcemeta/blaze/commits/${BLAZE_BRANCH}" /app/commit.json
-RUN git clone -b ${BLAZE_BRANCH} https://github.com/sourcemeta/blaze /app/repo
+ADD "https://api.github.com/repos/sourcemeta/blaze/commits/main" /app/commit.json
+RUN git clone -b main https://github.com/sourcemeta/blaze /app/repo
 RUN cmake -S /app -B /app/build -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=OFF
 RUN cmake --build /app/build --config Release --parallel 4
 

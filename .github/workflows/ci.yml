@@ -18,11 +18,6 @@ on:
         required: false
         default: false
         type: boolean
-      blaze_branch:
-        description: "Branch to use for Blaze"
-        required: false
-        default: main
-        type: string
   push:
     branches:
       - main
@@ -65,7 +60,7 @@ jobs:
         with:
           path: dist/report.csv
           key: noformat-${{ matrix.impl }}-${{ hashFiles(format('implementations/{0}/**/*', matrix.impl), 'schemas/**/*', 'report.sh') }}-${{ inputs.runs || 3 }}
-          lookup-only: ${{ matrix.skip_cache || startsWith(matrix.impl, 'blaze') || github.event_name == 'schedule' || inputs.skip_cache }}
+          lookup-only: ${{ matrix.skip_cache || github.event_name == 'schedule' || inputs.skip_cache }}
 
       - name: Install dts
         uses: jaxxstorm/action-install-gh-release@v2.1.0
@@ -74,9 +69,8 @@ jobs:
 
       - name: Run benchmarks
         if: ${{ steps.cache-report.outputs.cache-hit != 'true' || github.event_name == 'schedule' || inputs.skip_cache || matrix.skip_cache }}
-        continue-on-error: ${{ !startsWith(matrix.impl, 'blaze') }}
+        continue-on-error: ${{ true }}
         env:
-          BLAZE_BRANCH: ${{ inputs.blaze_branch || 'main' }}
           RUNS: ${{ inputs.runs || 3 }}
           IMPL: ${{ matrix.impl }}
         run: make RUNS=${RUNS} IMPLEMENTATIONS=${IMPL} dist/report.csv
@@ -98,7 +92,7 @@ jobs:
 
       - name: Cache report
         uses: actions/cache/save@v4
-        if: ${{ !startsWith(matrix.impl, 'blaze') && steps.cache-report.outputs.cache-hit != 'true' }}
+        if: ${{ steps.cache-report.outputs.cache-hit != 'true' }}
         with:
           path: dist/report.csv
           key: ${{ steps.cache-report.outputs.cache-primary-key }}
