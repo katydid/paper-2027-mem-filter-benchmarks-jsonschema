@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "PostOfficeBox": {
+      "type": "string"
+    },
+    "ExtendedAddress": {
+      "type": "string"
+    },
+    "StreetAddress": {
+      "type": "string"
+    },
+    "Locality": {
+      "type": "string"
+    },
+    "Region": {
+      "type": "string"
+    },
+    "PostalCode": {
+      "type": "string"
+    },
+    "CountryName": {
+      "type": "string"
+    }
+  },
+  "required": [ "Locality", "Region", "CountryName" ],
+  "dependentRequired": {
+    "PostOfficeBox": [ "StreetAddress" ],
+    "ExtendedAddress": [ "StreetAddress" ]
+  }
+}
