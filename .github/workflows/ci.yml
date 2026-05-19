@@ -156,12 +156,12 @@ jobs:
       #   run: |
       #     aws s3 cp dist/results/plots s3://${{ vars.S3_BUCKET_NAME }}/${{ github.sha }}/dist/results/plots/ --recursive
       #     echo b2_url_prefix="https://${{ vars.S3_BUCKET_NAME }}.${{ vars.S3_BASE_URL }}/${{ github.sha }}/" >> "$GITHUB_OUTPUT"
-      - name: Add plots to summary
-        run: python .github/plot_markdown.py dist/results/plots/schemas ${{ steps.upload.outputs.b2_url_prefix }} >> $GITHUB_STEP_SUMMARY
-      - name: Add compile plot to summary
-        run: python .github/plot_markdown.py dist/results/plots/compile.png ${{ steps.upload.outputs.b2_url_prefix }} "Compile time" >> $GITHUB_STEP_SUMMARY
-      - name: Add memory plot to summary
-        run: python .github/plot_markdown.py dist/results/plots/memory.png ${{ steps.upload.outputs.b2_url_prefix }} "Memory usage" >> $GITHUB_STEP_SUMMARY
+      # - name: Add plots to summary
+      #   run: python .github/plot_markdown.py dist/results/plots/schemas ${{ steps.upload.outputs.b2_url_prefix }} >> $GITHUB_STEP_SUMMARY
+      # - name: Add compile plot to summary
+      #   run: python .github/plot_markdown.py dist/results/plots/compile.png ${{ steps.upload.outputs.b2_url_prefix }} "Compile time" >> $GITHUB_STEP_SUMMARY
+      # - name: Add memory plot to summary
+      #   run: python .github/plot_markdown.py dist/results/plots/memory.png ${{ steps.upload.outputs.b2_url_prefix }} "Memory usage" >> $GITHUB_STEP_SUMMARY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
