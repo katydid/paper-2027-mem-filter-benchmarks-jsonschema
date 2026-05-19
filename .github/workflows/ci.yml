@@ -147,15 +147,15 @@ jobs:
           uv run python plot.py
           uv run python plot_compile.py
           uv run python plot_memory.py
-      - name: Upload plots
-        id: upload
-        env:
-          AWS_ENDPOINT_URL: https://${{ vars.S3_BASE_URL }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.S3_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_APPLICATION_KEY }}
-        run: |
-          aws s3 cp dist/results/plots s3://${{ vars.S3_BUCKET_NAME }}/${{ github.sha }}/dist/results/plots/ --recursive
-          echo b2_url_prefix="https://${{ vars.S3_BUCKET_NAME }}.${{ vars.S3_BASE_URL }}/${{ github.sha }}/" >> "$GITHUB_OUTPUT"
+      # - name: Upload plots
+      #   id: upload
+      #   env:
+      #     AWS_ENDPOINT_URL: https://${{ vars.S3_BASE_URL }}
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.S3_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_APPLICATION_KEY }}
+      #   run: |
+      #     aws s3 cp dist/results/plots s3://${{ vars.S3_BUCKET_NAME }}/${{ github.sha }}/dist/results/plots/ --recursive
+      #     echo b2_url_prefix="https://${{ vars.S3_BUCKET_NAME }}.${{ vars.S3_BASE_URL }}/${{ github.sha }}/" >> "$GITHUB_OUTPUT"
       - name: Add plots to summary
         run: python .github/plot_markdown.py dist/results/plots/schemas ${{ steps.upload.outputs.b2_url_prefix }} >> $GITHUB_STEP_SUMMARY
       - name: Add compile plot to summary
