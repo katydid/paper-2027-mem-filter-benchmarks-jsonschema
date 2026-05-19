@@ -29,6 +29,23 @@ func validateAll(parser reflect.Parser, matcher jsonschema.Matcher, instances []
 	return nil
 }
 
+var notSupported = map[string]string{
+	"ansible-meta":           "json: cannot unmarshal bool into Go struct field Schema.Object.properties of type schema.Schema",
+	"cmake-presets":          "just takes long",
+	"cql2":                   "could not find schema for #/$defs/andOrExpression",
+	"cspell":                 "uniqueItems not supported",
+	"deno":                   "uniqueItems not supported",
+	"draft-04":               "json: cannot unmarshal bool into Go struct field Schema.Object.properties of type schema.Schema",
+	"unreal-engine-uproject": "uniqueItems not supported",
+	"geojson":                "timed out",
+	"jsconfig":               "uniqueItems not supported",
+	"krakend":                "uniqueItems not supported",
+	"lazygit":                "uniqueItems are not supported",
+	"openapi":                "could not find schema for #/$defs/server",
+	"stylecop":               "uniqueItems are not supported",
+	"ui5-manifest":           "json: cannot unmarshal bool into Go struct field Schema.definitions.Object.properties.Array.items of type []*schema.Schema",
+}
+
 func main() {
 	log.SetFlags(log.Lshortfile)
 	if len(os.Args) < 2 {
@@ -36,6 +53,10 @@ func main() {
 	}
 
 	exampleFolder := os.Args[1]
+	log.Printf("folder %q with base %s", exampleFolder, filepath.Base(exampleFolder))
+	if reason, ok := notSupported[filepath.Base(exampleFolder)]; ok {
+		log.Fatalf("%s is not supported, because %s", exampleFolder, reason)
+	}
 
 	// Construct and canonicalize file paths
 	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema-noformat.json"))
