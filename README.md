@@ -32,7 +32,7 @@ A summary of these implementations is given below.
 - [Opis](https://opis.io/json-schema) (PHP)
 - [jsoncons](https://github.com/danielaparker/jsoncons) (C++)
 - [json_schemer](https://github.com/davishmcclurg/json_schemer) (Ruby)
-- [json-schema-validator](https://github.com/networknt/json-schema-validator) (Java)
+- [json-schema-validator](https://github.com/networknt/json-schema-validator) (Java) (Disabled)
 - [json-schema-validator](https://github.com/OptimumCode/json-schema-validator) (Kotlin)
 - [jsonschema](https://github.com/santhosh-tekuri/jsonschema/) (Go)
 - [katydidauto](https://github.com/katydid/validator-go-jsonschema) (Go)

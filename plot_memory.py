@@ -18,7 +18,7 @@ IMPL_RENAMES = {
     'jsdotnet': 'JsonSchema.Net',
     'jsv': 'JSV',
     'kmp': 'KMP',
-    'networknt': 'NetworkNT',
+    # 'networknt': 'NetworkNT',
     'py-jsonschema': 'jsonschema (Py)',
 }
 
