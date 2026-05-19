@@ -35,6 +35,7 @@ A summary of these implementations is given below.
 - [json-schema-validator](https://github.com/networknt/json-schema-validator) (Java)
 - [json-schema-validator](https://github.com/OptimumCode/json-schema-validator) (Kotlin)
 - [jsonschema](https://github.com/santhosh-tekuri/jsonschema/) (Go)
+- [katydidauto](https://github.com/katydid/validator-go-jsonschema) (Go)
 - [jsonschema](https://python-jsonschema.readthedocs.io/en/stable/) (Python)
 - [JsonSchema.NET](https://github.com/json-everything/json-everything) (C#)
 - [JSV](https://github.com/lud/jsv) (Elixir)

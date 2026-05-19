@@ -281,6 +281,24 @@ dist/results/go-jsonschema/%: \
 	| dist/results/go-jsonschema
 	@$(call docker_run,go-jsonschema,/workspace/$(dir $(word 2,$^)))
 
+# GO / KATYDIDAUTO
+
+implementations/go-katydidauto/.dockertimestamp: \
+	implementations/go-katydidauto/memory-wrapper.sh \
+	implementations/go-katydidauto/go.mod \
+	implementations/go-katydidauto/go.sum \
+	implementations/go-katydidauto/main.go \
+	implementations/go-katydidauto/Dockerfile
+	docker build -t jsonschema-benchmark/go-katydidauto implementations/go-katydidauto
+	touch $@
+
+dist/results/go-katydidauto/%: \
+	implementations/go-katydidauto/.dockertimestamp \
+	schemas/%/schema-noformat.json \
+	schemas/%/instances.jsonl \
+	| dist/results/go-katydidauto
+	@$(call docker_run,go-katydidauto,/workspace/$(dir $(word 2,$^)))
+
 # HYPERJUMP
 
 implementations/hyperjump/.dockertimestamp: \

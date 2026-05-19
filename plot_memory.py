@@ -9,6 +9,7 @@ IMPL_RENAMES = {
     'boon': 'Boon',
     'corvus': 'Corvus',
     'go-jsonschema': 'jsonschema (Go)',
+    'go-katydidauto': 'katydidauto (Go)',
     'jsu-c': 'JSU (C)',
     'jsu-java': 'JSU (Java)',
     'jsu-js': 'JSU (JS)',
