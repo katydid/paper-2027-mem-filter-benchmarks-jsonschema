@@ -263,41 +263,113 @@ dist/results/py-jsonschema/%: \
 	| dist/results/py-jsonschema
 	@$(call docker_run,py-jsonschema,/workspace/$(dir $(word 2,$^)))
 
-# GO / JSONSCHEMA
+# GO / GOOGLE
 
-implementations/go-jsonschema/.dockertimestamp: \
-	implementations/go-jsonschema/memory-wrapper.sh \
-	implementations/go-jsonschema/go.mod \
-	implementations/go-jsonschema/go.sum \
-	implementations/go-jsonschema/main.go \
-	implementations/go-jsonschema/Dockerfile
-	docker build -t jsonschema-benchmark/go-jsonschema implementations/go-jsonschema
+implementations/go-google/.dockertimestamp: \
+	implementations/go-google/memory-wrapper.sh \
+	implementations/go-google/go.mod \
+	implementations/go-google/go.sum \
+	implementations/go-google/main.go \
+	implementations/go-google/Dockerfile
+	docker build -t jsonschema-benchmark/go-google implementations/go-google
 	touch $@
 
-dist/results/go-jsonschema/%: \
-	implementations/go-jsonschema/.dockertimestamp \
+dist/results/go-google/%: \
+	implementations/go-google/.dockertimestamp \
 	schemas/%/schema-noformat.json \
 	schemas/%/instances.jsonl \
-	| dist/results/go-jsonschema
-	@$(call docker_run,go-jsonschema,/workspace/$(dir $(word 2,$^)))
+	| dist/results/go-google
+	@$(call docker_run,go-google,/workspace/$(dir $(word 2,$^)))
 
-# GO / KATYDIDAUTO
+# GO / JSON_SCHEMA_SPEC
 
-implementations/go-katydidauto/.dockertimestamp: \
-	implementations/go-katydidauto/memory-wrapper.sh \
-	implementations/go-katydidauto/go.mod \
-	implementations/go-katydidauto/go.sum \
-	implementations/go-katydidauto/main.go \
-	implementations/go-katydidauto/Dockerfile
-	docker build -t jsonschema-benchmark/go-katydidauto implementations/go-katydidauto
+implementations/go-json-schema-spec/.dockertimestamp: \
+	implementations/go-json-schema-spec/memory-wrapper.sh \
+	implementations/go-json-schema-spec/go.mod \
+	implementations/go-json-schema-spec/go.sum \
+	implementations/go-json-schema-spec/main.go \
+	implementations/go-json-schema-spec/Dockerfile
+	docker build -t jsonschema-benchmark/go-json-schema-spec implementations/go-json-schema-spec
 	touch $@
 
-dist/results/go-katydidauto/%: \
-	implementations/go-katydidauto/.dockertimestamp \
+dist/results/go-json-schema-spec/%: \
+	implementations/go-json-schema-spec/.dockertimestamp \
 	schemas/%/schema-noformat.json \
 	schemas/%/instances.jsonl \
-	| dist/results/go-katydidauto
-	@$(call docker_run,go-katydidauto,/workspace/$(dir $(word 2,$^)))
+	| dist/results/go-json-schema-spec
+	@$(call docker_run,go-json-schema-spec,/workspace/$(dir $(word 2,$^)))
+
+# GO / KAPTINLIN
+
+implementations/go-kaptinlin/.dockertimestamp: \
+	implementations/go-kaptinlin/memory-wrapper.sh \
+	implementations/go-kaptinlin/go.mod \
+	implementations/go-kaptinlin/go.sum \
+	implementations/go-kaptinlin/main.go \
+	implementations/go-kaptinlin/Dockerfile
+	docker build -t jsonschema-benchmark/go-kaptinlin implementations/go-kaptinlin
+	touch $@
+
+dist/results/go-kaptinlin/%: \
+	implementations/go-kaptinlin/.dockertimestamp \
+	schemas/%/schema-noformat.json \
+	schemas/%/instances.jsonl \
+	| dist/results/go-kaptinlin
+	@$(call docker_run,go-kaptinlin,/workspace/$(dir $(word 2,$^)))
+
+# GO / KATYDID-AUTO
+
+implementations/go-katydid-auto/.dockertimestamp: \
+	implementations/go-katydid-auto/memory-wrapper.sh \
+	implementations/go-katydid-auto/go.mod \
+	implementations/go-katydid-auto/go.sum \
+	implementations/go-katydid-auto/main.go \
+	implementations/go-katydid-auto/Dockerfile
+	docker build -t jsonschema-benchmark/go-katydid-auto implementations/go-katydid-auto
+	touch $@
+
+dist/results/go-katydid-auto/%: \
+	implementations/go-katydid-auto/.dockertimestamp \
+	schemas/%/schema-noformat.json \
+	schemas/%/instances.jsonl \
+	| dist/results/go-katydid-auto
+	@$(call docker_run,go-katydid-auto,/workspace/$(dir $(word 2,$^)))
+
+# GO / KATYDID-MEM
+
+implementations/go-katydid-mem/.dockertimestamp: \
+	implementations/go-katydid-mem/memory-wrapper.sh \
+	implementations/go-katydid-mem/go.mod \
+	implementations/go-katydid-mem/go.sum \
+	implementations/go-katydid-mem/main.go \
+	implementations/go-katydid-mem/Dockerfile
+	docker build -t jsonschema-benchmark/go-katydid-mem implementations/go-katydid-mem
+	touch $@
+
+dist/results/go-katydid-mem/%: \
+	implementations/go-katydid-mem/.dockertimestamp \
+	schemas/%/schema-noformat.json \
+	schemas/%/instances.jsonl \
+	| dist/results/go-katydid-mem
+	@$(call docker_run,go-katydid-mem,/workspace/$(dir $(word 2,$^)))
+
+# GO / SANTHOSH_TEKURI
+
+implementations/go-santhosh-tekuri/.dockertimestamp: \
+	implementations/go-santhosh-tekuri/memory-wrapper.sh \
+	implementations/go-santhosh-tekuri/go.mod \
+	implementations/go-santhosh-tekuri/go.sum \
+	implementations/go-santhosh-tekuri/main.go \
+	implementations/go-santhosh-tekuri/Dockerfile
+	docker build -t jsonschema-benchmark/go-santhosh-tekuri implementations/go-santhosh-tekuri
+	touch $@
+
+dist/results/go-santhosh-tekuri/%: \
+	implementations/go-santhosh-tekuri/.dockertimestamp \
+	schemas/%/schema-noformat.json \
+	schemas/%/instances.jsonl \
+	| dist/results/go-santhosh-tekuri
+	@$(call docker_run,go-santhosh-tekuri,/workspace/$(dir $(word 2,$^)))
 
 # HYPERJUMP
 
