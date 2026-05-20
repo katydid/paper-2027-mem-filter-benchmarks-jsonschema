@@ -1,0 +1,69 @@
+
+{
+	"definitions": {
+		"due": {
+			"type": "object",
+			"anyOf": [
+			{
+				"properties": {
+					"Year": {
+						"$ref": "#/definitions/year2026"
+					}
+				},
+				"required": ["Year"]
+			},
+			{
+				"allOf": [                  
+					{
+						"properties": {
+							"Year": {
+								"$ref": "#/definitions/year2025"
+							}
+						},
+						"required": ["Year"]
+					},
+					{
+						"properties": {
+							"Month": {
+								"$ref": "#/definitions/month10"
+							}
+						},
+						"required": ["Month"]
+					}
+				]
+			}
+			]
+		},
+		"loc": {
+			"type": "object",
+			"properties": {
+				"Cont": {
+					"$ref": "#/definitions/conteu"
+				}
+			},
+			"required": ["Cont"]
+		},
+		"year2026": {
+			"const": "2026"
+		},
+		"year2025": {
+			"const": "2025"
+		},
+		"month10": {
+			"minimum": 10
+		},
+		"conteu": {
+			"const": "EU"
+		}
+	},
+	"type": "object",
+	"properties": {
+		"Due": {
+			"$ref": "#/definitions/due"
+		},
+		"Loc": {
+			"$ref": "#/definitions/loc"
+		}
+	},
+	"required": ["Due", "Loc"]
+}

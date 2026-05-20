@@ -67,6 +67,37 @@ var generators = []schemaGenerator{
 		gen:    schemas.RandomUserProfile(),
 		schema: schemas.SchemaJSONSchemaExampleUserProfile,
 	},
+	{
+		name:      "example-address-valid",
+		gen:       schemas.RandomAddress(),
+		schema:    schemas.SchemaJSONSchemaExampleAddress,
+		validOnly: true,
+	},
+	{
+		name:      "example-blogpost-valid",
+		gen:       schemas.RandomBlogPost(),
+		schema:    schemas.SchemaJSONSchemaExampleBlogPost,
+		validOnly: true,
+	},
+	{
+		name:      "example-complex-valid",
+		gen:       complex.Complex(),
+		schema:    complex.SchemaComplexNew,
+		validOnly: true,
+		num:       100,
+	},
+	{
+		name:      "example-conf-valid",
+		gen:       schemas.RandomConfIsIn2026OrLate2025AndEU(),
+		schema:    schemas.SchemaConfIsIn2026OrLate2025AndEU,
+		validOnly: true,
+	},
+	{
+		name:      "example-userprofile-valid",
+		gen:       schemas.RandomUserProfile(),
+		schema:    schemas.SchemaJSONSchemaExampleUserProfile,
+		validOnly: true,
+	},
 }
 
 func main() {
