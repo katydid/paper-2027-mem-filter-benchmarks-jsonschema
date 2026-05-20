@@ -28,11 +28,13 @@ func validateAll(instances []any, sch *jsonschema.Schema) error {
 }
 
 func main() {
+	log.SetFlags(log.Lshortfile)
 	if len(os.Args) < 2 {
 		log.Fatal("Please provide the example folder path as an argument")
 	}
 
 	exampleFolder := os.Args[1]
+	log.Printf("benchmarking schema in folder: %s", exampleFolder)
 
 	// Construct and canonicalize file paths
 	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema-noformat.json"))
@@ -99,7 +101,7 @@ func main() {
 	coldStart := time.Now()
 	err = validateAll(instances, sch)
 	if err != nil {
-		log.Fatalf("Validation failed: %v", err)
+		log.Fatalf("Validation failed: %v for schema in folder %s", err, exampleFolder)
 	}
 	coldDuration := time.Since(coldStart)
 
