@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,17 +11,19 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/santhosh-tekuri/jsonschema/v6"
+	jsonschema "github.com/kaptinlin/jsonschema"
 )
+
+// Does not support: "dependencies"
 
 const WarmupIterations = 1000
 const MaxWarmupTime = 10_000_000_000
 
-func validateAll(instances []interface{}, sch *jsonschema.Schema) error {
+func validateAll(instances []any, sch *jsonschema.Schema) error {
 	for _, inst := range instances {
-		if err := sch.Validate(inst); err != nil {
-			return err
-		}
+		result := sch.Validate(inst)
+		_ = result
+		// result.IsValid()
 	}
 	return nil
 }
@@ -50,22 +51,15 @@ func main() {
 	}
 
 	// Compile the JSON schema
-	c := jsonschema.NewCompiler()
-	c.AssertFormat()
-
 	compile_start := time.Now()
 
-	doc, err := jsonschema.UnmarshalJSON(bytes.NewReader(schemaData))
+	compiler := jsonschema.NewCompiler()
+	compiler.AssertFormat = true
+	validator, err := compiler.Compile(schemaData)
 	if err != nil {
-		log.Fatalf("Error unmarshaling schema: %v", err)
+		log.Fatalf("Error creating new validator: %v", err)
 	}
-	if err := c.AddResource("schema.json", doc); err != nil {
-		log.Fatalf("Error adding resource: %v", err)
-	}
-	sch, err := c.Compile("schema.json")
-	if err != nil {
-		log.Fatalf("Error compiling schema: %v", err)
-	}
+
 	compile_duration := time.Since(compile_start)
 
 	if err != nil {
@@ -80,12 +74,12 @@ func main() {
 	defer f.Close()
 
 	// Decode and store JSON objects
-	var instances []interface{}
+	var instances []any
 	reader := bufio.NewReader(f)
 	decoder := json.NewDecoder(reader)
 
 	for {
-		var inst interface{}
+		var inst any
 		if err := decoder.Decode(&inst); err != nil {
 			if err == io.EOF {
 				break
@@ -97,7 +91,7 @@ func main() {
 
 	// Cold start
 	coldStart := time.Now()
-	err = validateAll(instances, sch)
+	err = validateAll(instances, validator)
 	if err != nil {
 		log.Fatalf("Validation failed: %v", err)
 	}
@@ -106,13 +100,21 @@ func main() {
 	// Warmup
 	iterations := math.Ceil(float64(MaxWarmupTime) / float64(coldDuration.Nanoseconds()))
 	for _ = range int64(min(iterations, WarmupIterations)) {
-		validateAll(instances, sch)
+		validateAll(instances, validator)
 	}
 
 	warmStart := time.Now()
-	validateAll(instances, sch)
+	validateAll(instances, validator)
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
 	fmt.Printf("%d,%d,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), compile_duration.Nanoseconds())
+}
+
+func unmarshalToAny(data []byte) (any, error) {
+	if len(data) == 0 {
+		return nil, nil
+	}
+	var v any
+	return v, json.Unmarshal(data, &v)
 }

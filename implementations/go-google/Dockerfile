@@ -1,5 +1,5 @@
 # Use the official Golang image as a parent image
-FROM golang:1.23-alpine3.21
+FROM golang:1.26.3-alpine3.23
 
 RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community time
 

@@ -34,11 +34,17 @@ A summary of these implementations is given below.
 - [json_schemer](https://github.com/davishmcclurg/json_schemer) (Ruby)
 - [json-schema-validator](https://github.com/networknt/json-schema-validator) (Java) (Disabled)
 - [json-schema-validator](https://github.com/OptimumCode/json-schema-validator) (Kotlin)
-- [jsonschema](https://github.com/santhosh-tekuri/jsonschema/) (Go)
-- [katydidauto](https://github.com/katydid/validator-go-jsonschema) (Go)
 - [jsonschema](https://python-jsonschema.readthedocs.io/en/stable/) (Python)
 - [JsonSchema.NET](https://github.com/json-everything/json-everything) (C#)
 - [JSV](https://github.com/lud/jsv) (Elixir)
+
+Go libraries:
+- [google](https://github.com/google/jsonschema-go) (Go)
+- [json-schema-spec](https://github.com/json-schema-spec/json-schema-go) (Go)
+- [kaptinlin](https://github.com/kaptinlin/jsonschema) (Go)
+- [katydid-auto](https://github.com/katydid/validator-go-jsonschema) (Go)
+- [katydid-mem](https://github.com/katydid/validator-go-jsonschema) (Go)
+- [santhosh-tekuri](https://github.com/santhosh-tekuri/jsonschema/) (Go)
 
 Note that some implementations are currently ignored by default to limit the runtime of the benchmark.
 These implementations are identified by a `.benchmark-ignore` file in the implementation subdirectory.

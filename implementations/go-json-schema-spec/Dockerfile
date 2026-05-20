@@ -13,9 +13,9 @@ COPY . .
 RUN go mod download
 
 # Build the Go app
-RUN go build -o go_katydid_validator .
+RUN go build -o go_jsonschema_validator .
 
 # Run the binary
-ENTRYPOINT ["/app/memory-wrapper.sh", "/app/go_katydid_validator"]
+ENTRYPOINT ["/app/memory-wrapper.sh", "/app/go_jsonschema_validator"]
 CMD []
 
