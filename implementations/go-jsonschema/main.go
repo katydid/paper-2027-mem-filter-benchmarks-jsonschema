@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -38,6 +39,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error constructing schema file path: %v", err)
 	}
+	schemaData, err := os.ReadFile(schemaFile)
+	if err != nil {
+		log.Fatalf("Error reading schema data: %v", err)
+	}
 
 	instanceFile, err := filepath.Abs(filepath.Join(exampleFolder, "instances.jsonl"))
 	if err != nil {
@@ -46,9 +51,21 @@ func main() {
 
 	// Compile the JSON schema
 	c := jsonschema.NewCompiler()
+	c.AssertFormat()
 
 	compile_start := time.Now()
-	sch, err := c.Compile(schemaFile)
+
+	doc, err := jsonschema.UnmarshalJSON(bytes.NewReader(schemaData))
+	if err != nil {
+		log.Fatalf("Error unmarshaling schema: %v", err)
+	}
+	if err := c.AddResource("schema.json", doc); err != nil {
+		log.Fatalf("Error adding resource: %v", err)
+	}
+	sch, err := c.Compile("schema.json")
+	if err != nil {
+		log.Fatalf("Error compiling schema: %v", err)
+	}
 	compile_duration := time.Since(compile_start)
 
 	if err != nil {
