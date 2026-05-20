@@ -52,13 +52,13 @@ var generators = []schemaGenerator{
 		schema: schemas.SchemaJSONSchemaExampleBlogPost,
 	},
 	{
-		name:   "example-complex-mixed",
+		name:   "ajv-complex-mixed",
 		gen:    complex.Complex(),
 		schema: complex.SchemaComplexNew,
 		num:    100,
 	},
 	{
-		name:   "example-conf-mixed",
+		name:   "katydid-conf-mixed",
 		gen:    schemas.RandomConfIsIn2026OrLate2025AndEU(),
 		schema: schemas.SchemaConfIsIn2026OrLate2025AndEU,
 	},
@@ -80,14 +80,14 @@ var generators = []schemaGenerator{
 		validOnly: true,
 	},
 	{
-		name:      "example-complex-valid",
+		name:      "ajv-complex-valid",
 		gen:       complex.Complex(),
 		schema:    complex.SchemaComplexNew,
 		validOnly: true,
 		num:       100,
 	},
 	{
-		name:      "example-conf-valid",
+		name:      "katydid-conf-valid",
 		gen:       schemas.RandomConfIsIn2026OrLate2025AndEU(),
 		schema:    schemas.SchemaConfIsIn2026OrLate2025AndEU,
 		validOnly: true,

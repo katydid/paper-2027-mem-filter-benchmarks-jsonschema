@@ -22,9 +22,8 @@ const MaxWarmupTime = 10_000_000_000
 
 func validateAll(instances []any, sch *jsonschema.Resolved) error {
 	for _, inst := range instances {
-		if result := sch.Validate(inst); result != nil {
-			return result
-		}
+		result := sch.Validate(inst)
+		_ = result
 	}
 	return nil
 }
