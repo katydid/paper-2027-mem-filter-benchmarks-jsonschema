@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"time"
@@ -123,6 +124,7 @@ var generators = []schemaGenerator{
 }
 
 func main() {
+	log.SetFlags(log.Lshortfile)
 	seed := flag.Int64("seed", time.Now().UnixNano(), "seed for random generator (defaults to now)")
 	num := flag.Int("num", 1000, "number of random json files to generate (defaults to 10)")
 	flag.Parse()
@@ -169,26 +171,38 @@ func generateJSONL(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.S
 	for i := range num {
 		var s string
 		if mixed && i%2 == 0 && i > 10 {
-			s = gen.Wrong(r)
-			v, err := isValid(validator, []byte(s))
-			if err != nil {
-				panic(err)
-			}
-			if v {
-				panic(fmt.Sprintf("expected invalid for %s", s))
-			}
+			s = genWrong(r, gen, validator)
 		} else {
-			s = gen.Right(r)
-			v, err := isValid(validator, []byte(s))
-			if err != nil {
-				panic(err)
-			}
-			if !v {
-				panic(fmt.Sprintf("expected valid for %s", s))
-			}
+			s = genRight(r, gen, validator)
 		}
 		file.WriteString(s + "\n")
 	}
+}
+
+func genWrong(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.Schema) string {
+	s := gen.Wrong(r)
+	v, err := isValid(validator, []byte(s))
+	if err != nil {
+		panic(err)
+	}
+	if v {
+		log.Printf("regenerating, since we expected invalid for %s", s)
+		return genWrong(r, gen, validator)
+	}
+	return s
+}
+
+func genRight(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.Schema) string {
+	s := gen.Right(r)
+	v, err := isValid(validator, []byte(s))
+	if err != nil {
+		panic(err)
+	}
+	if !v {
+		log.Printf("regenerating, since we expected valid for %s", s)
+		return genRight(r, gen, validator)
+	}
+	return s
 }
 
 func newValidator(schemaJSON string) (*jsonschema.Schema, error) {

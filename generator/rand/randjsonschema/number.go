@@ -104,7 +104,7 @@ func (o *randNumber) Right(r rand.Rand) string {
 func (o *randNumber) Wrong(r rand.Rand) string {
 	if r.Intn(10) == 0 {
 		// generate not a number
-		return randjson.String(r)
+		return randjson.Value(r, randjson.NotNumber())
 	}
 	var num string
 	for {
@@ -117,10 +117,14 @@ func (o *randNumber) Wrong(r rand.Rand) string {
 			if i >= int(*o.minimum) && i <= int(*o.maximum) {
 				continue
 			}
-		} else if o.minimum != nil && i >= int(*o.minimum) {
-			continue
-		} else if o.maximum != nil && i <= int(*o.maximum) {
-			continue
+		} else if o.minimum != nil {
+			if i >= int(*o.minimum) {
+				continue
+			}
+		} else if o.maximum != nil {
+			if i <= int(*o.maximum) {
+				continue
+			}
 		}
 		if o.multipleOf != nil && ((i/int(*o.multipleOf))*int(*o.multipleOf)) == i {
 			continue
