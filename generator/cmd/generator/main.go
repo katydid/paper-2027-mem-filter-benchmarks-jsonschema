@@ -143,6 +143,17 @@ var generators = []schemaGenerator{
 		schema:    schemas.SchemaJSONSchemaExampleJobPosting,
 		validOnly: true,
 	},
+	{
+		name:   "example-movie-mixed",
+		gen:    schemas.RandomMovie(),
+		schema: schemas.SchemaJSONSchemaExampleMovie,
+	},
+	{
+		name:      "example-movie-valid",
+		gen:       schemas.RandomMovie(),
+		schema:    schemas.SchemaJSONSchemaExampleMovie,
+		validOnly: true,
+	},
 }
 
 func main() {
