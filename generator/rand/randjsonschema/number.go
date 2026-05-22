@@ -40,9 +40,15 @@ func Integer(opts ...NumberOption) Rand {
 	return res
 }
 
-func WithMinimum(n uint) func(r *randNumber) {
+func WithMinimum(n int) func(r *randNumber) {
 	return func(r *randNumber) {
 		r.minimum = &n
+	}
+}
+
+func WithMaximum(n int) func(r *randNumber) {
+	return func(r *randNumber) {
+		r.maximum = &n
 	}
 }
 
@@ -53,41 +59,50 @@ func WithMultipleOf(n uint) func(r *randNumber) {
 }
 
 type randNumber struct {
-	minimum    *uint
+	minimum    *int
+	maximum    *int
 	multipleOf *uint
 	isInteger  bool
 }
 
 func (o *randNumber) Right(r rand.Rand) string {
-	if o.minimum != nil && r.Intn(10) == 0 {
+	if o.minimum != nil && r.Intn(20) == 0 {
 		return strconv.Itoa(int(*o.minimum))
 	}
-	for {
-		num := randjson.Number(r)
-		if o.isInteger {
-			num = randjson.Integer(r)
+	if o.maximum != nil && r.Intn(20) == 0 {
+		return strconv.Itoa(int(*o.minimum))
+	}
+	if o.maximum != nil && o.minimum != nil {
+		return strconv.Itoa(r.Intn(*o.maximum-*o.minimum) + *o.minimum)
+	}
+	num := randjson.Number(r)
+	if o.isInteger {
+		num = randjson.Integer(r)
+	}
+	i, err := strconv.Atoi(num)
+	if err != nil {
+		return o.Right(r)
+	}
+	if o.minimum != nil && i < int(*o.minimum) {
+		return o.Right(r)
+	}
+	if o.maximum != nil && i > int(*o.maximum) {
+		return o.Right(r)
+	}
+	if o.multipleOf != nil {
+		min := 0
+		if o.minimum != nil {
+			min = int(*o.minimum)
 		}
-		i, err := strconv.Atoi(num)
-		if err != nil {
-			continue
-		}
-		if o.minimum != nil && i < int(*o.minimum) {
-			continue
-		}
-		if o.multipleOf != nil {
-			min := 0
-			if o.minimum != nil {
-				min = int(*o.minimum)
-			}
-			i = (r.Intn(1000) + min) * int(*o.multipleOf)
-			num = strconv.Itoa(i)
-		}
+		i = (r.Intn(1000) + min) * int(*o.multipleOf)
+		num = strconv.Itoa(i)
 		return num
 	}
+	return num
 }
 
 func (o *randNumber) Wrong(r rand.Rand) string {
-	if r.Intn(2) == 0 {
+	if r.Intn(10) == 0 {
 		// generate not a number
 		return randjson.String(r)
 	}
@@ -98,13 +113,19 @@ func (o *randNumber) Wrong(r rand.Rand) string {
 		if err != nil {
 			continue
 		}
-		if o.minimum != nil && i >= int(*o.minimum) {
+		if o.minimum != nil && o.maximum != nil {
+			if i >= int(*o.minimum) && i <= int(*o.maximum) {
+				continue
+			}
+		} else if o.minimum != nil && i >= int(*o.minimum) {
+			continue
+		} else if o.maximum != nil && i <= int(*o.maximum) {
 			continue
 		}
 		if o.multipleOf != nil && ((i/int(*o.multipleOf))*int(*o.multipleOf)) == i {
 			continue
 		}
-		if o.minimum == nil && o.multipleOf == nil {
+		if o.minimum == nil && o.multipleOf == nil && o.maximum == nil {
 			return randjson.Value(r, randjson.NotNumber())
 		}
 		return num

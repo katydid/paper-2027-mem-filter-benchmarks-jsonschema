@@ -47,37 +47,27 @@ var generators = []schemaGenerator{
 		schema: schemas.SchemaJSONSchemaExampleAddress,
 	},
 	{
-		name:   "example-blogpost-mixed",
-		gen:    schemas.RandomBlogPost(),
-		schema: schemas.SchemaJSONSchemaExampleBlogPost,
-	},
-	{
-		name:   "ajv-complex-mixed",
-		gen:    complex.Complex(),
-		schema: complex.SchemaComplexNew,
-		num:    100,
-	},
-	{
-		name:   "katydid-conf-mixed",
-		gen:    schemas.RandomConfIsIn2026OrLate2025AndEU(),
-		schema: schemas.SchemaConfIsIn2026OrLate2025AndEU,
-	},
-	{
-		name:   "example-userprofile-mixed",
-		gen:    schemas.RandomUserProfile(),
-		schema: schemas.SchemaJSONSchemaExampleUserProfile,
-	},
-	{
 		name:      "example-address-valid",
 		gen:       schemas.RandomAddress(),
 		schema:    schemas.SchemaJSONSchemaExampleAddress,
 		validOnly: true,
 	},
 	{
+		name:   "example-blogpost-mixed",
+		gen:    schemas.RandomBlogPost(),
+		schema: schemas.SchemaJSONSchemaExampleBlogPost,
+	},
+	{
 		name:      "example-blogpost-valid",
 		gen:       schemas.RandomBlogPost(),
 		schema:    schemas.SchemaJSONSchemaExampleBlogPost,
 		validOnly: true,
+	},
+	{
+		name:   "ajv-complex-mixed",
+		gen:    complex.Complex(),
+		schema: complex.SchemaComplexNew,
+		num:    100,
 	},
 	{
 		name:      "ajv-complex-valid",
@@ -87,15 +77,36 @@ var generators = []schemaGenerator{
 		num:       100,
 	},
 	{
+		name:   "katydid-conf-mixed",
+		gen:    schemas.RandomConfIsIn2026OrLate2025AndEU(),
+		schema: schemas.SchemaConfIsIn2026OrLate2025AndEU,
+	},
+	{
 		name:      "katydid-conf-valid",
 		gen:       schemas.RandomConfIsIn2026OrLate2025AndEU(),
 		schema:    schemas.SchemaConfIsIn2026OrLate2025AndEU,
 		validOnly: true,
 	},
 	{
+		name:   "example-userprofile-mixed",
+		gen:    schemas.RandomUserProfile(),
+		schema: schemas.SchemaJSONSchemaExampleUserProfile,
+	},
+	{
 		name:      "example-userprofile-valid",
 		gen:       schemas.RandomUserProfile(),
 		schema:    schemas.SchemaJSONSchemaExampleUserProfile,
+		validOnly: true,
+	},
+	{
+		name:   "example-calendar-mixed",
+		gen:    schemas.RandomCalendar(),
+		schema: schemas.SchemaJSONSchemaExampleCalendar,
+	},
+	{
+		name:      "example-calendar-valid",
+		gen:       schemas.RandomCalendar(),
+		schema:    schemas.SchemaJSONSchemaExampleCalendar,
 		validOnly: true,
 	},
 }
@@ -153,7 +164,7 @@ func generateJSONL(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.S
 				panic(err)
 			}
 			if v {
-				panic("expected invalid")
+				panic(fmt.Sprintf("expected invalid for %s", s))
 			}
 		} else {
 			s = gen.Right(r)
@@ -162,7 +173,7 @@ func generateJSONL(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.S
 				panic(err)
 			}
 			if !v {
-				panic("expected valid")
+				panic(fmt.Sprintf("expected valid for %s", s))
 			}
 		}
 		file.WriteString(s + "\n")
