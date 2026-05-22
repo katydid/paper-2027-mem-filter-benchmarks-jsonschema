@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ajv_complex
+package jsck_complex
 
 import (
 	. "github.com/katydid/validator-jsonschema-benchmarks/generator/rand/randjsonschema"

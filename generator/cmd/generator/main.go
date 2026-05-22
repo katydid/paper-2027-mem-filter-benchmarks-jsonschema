@@ -28,7 +28,7 @@ import (
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand/randjsonschema"
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas"
-	complex "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/ajv_complex"
+	complex "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_complex"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/std"
 )
@@ -65,13 +65,13 @@ var generators = []schemaGenerator{
 		validOnly: true,
 	},
 	{
-		name:   "ajv-complex-mixed",
+		name:   "jsck_complex-mixed",
 		gen:    complex.Complex(),
 		schema: complex.SchemaComplexNew,
 		num:    100,
 	},
 	{
-		name:      "ajv-complex-valid",
+		name:      "jsck_complex-valid",
 		gen:       complex.Complex(),
 		schema:    complex.SchemaComplexNew,
 		validOnly: true,
