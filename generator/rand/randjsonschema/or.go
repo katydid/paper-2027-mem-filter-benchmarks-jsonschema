@@ -19,6 +19,7 @@ import "github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
 type randOr struct {
 	rightArgs []Rand
 	wrongArgs []Rand
+	args      []Rand
 }
 
 type OrOption func(r *randOr)
@@ -28,10 +29,16 @@ func Or(opts ...OrOption) Rand {
 	for _, o := range opts {
 		o(res)
 	}
-	if len(res.rightArgs) == 0 {
+	if len(res.rightArgs) == 0 && len(res.args) == 0 {
 		panic("Or was not correctly initialized")
 	}
 	return res
+}
+
+func WithAnyOf(args ...Rand) func(r *randOr) {
+	return func(r *randOr) {
+		r.args = args
+	}
 }
 
 func WithRight(args ...Rand) func(r *randOr) {
@@ -47,11 +54,17 @@ func WithWrong(args ...Rand) func(r *randOr) {
 }
 
 func (o *randOr) Right(r rand.Rand) string {
-	i := r.Intn(len(o.rightArgs))
-	return o.rightArgs[i].Right(r)
+	i := r.Intn(len(o.rightArgs) + len(o.args))
+	if i < len(o.rightArgs) {
+		return o.rightArgs[i].Right(r)
+	}
+	return o.args[i-len(o.rightArgs)].Right(r)
 }
 
 func (o *randOr) Wrong(r rand.Rand) string {
-	i := r.Intn(len(o.wrongArgs))
-	return o.wrongArgs[i].Right(r)
+	i := r.Intn(len(o.wrongArgs) + len(o.args))
+	if i < len(o.wrongArgs) {
+		return o.wrongArgs[i].Right(r)
+	}
+	return o.args[i-len(o.wrongArgs)].Wrong(r)
 }

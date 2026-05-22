@@ -109,6 +109,17 @@ var generators = []schemaGenerator{
 		schema:    schemas.SchemaJSONSchemaExampleCalendar,
 		validOnly: true,
 	},
+	{
+		name:   "example-devicetype-mixed",
+		gen:    schemas.RandomDevicetype(),
+		schema: schemas.SchemaJSONSchemaExampleDevicetype,
+	},
+	{
+		name:      "example-devicetype-valid",
+		gen:       schemas.RandomDevicetype(),
+		schema:    schemas.SchemaJSONSchemaExampleDevicetype,
+		validOnly: true,
+	},
 }
 
 func main() {
