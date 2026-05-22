@@ -121,6 +121,17 @@ var generators = []schemaGenerator{
 		schema:    schemas.SchemaJSONSchemaExampleDevicetype,
 		validOnly: true,
 	},
+	{
+		name:   "example-health-record-mixed",
+		gen:    schemas.RandomHealthRecord(),
+		schema: schemas.SchemaJSONSchemaExampleHealthRecord,
+	},
+	{
+		name:      "example-health-record-valid",
+		gen:       schemas.RandomHealthRecord(),
+		schema:    schemas.SchemaJSONSchemaExampleHealthRecord,
+		validOnly: true,
+	},
 }
 
 func main() {
