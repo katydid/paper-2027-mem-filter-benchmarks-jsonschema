@@ -27,7 +27,7 @@ import (
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand/randjsonschema"
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas"
-	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/complex"
+	complex "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/ajv_complex"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/std"
 )

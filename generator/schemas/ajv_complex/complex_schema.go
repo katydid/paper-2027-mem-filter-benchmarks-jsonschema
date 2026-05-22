@@ -44,7 +44,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package complex
+package ajv_complex
 
 // Modifications made to original schema:
 // 1. Removed test cases.
