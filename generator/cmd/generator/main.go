@@ -132,6 +132,17 @@ var generators = []schemaGenerator{
 		schema:    schemas.SchemaJSONSchemaExampleHealthRecord,
 		validOnly: true,
 	},
+	{
+		name:   "example-job-posting-mixed",
+		gen:    schemas.RandomJobPosting(),
+		schema: schemas.SchemaJSONSchemaExampleJobPosting,
+	},
+	{
+		name:      "example-job-posting-valid",
+		gen:       schemas.RandomJobPosting(),
+		schema:    schemas.SchemaJSONSchemaExampleJobPosting,
+		validOnly: true,
+	},
 }
 
 func main() {
