@@ -35,13 +35,13 @@ const SchemaJSONSchemaExampleDevicetype = `
       "properties": {
         "deviceType": { "const": "smartphone" }
       },
-      "$ref": "https://example.com/smartphone.schema.json"
+      "$ref": "#/definitions/smartphone"
     },
     {
       "properties": {
         "deviceType": { "const": "laptop" }
       },
-      "$ref": "https://example.com/laptop.schema.json"
+      "$ref": "#/definitions/laptop"
     }
   ],
   "definitions": {
