@@ -93,6 +93,52 @@ const SchemaBasic = `
 }
 `
 
+// exactly the same as the schema above, except we removed uniqueItems
+const SchemaBasicNoUniqueItems = `
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Product set",
+  "type": "array",
+  "items": {
+    "title": "Product",
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "The unique identifier for a product",
+        "type": "number"
+      },
+      "name": {
+        "type": "string"
+      },
+      "price": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
+      },
+      "dimensions": {
+        "type": "object",
+        "properties": {
+          "length": {"type": "number"},
+          "width": {"type": "number"},
+          "height": {"type": "number"}
+        },
+        "required": ["length", "width", "height"]
+      },
+      "warehouseLocation": {
+        "description": "Coordinates of the warehouse with the product"
+      }
+    },
+    "required": ["id", "name", "price"]
+  }
+}
+`
+
 //     "tests": [
 //       {
 //         "description": "valid array from z-schema benchmark",

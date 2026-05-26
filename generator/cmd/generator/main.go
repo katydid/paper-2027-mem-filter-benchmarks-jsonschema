@@ -180,6 +180,19 @@ var generators = []schemaGenerator{
 		validOnly: true,
 		num:       200,
 	},
+	{
+		name:   "zschema_basic-noUniqueItems-mixed",
+		gen:    basic.ProductSetNoUniqueItems(),
+		schema: basic.SchemaBasicNoUniqueItems,
+		num:    200,
+	},
+	{
+		name:      "zschema_basic-noUniqueItems-valid",
+		gen:       basic.ProductSetNoUniqueItems(),
+		schema:    basic.SchemaBasicNoUniqueItems,
+		validOnly: true,
+		num:       200,
+	},
 }
 
 func main() {

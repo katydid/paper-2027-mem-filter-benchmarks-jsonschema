@@ -24,14 +24,38 @@ func ProductSet() Rand {
 
 func Product() Rand {
 	return Object(WithAdditionalFields(),
-		// WithAlwaysRightFields(
-		// 	Field("warhouseLocation", Any()),
-		// ),
+		WithAlwaysRightFields(
+			Field("warhouseLocation", Any()),
+		),
 		WithFields(
 			Field("id", Number(), IsRequired()),
 			Field("name", String(), IsRequired()),
 			Field("price", Number(WithExclusiveMinimum(0)), IsRequired()),
 			Field("tags", ArrayOf(String(), WithMinItems(1), WithUniqueItems())),
+			Field("dimensions", Object(WithAdditionalFields(), WithFields(
+				Field("length", Number(), IsRequired()),
+				Field("width", Number(), IsRequired()),
+				Field("height", Number(), IsRequired()),
+			))),
+		),
+	)
+}
+
+// exactly the same as the schema above, except we removed uniqueItems
+func ProductSetNoUniqueItems() Rand {
+	return ArrayOf(ProductNoUniqueItems())
+}
+
+func ProductNoUniqueItems() Rand {
+	return Object(WithAdditionalFields(),
+		WithAlwaysRightFields(
+			Field("warhouseLocation", Any()),
+		),
+		WithFields(
+			Field("id", Number(), IsRequired()),
+			Field("name", String(), IsRequired()),
+			Field("price", Number(WithExclusiveMinimum(0)), IsRequired()),
+			Field("tags", ArrayOf(String(), WithMinItems(1))),
 			Field("dimensions", Object(WithAdditionalFields(), WithFields(
 				Field("length", Number(), IsRequired()),
 				Field("width", Number(), IsRequired()),
