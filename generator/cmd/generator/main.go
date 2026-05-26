@@ -29,6 +29,7 @@ import (
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand/randjsonschema"
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas"
 	complex "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_complex"
+	medium "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_medium"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/std"
 )
@@ -154,6 +155,17 @@ var generators = []schemaGenerator{
 		schema:    schemas.SchemaJSONSchemaExampleMovie,
 		validOnly: true,
 	},
+	{
+		name:   "jsck_medium-mixed",
+		gen:    medium.Medium(),
+		schema: medium.SchemaMedium,
+	},
+	{
+		name:      "jsck_medium-valid",
+		gen:       medium.Medium(),
+		schema:    medium.SchemaMedium,
+		validOnly: true,
+	},
 }
 
 func main() {
@@ -165,7 +177,6 @@ func main() {
 	if len(args) == 0 {
 		panic("expected folder where to generate")
 	}
-	r := rand.NewRandWithSeed(*seed)
 	folder := args[0]
 	fmt.Printf("generating at %s with seed %d\n", folder, *seed)
 
@@ -179,7 +190,7 @@ func main() {
 		}
 		validator, err := newValidator(gen.schema)
 		if err != nil {
-			panic(err)
+			panic(fmt.Sprintf("given schema %s, error: %v", gen.schema, err))
 		}
 		schemaFilename := filepath.Join(subfolder, "schema.json")
 		if err := os.WriteFile(schemaFilename, []byte(gen.schema), 0644); err != nil {
@@ -190,17 +201,18 @@ func main() {
 			fmt.Printf("overriding num with %d for schema %s\n", gen.num, gen.name)
 			number = gen.num
 		}
-		generateJSONL(r, gen.gen, validator, number, subfolder, !gen.validOnly)
+		generateJSONL(*seed, gen.gen, validator, number, subfolder, !gen.validOnly)
 	}
 
 }
 
-func generateJSONL(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.Schema, num int, folder string, mixed bool) {
+func generateJSONL(seed int64, gen randjsonschema.Rand, validator *jsonschema.Schema, num int, folder string, mixed bool) {
 	file, err := os.Create(filepath.Join(folder, "instances.jsonl"))
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
+	r := rand.NewRandWithSeed(seed)
 	for i := range num {
 		var s string
 		if mixed && i%2 == 0 && i > 10 {
@@ -219,7 +231,7 @@ func genWrong(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.Schema
 		panic(err)
 	}
 	if v {
-		log.Printf("regenerating, since we expected invalid for %s", s)
+		log.Fatalf("regenerating, since we expected invalid for %s", s)
 		return genWrong(r, gen, validator)
 	}
 	return s
@@ -229,10 +241,10 @@ func genRight(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.Schema
 	s := gen.Right(r)
 	v, err := isValid(validator, []byte(s))
 	if err != nil {
-		panic(err)
+		panic(fmt.Sprintf("given input %s error: %v", s, err))
 	}
 	if !v {
-		log.Printf("regenerating, since we expected valid for %s", s)
+		log.Fatalf("regenerating, since we expected valid for %s", s)
 		return genRight(r, gen, validator)
 	}
 	return s

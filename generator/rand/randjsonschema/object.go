@@ -34,9 +34,6 @@ func Object(opts ...ObjectOption) Rand {
 	for _, o := range opts {
 		o(res)
 	}
-	if len(res.fields) == 0 {
-		panic("object has no fields that can be wrong")
-	}
 	return res
 }
 
@@ -60,7 +57,7 @@ func WithAlwaysRightFields(fields ...Rand) func(r *randObject) {
 }
 
 func (o *randObject) Right(r rand.Rand) string {
-	if len(o.fields) == 0 {
+	if len(o.fields) == 0 && !o.additionalFields {
 		return "{}"
 	}
 
@@ -75,7 +72,7 @@ func (o *randObject) Right(r rand.Rand) string {
 		fields = append(fields, o.alwaysRightFields[i])
 	}
 	if o.additionalFields && r.Intn(2) == 0 {
-		additionalField := Field("AdditionalField", String(), IsRequired())
+		additionalField := Field("AdditionalField", String(WithMinLength(1)), IsRequired())
 		fieldmap[additionalField] = true
 		fields = append(fields, additionalField)
 	}
@@ -114,7 +111,7 @@ func (o *randObject) Wrong(r rand.Rand) string {
 		fields = append(fields, o.alwaysRightFields[i])
 	}
 	if !o.additionalFields && r.Intn(2) == 0 {
-		additionalField := Field("AdditionalField", String(), IsRequired())
+		additionalField := Field("AdditionalField", String(WithMinLength(1)), IsRequired())
 		fieldmap[additionalField] = true
 		fields = append(fields, additionalField)
 	}

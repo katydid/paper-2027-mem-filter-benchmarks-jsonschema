@@ -73,3 +73,9 @@ Note that while there is noise in the results across runs due to the use of shar
 It also worth noting that some implementations compile schemas ahead of time into a more efficient representation, while others interpret the entire schema at runtime.
 Currently we operate under the assumption that a schema changes infrequently enough that the compilation process is unlikely to be a performance bottleneck.
 As such, we currently only measure the time for validation and exclude any compilation time.
+
+## Setup for Mac
+
+* Install [Docker](https://www.docker.com/)
+* Install [dts](https://github.com/martinohmann/dts/releases) by placing the binary downloaded from releases into your `PATH`.
+* Replace sed with gsed from coreutils

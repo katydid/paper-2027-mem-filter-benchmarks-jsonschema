@@ -139,6 +139,12 @@ func NotNumber() Option {
 	}
 }
 
+func WithAscii() Option {
+	return func(c *config) {
+		c.easyStrings = true
+	}
+}
+
 // top level is not an the specific value, but we can generate those types below that.
 func (c *config) resetNot() {
 	c.notArray = false
