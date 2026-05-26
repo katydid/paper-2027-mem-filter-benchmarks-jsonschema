@@ -28,6 +28,7 @@ import (
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand/randjsonschema"
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas"
+	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/ajv_cosmicrealms"
 	complex "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_complex"
 	medium "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_medium"
 	advanced "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/zschema_advanced"
@@ -214,6 +215,28 @@ var generators = []schemaGenerator{
 		name:      "zschema_advanced-noUniqueItems-valid",
 		gen:       advanced.AdvancedNoUniqueItems(),
 		schema:    advanced.SchemaAdvancedNoUniqueItems,
+		validOnly: true,
+	},
+	{
+		name:   "ajv_cosmicrealms-mixed",
+		gen:    ajv_cosmicrealms.CosmicRealms(),
+		schema: ajv_cosmicrealms.SchemaCosmicRealms,
+	},
+	{
+		name:      "ajv_cosmicrealms-valid",
+		gen:       ajv_cosmicrealms.CosmicRealms(),
+		schema:    ajv_cosmicrealms.SchemaCosmicRealms,
+		validOnly: true,
+	},
+	{
+		name:   "ajv_cosmicrealms-noUniqueItems-mixed",
+		gen:    ajv_cosmicrealms.CosmicRealmsNoUniqueItems(),
+		schema: ajv_cosmicrealms.SchemaCosmicRealmsNoUniqueItems,
+	},
+	{
+		name:      "ajv_cosmicrealms-noUniqueItems-valid",
+		gen:       ajv_cosmicrealms.CosmicRealmsNoUniqueItems(),
+		schema:    ajv_cosmicrealms.SchemaCosmicRealmsNoUniqueItems,
 		validOnly: true,
 	},
 }

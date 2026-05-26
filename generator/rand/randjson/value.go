@@ -145,7 +145,11 @@ func String(r rand.Rand, opts ...Option) string {
 // string := '"' characters '"'
 // characters := "" | character characters
 func randString(r rand.Rand, c *config) string {
-	ss := make([]string, int(r.Intn(c.maxStringLength-c.minStringLength)+c.minStringLength))
+	n := c.maxStringLength
+	if c.maxStringLength != c.minStringLength {
+		n = int(r.Intn(c.maxStringLength-c.minStringLength) + c.minStringLength)
+	}
+	ss := make([]string, n)
 	for i := range ss {
 		ss[i] = randChar(r, c)
 	}

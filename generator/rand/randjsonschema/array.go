@@ -27,12 +27,19 @@ type ArrayOption func(r *randArray)
 type randArray struct {
 	Item   Rand
 	minLen int
+	maxLen *int
 	unique bool
 }
 
 func WithMinItems(n int) func(r *randArray) {
 	return func(r *randArray) {
 		r.minLen = n
+	}
+}
+
+func WithMaxItems(n int) func(r *randArray) {
+	return func(r *randArray) {
+		r.maxLen = &n
 	}
 }
 
@@ -52,6 +59,12 @@ func ArrayOf(item Rand, opts ...ArrayOption) Rand {
 
 func (o *randArray) Right(r rand.Rand) string {
 	n := r.Intn(10) + o.minLen
+	if o.maxLen != nil {
+		n = *o.maxLen
+		if *o.maxLen != o.minLen {
+			n = r.Intn(*o.maxLen-o.minLen) + o.minLen
+		}
+	}
 	items := []string{}
 	for range n {
 		s := o.Item.Right(r)
@@ -74,7 +87,14 @@ func (o *randArray) Wrong(r rand.Rand) string {
 			}
 		}
 		n := r.Intn(9) + 1
+		if o.maxLen != nil && r.Intn(5) == 0 {
+			n = *o.maxLen + r.Intn(9) + 1
+		}
 		wrongIndex := r.Intn(n)
+		if o.maxLen != nil && n > *o.maxLen {
+			// the length is already wrong
+			wrongIndex = -1
+		}
 		items := []string{}
 		for i := range n {
 			if i == wrongIndex {
@@ -83,7 +103,8 @@ func (o *randArray) Wrong(r rand.Rand) string {
 				items = append(items, o.Item.Right(r))
 			}
 		}
-		if o.unique && r.Intn(10) == 0 {
+		// replace wrongIndex with a duplicate
+		if wrongIndex != -1 && o.unique && r.Intn(10) == 0 {
 			copyIndex := r.Intn(n)
 			items[wrongIndex] = items[copyIndex]
 		}
