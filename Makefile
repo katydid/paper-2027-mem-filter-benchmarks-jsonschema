@@ -497,23 +497,23 @@ dist/results/kmp/%: \
 
 # networknt
 
-# implementations/networknt/.dockertimestamp: \
-# 	implementations/networknt/memory-wrapper.sh \
-# 	implementations/networknt/app/src/main/java/io/github/sourcemeta/*.java \
-# 	implementations/networknt/app/build.gradle.kts \
-# 	implementations/networknt/gradle/libs.versions.toml \
-# 	implementations/networknt/gradle/wrapper/gradle-wrapper.properties \
-# 	implementations/networknt/run.sh \
-# 	implementations/networknt/Dockerfile
-# 	docker build -t jsonschema-benchmark/networknt implementations/networknt
-# 	touch $@
+implementations/networknt/.dockertimestamp: \
+	implementations/networknt/memory-wrapper.sh \
+	implementations/networknt/app/src/main/java/io/github/sourcemeta/*.java \
+	implementations/networknt/app/build.gradle.kts \
+	implementations/networknt/gradle/libs.versions.toml \
+	implementations/networknt/gradle/wrapper/gradle-wrapper.properties \
+	implementations/networknt/run.sh \
+	implementations/networknt/Dockerfile
+	docker build -t jsonschema-benchmark/networknt implementations/networknt
+	touch $@
 
-# dist/results/networknt/%: \
-# 	implementations/networknt/.dockertimestamp \
-# 	schemas/%/schema-noformat.json \
-# 	schemas/%/instances.jsonl \
-# 	| dist/results/networknt
-# 	@$(call docker_run,networknt,/workspace/$(word 2,$^) /workspace/$(word 3,$^))
+dist/results/networknt/%: \
+	implementations/networknt/.dockertimestamp \
+	schemas/%/schema-noformat.json \
+	schemas/%/instances.jsonl \
+	| dist/results/networknt
+	@$(call docker_run,networknt,/workspace/$(word 2,$^) /workspace/$(word 3,$^))
 
 # opis
 
