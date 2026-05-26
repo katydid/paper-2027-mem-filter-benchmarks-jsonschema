@@ -1,5 +1,7 @@
 # JSON Schema Utils compiler with JMC C JMC Backend
 
+The [JSC C compiler](https://github.com/zx80/json-schema-utils) generates C code that does validation.
+
 The JSU compiler uses JSON Model as an intermediate language to
 generate efficient validation code from a schema.
 

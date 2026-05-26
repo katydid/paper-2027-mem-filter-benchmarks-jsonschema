@@ -1,0 +1,1 @@
+[Opis](https://opis.io/json-schema) (PHP)

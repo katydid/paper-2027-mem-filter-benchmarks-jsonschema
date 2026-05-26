@@ -1,0 +1,1 @@
+[go-json-schema-spec](https://github.com/json-schema-spec/json-schema-go) (Go)

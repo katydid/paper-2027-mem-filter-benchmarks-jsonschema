@@ -1,0 +1,1 @@
+[JsonSchema.NET](https://github.com/json-everything/json-everything) (C#)

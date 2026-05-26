@@ -1,81 +1,76 @@
 # JSON Schema Benchmark
 
-The goal of this benchmark is measure the performance of various JSON Schema validators.
-Each validator is run with multiple schemas and a collection of those documents expected to be valid for that schema.
-While implementations that do not produce the correct result on validation will be flagged, our goal is not to test for correctness.
-For correctness tests of validators, please see [Bowtie](https://bowtie.report/).
+This benchmark suite builds on the amazing work of [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) for the purpose of benchmarking Katydid's JSONSchema implementation against other JSONSchema validators.
+
+Each validator is run with multiple schemas and a collection of documents that might be valid or mixed, which is expressed in the suffix of the folder name.
+
+## Results
+
+The most recent results can be seen (via GitHub Actions)[https://github.com/katydid/validator-jsonschema-benchmarks/actions/workflows/ci.yml].
 
 ## Setup
 
-The benchmark requires Python, make, and Docker.
-[uv](https://github.com/astral-sh/uv) is used for dependency management in the Python scripts.
+The benchmark requires make, [Docker](https://www.docker.com/), [dts](https://github.com/martinohmann/dts/releases) and sed.
+
+## Running
+
 To run all the benchmarks, a report can be produced via `make dist/report.csv`.
 The `Makefile` accepts parameters `IMPLEMENTATIONS` to specify which implementations to run and `RUNS` for the number of runs per implementation.
 For example, `make IMPLEMENTATIONS='blaze jsoncons' RUNS=5` will run the Blaze and jsoncons implementations 5 times each.
-To plot the runtime for each implementation, run `make plots`.
 
 ## Implementations
+
+All implementations can be found in the `implementations/` subdirectory.
+A summary of these implementations is given below:
+
+- [ajv](./implementations/ajv/) (JS)
+- [ajv-bun](./implementations/ajv-bun/) (JS with BUN runtime)
+- [blaze](./implementations/blaze/) (C++)
+- [boon](./implementations/boon/) (Rust)
+- [corvus](./implementations/corvus/) (C#)
+- [go-google](./implementations/go-google/) (Go)
+- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go)
+- [go-kaptinlin](./implementations/go-kaptinlin/) (Go)
+- [go-katydid-auto](./implementations/go-katydid-auto/) (Go)
+- [go-katydid-mem](./implementations/go-katydid-mem/) (Go)
+- [go-santhosh-tekuri](./implementations/go-santhosh-tekuri/) (Go)
+- [hyperjump](./implementations/hyperjump/) (JS)
+- [jsdotnet](./implementations/jsdotnet/) (C#)
+- [json_schemer](./implementations/json_schemer/) (Ruby)
+- [jsoncons](./implementations/jsoncons/) (C++)
+- [jsu-c](./implementations/jsu-c/) (generated C)
+- [jsu-java](./implementations/jsu-java/) (generated Java)
+- [jsu-js](./implementations/jsu-js/) (generated JS)
+- [jsu-pl](./implementations/jsu-pl/) (generated Perl)
+- [jsu-py](./implementations/jsu-py/) (generated Python)
+- [JSV](./implementations/jsv) (Elixir)
+- [kmp](./implementations/kmp) (Kotlin)
+- [networknt](./implementations/networknt/) (Java)
+- [opis](./implementations/opis/) (PHP)
+- [py-jsonschema](./implementations/py-jsonschema/) (Python)
+- [rapidjson](./implementations/rapidjson/) (C++)
+- [schemasafe](./implementations/schemasafe/) (JS)
+
+Compared to the original [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) the following libraries were added: 
+
+- [go-google](./implementations/go-google/) (Go)
+- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go)
+- [go-kaptinlin](./implementations/go-kaptinlin/) (Go)
+- [go-katydid-auto](./implementations/go-katydid-auto/) (Go)
+- [go-katydid-mem](./implementations/go-katydid-mem/) (Go)
+- [rapidjson](./implementations/rapidjson/) (C++)
+
+Also note that [go-santhosh-tekuri](./implementations/go-santhosh-tekuri/) was renamed from [go-jsonschema](https://github.com/sourcemeta-research/jsonschema-benchmark/tree/main/implementations/go-jsonschema).
 
 Each implementation is run via Docker.
 First, a Docker container is built with all the necessary dependencies.
 Then, at runtime, a folder containing the schema and the necessary dependencies is mounted and the time to validate all documents is measured.
-All implementations can be found in the `implementations/` subdirectory.
-A summary of these implementations is given below.
 
-- [Ajv](https://ajv.js.org/) (JS)
-- [Blaze](https://github.com/sourcemeta/blaze) (C++)
-- [@exodus/schemasafe](https://github.com/ExodusMovement/schemasafe) (JS)
-- [boon](https://github.com/santhosh-tekuri/boon) (Rust)
-- [Corvus.JsonSchema](https://github.com/corvus-dotnet/Corvus.JsonSchema) (C#)
-- [Hyperjump](https://github.com/hyperjump-io/json-schema) (JS)
-- [JSU](https://github.com/zx80/json-schema-utils) (C, Java, JS, Python, Perl)
-- [Opis](https://opis.io/json-schema) (PHP)
-- [jsoncons](https://github.com/danielaparker/jsoncons) (C++)
-- [json_schemer](https://github.com/davishmcclurg/json_schemer) (Ruby)
-- [json-schema-validator](https://github.com/networknt/json-schema-validator) (Java) (Disabled)
-- [json-schema-validator](https://github.com/OptimumCode/json-schema-validator) (Kotlin)
-- [jsonschema](https://python-jsonschema.readthedocs.io/en/stable/) (Python)
-- [JsonSchema.NET](https://github.com/json-everything/json-everything) (C#)
-- [JSV](https://github.com/lud/jsv) (Elixir)
+Implementations can be ignored by adding a `.benchmark-ignore` file in the implementation subdirectory.
+It also worth noting that some implementations compile schemas ahead of time into a more efficient representation, while others interpret the entire schema at runtime.
 
-Go libraries:
-- [google](https://github.com/google/jsonschema-go) (Go)
-- [json-schema-spec](https://github.com/json-schema-spec/json-schema-go) (Go)
-- [kaptinlin](https://github.com/kaptinlin/jsonschema) (Go)
-- [katydid-auto](https://github.com/katydid/validator-go-jsonschema) (Go)
-- [katydid-mem](https://github.com/katydid/validator-go-jsonschema) (Go)
-- [santhosh-tekuri](https://github.com/santhosh-tekuri/jsonschema/) (Go)
-
-Note that some implementations are currently ignored by default to limit the runtime of the benchmark.
-These implementations are identified by a `.benchmark-ignore` file in the implementation subdirectory.
-To run one of these implementations, it must be explicitly specified as described above.
-
-## Acceptance criteria
-
-As the name implies, this benchmark is for JSON Schema implementations.
-Every implementation included in this benchmark must aim to be a fully compliant implementation of the [JSON Schema](https://json-schema.org/) standard, including all required features as defined by the specification.
-Bugs, spec misunderstandings, and incomplete support for optional features are perfectly acceptable.
-However, implementations that intentionally do not support required parts of the specification, or that only implement a subset of the language with no intention of reaching full compliance, do not qualify for inclusion.
-A strong signal of eligibility is being listed in [Bowtie](https://bowtie.report/) and in the [JSON Schema tooling page](https://json-schema.org/tools), which imply a recognized level of compliance.
-If you believe an included implementation does not meet these criteria, please [open an issue](https://github.com/sourcemeta-research/jsonschema-benchmark/issues).
-
-## Adding a new implementation
+### Adding a new implementation
 
 First, each implementation must have a `Dockerfile` that copies in any necessary scripts and installs dependencies.
 There is also a `version.sh` script that must output the version of the implementation (often extracted from whatever dependency management tool is used).
 Finally, appropriate targets must be added to the `Makefile` to build the Docker container and run the benchmark.
-We will gladly accept pull requests to add new implementations.
-
-## Results
-
-The most recent results can be seen (via GitHub Actions)[https://github.com/sourcemeta-research/jsonschema-benchmark/actions/workflows/ci.yml].
-Note that while there is noise in the results across runs due to the use of shared infrastructure, the relative ranking of different implementations is generally consistent.
-It also worth noting that some implementations compile schemas ahead of time into a more efficient representation, while others interpret the entire schema at runtime.
-Currently we operate under the assumption that a schema changes infrequently enough that the compilation process is unlikely to be a performance bottleneck.
-As such, we currently only measure the time for validation and exclude any compilation time.
-
-## Setup for Mac
-
-* Install [Docker](https://www.docker.com/)
-* Install [dts](https://github.com/martinohmann/dts/releases) by placing the binary downloaded from releases into your `PATH`.
-* Replace sed with gsed from coreutils

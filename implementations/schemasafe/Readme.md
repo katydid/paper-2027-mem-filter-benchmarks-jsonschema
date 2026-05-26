@@ -1,0 +1,1 @@
+[@exodus/schemasafe](https://github.com/ExodusMovement/schemasafe) (JS)

@@ -1,0 +1,1 @@
+The [JSC Java compiler](https://github.com/zx80/json-schema-utils) generates Java code that does validation.

@@ -1,0 +1,1 @@
+[go-kaptinlin](https://github.com/kaptinlin/jsonschema) (Go)
