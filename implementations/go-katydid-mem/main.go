@@ -30,20 +30,27 @@ func validateAll(parser reflect.Parser, matcher jsonschema.Matcher, instances []
 }
 
 var notSupported = map[string]string{
-	"ansible-meta":           "json: cannot unmarshal bool into Go struct field Schema.Object.properties of type schema.Schema",
-	"cmake-presets":          "just takes long",
-	"cql2":                   "could not find schema for #/$defs/andOrExpression",
+	"ajv_cosmicrealms-mixed": "uniqueItems not supported",
+	"ajv_cosmicrealms-valid": "uniqueItems not supported",
 	"cspell":                 "uniqueItems not supported",
 	"deno":                   "uniqueItems not supported",
-	"draft-04":               "json: cannot unmarshal bool into Go struct field Schema.Object.properties of type schema.Schema",
-	"unreal-engine-uproject": "uniqueItems not supported",
-	"geojson":                "timed out",
+	"draft-04":               "uniqueItems not supported",
 	"jsconfig":               "uniqueItems not supported",
 	"krakend":                "uniqueItems not supported",
-	"lazygit":                "uniqueItems are not supported",
-	"openapi":                "could not find schema for #/$defs/server",
-	"stylecop":               "uniqueItems are not supported",
-	"ui5-manifest":           "json: cannot unmarshal bool into Go struct field Schema.definitions.Object.properties.Array.items of type []*schema.Schema",
+	"lazygit":                "uniqueItems not supported",
+	"openapi":                "uniqueItems not supported",
+	"stylecop":               "uniqueItems not supported",
+	"ui5-manifest":           "uniqueItems not supported",
+	"unreal-engine-uproject": "uniqueItems not supported",
+	"zschema_advanced-mixed": "uniqueItems not supported",
+	"zschema_advanced-valid": "uniqueItems not supported",
+	"zschema_basic-mixed":    "uniqueItems not supported",
+	"zschema_basic-valid":    "uniqueItems not supported",
+
+	"ansible-meta":  "json: cannot unmarshal bool into Go struct field Schema.Object.properties of type schema.Schema",
+	"cmake-presets": "just takes long",
+	"cql2":          "could not find schema for #/$defs/andOrExpression",
+	"geojson":       "timed out",
 }
 
 func main() {
