@@ -23,6 +23,14 @@ import (
 type FieldOption func(r *randField)
 
 func Field(name string, value Rand, opts ...FieldOption) Rand {
+	res := &randField{name: Const(strconv.Quote(name)), value: value}
+	for _, o := range opts {
+		o(res)
+	}
+	return res
+}
+
+func PatternField(name Rand, value Rand, opts ...FieldOption) Rand {
 	res := &randField{name: name, value: value}
 	for _, o := range opts {
 		o(res)
@@ -31,7 +39,7 @@ func Field(name string, value Rand, opts ...FieldOption) Rand {
 }
 
 type randField struct {
-	name     string
+	name     Rand
 	required bool
 	value    Rand
 }
@@ -46,12 +54,12 @@ func (o *randField) Right(r rand.Rand) string {
 	if !o.required && r.Intn(5) == 0 {
 		return ""
 	}
-	return strconv.Quote(o.name) + ":" + o.value.Right(r)
+	return o.name.Right(r) + ":" + o.value.Right(r)
 }
 
 func (o *randField) Wrong(r rand.Rand) string {
 	if o.required && r.Intn(3) == 0 {
 		return ""
 	}
-	return strconv.Quote(o.name) + ":" + o.value.Wrong(r)
+	return o.name.Right(r) + ":" + o.value.Wrong(r)
 }

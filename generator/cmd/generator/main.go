@@ -30,6 +30,7 @@ import (
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas"
 	complex "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_complex"
 	medium "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_medium"
+	advanced "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/zschema_advanced"
 	basic "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/zschema_basic"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/std"
@@ -192,6 +193,28 @@ var generators = []schemaGenerator{
 		schema:    basic.SchemaBasicNoUniqueItems,
 		validOnly: true,
 		num:       200,
+	},
+	{
+		name:   "zschema_advanced-mixed",
+		gen:    advanced.Advanced(),
+		schema: advanced.SchemaAdvanced,
+	},
+	{
+		name:      "zschema_advanced-valid",
+		gen:       advanced.Advanced(),
+		schema:    advanced.SchemaAdvanced,
+		validOnly: true,
+	},
+	{
+		name:   "zschema_advanced-noUniqueItems-mixed",
+		gen:    advanced.AdvancedNoUniqueItems(),
+		schema: advanced.SchemaAdvancedNoUniqueItems,
+	},
+	{
+		name:      "zschema_advanced-noUniqueItems-valid",
+		gen:       advanced.AdvancedNoUniqueItems(),
+		schema:    advanced.SchemaAdvancedNoUniqueItems,
+		validOnly: true,
 	},
 }
 
