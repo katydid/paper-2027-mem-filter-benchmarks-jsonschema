@@ -30,6 +30,7 @@ import (
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/schemas"
 	complex "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_complex"
 	medium "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_medium"
+	basic "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/zschema_basic"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/std"
 )
@@ -165,6 +166,19 @@ var generators = []schemaGenerator{
 		gen:       medium.Medium(),
 		schema:    medium.SchemaMedium,
 		validOnly: true,
+	},
+	{
+		name:   "zschema_basic-mixed",
+		gen:    basic.ProductSet(),
+		schema: basic.SchemaBasic,
+		num:    200,
+	},
+	{
+		name:      "zschema_basic-valid",
+		gen:       basic.ProductSet(),
+		schema:    basic.SchemaBasic,
+		validOnly: true,
+		num:       200,
 	},
 }
 

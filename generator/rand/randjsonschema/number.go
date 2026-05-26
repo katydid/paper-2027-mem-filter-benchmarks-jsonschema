@@ -58,22 +58,36 @@ func WithMultipleOf(n uint) func(r *randNumber) {
 	}
 }
 
+func WithExclusiveMinimum(n int) func(r *randNumber) {
+	return func(r *randNumber) {
+		r.minimum = &n
+		r.exclusive = true
+	}
+}
+
 type randNumber struct {
 	minimum    *int
 	maximum    *int
+	exclusive  bool
 	multipleOf *uint
 	isInteger  bool
 }
 
 func (o *randNumber) Right(r rand.Rand) string {
-	if o.minimum != nil && r.Intn(20) == 0 {
+	if !o.exclusive && o.minimum != nil && r.Intn(20) == 0 {
 		return strconv.Itoa(int(*o.minimum))
 	}
-	if o.maximum != nil && r.Intn(20) == 0 {
-		return strconv.Itoa(int(*o.minimum))
+	if !o.exclusive && o.maximum != nil && r.Intn(20) == 0 {
+		return strconv.Itoa(int(*o.maximum))
 	}
 	if o.maximum != nil && o.minimum != nil {
-		return strconv.Itoa(r.Intn(*o.maximum-*o.minimum) + *o.minimum)
+		n := r.Intn(*o.maximum-*o.minimum) + *o.minimum
+		if o.exclusive {
+			if n == *o.maximum || n == *o.minimum {
+				return o.Right(r)
+			}
+		}
+		return strconv.Itoa(n)
 	}
 	num := randjson.Number(r)
 	if o.isInteger {
@@ -81,6 +95,9 @@ func (o *randNumber) Right(r rand.Rand) string {
 	}
 	i, err := strconv.Atoi(num)
 	if err != nil {
+		return o.Right(r)
+	}
+	if o.minimum != nil && o.exclusive && i <= int(*o.minimum) {
 		return o.Right(r)
 	}
 	if o.minimum != nil && i < int(*o.minimum) {
@@ -105,6 +122,11 @@ func (o *randNumber) Wrong(r rand.Rand) string {
 	if r.Intn(10) == 0 {
 		// generate not a number
 		return randjson.Value(r, randjson.NotNumber())
+	}
+	if o.exclusive && o.minimum != nil {
+		if r.Intn(10) == 0 {
+			return strconv.Itoa(*o.minimum)
+		}
 	}
 	var num string
 	for {

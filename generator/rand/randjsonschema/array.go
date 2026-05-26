@@ -15,6 +15,7 @@
 package randjsonschema
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
@@ -26,11 +27,18 @@ type ArrayOption func(r *randArray)
 type randArray struct {
 	Item   Rand
 	minLen int
+	unique bool
 }
 
 func WithMinItems(n int) func(r *randArray) {
 	return func(r *randArray) {
 		r.minLen = n
+	}
+}
+
+func WithUniqueItems() func(r *randArray) {
+	return func(r *randArray) {
+		r.unique = true
 	}
 }
 
@@ -46,7 +54,11 @@ func (o *randArray) Right(r rand.Rand) string {
 	n := r.Intn(10) + o.minLen
 	items := []string{}
 	for range n {
-		items = append(items, o.Item.Right(r))
+		s := o.Item.Right(r)
+		for o.unique && slices.Contains(items, s) {
+			s = o.Item.Right(r)
+		}
+		items = append(items, s)
 	}
 	return "[" + strings.Join(items, ",") + "]"
 }
@@ -70,6 +82,10 @@ func (o *randArray) Wrong(r rand.Rand) string {
 			} else {
 				items = append(items, o.Item.Right(r))
 			}
+		}
+		if o.unique && r.Intn(10) == 0 {
+			copyIndex := r.Intn(n)
+			items[wrongIndex] = items[copyIndex]
 		}
 		return "[" + strings.Join(items, ",") + "]"
 	}
