@@ -79,6 +79,12 @@ First, each implementation must have a `Dockerfile` that copies in any necessary
 There is also a `version.sh` script that must output the version of the implementation (often extracted from whatever dependency management tool is used).
 Finally, appropriate targets must be added to the `Makefile` to build the Docker container and run the benchmark.
 
+## Shortcomings
+
+* Lots of libraries do not support unicode strings properly, so random generation of documents has been limited to ascii strings.
+* Since we using JSONL for documents, we do not generate newlines in strings.
+* Number generation has been limited to 64 bit floats.
+
 ## Schemas
 
 <table>

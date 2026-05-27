@@ -74,6 +74,9 @@ implementations/%/memory-wrapper.sh: memory-wrapper.sh
 generate:
 	(cd generator && make generate)
 
+run:
+	make dist/report.csv
+
 # Blaze
 
 implementations/blaze/.dockertimestamp: \

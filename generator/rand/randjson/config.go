@@ -49,6 +49,7 @@ func newConfig(opts ...Option) *config {
 		numberEdgeCases:    defaultNumberEdgeCases,
 		numberEdgeCaseOdds: 100,
 		maxSpaces:          5,
+		easyStrings:        true, // TODO make this false, but currently lots of engines struggle with unicode
 		noNewlines:         true, // TODO make this more configurable, but this is the default for now to support the jsonl format.
 		easyFloats:         true, // TODO make these false by default. This is currently true since not all engines support large numbers.
 	}

@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     const std::filesystem::path example{argv[1]};
     return validate(example);
   } catch (const std::exception &e) {
-    std::cerr << "Error during Blaze benchmark: " << e.what() << "\n";
+    std::cerr << "Error during Blaze benchmark: " << e.what() << " in folder " << argv[1] << "\n";
     return EXIT_FAILURE;
   }
 }
