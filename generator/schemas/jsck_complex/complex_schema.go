@@ -52,6 +52,7 @@ package jsck_complex
 
 const SchemaComplexNew = `
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "array",
   "items": {"$ref": "#transaction"},
   "minItems": 1,

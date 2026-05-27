@@ -24,6 +24,7 @@ import (
 
 const SchemaConfIsIn2026OrLate2025AndEU = `
 {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
 	"definitions": {
 		"due": {
 			"type": "object",

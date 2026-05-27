@@ -71,6 +71,9 @@ schemas/%/schema-noformat.json: schemas/%/schema.json
 implementations/%/memory-wrapper.sh: memory-wrapper.sh
 	cp -p $< $@
 
+generate:
+	(cd generator && make generate)
+
 # Blaze
 
 implementations/blaze/.dockertimestamp: \

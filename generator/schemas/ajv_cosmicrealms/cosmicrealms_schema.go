@@ -25,6 +25,7 @@ package ajv_cosmicrealms
 
 const SchemaCosmicRealms = `
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "test",
   "type": "object",
   "additionalProperties": false,
@@ -89,6 +90,7 @@ const SchemaCosmicRealms = `
 
 const SchemaCosmicRealmsNoUniqueItems = `
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "test",
   "type": "object",
   "additionalProperties": false,

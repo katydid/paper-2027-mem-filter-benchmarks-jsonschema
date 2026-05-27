@@ -48,6 +48,7 @@ package jsck_medium
 
 const SchemaMedium = `
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "description": "A moderately complex schema with some nesting and value constraints",
   "type": "object",
   "additionalProperties": false,
