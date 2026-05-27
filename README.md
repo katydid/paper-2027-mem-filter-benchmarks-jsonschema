@@ -18,9 +18,11 @@ The benchmarks require:
 
 ## Running
 
-To run all the benchmarks, a report can be produced via `make dist/report.csv`.
-The `Makefile` accepts parameters `IMPLEMENTATIONS` to specify which implementations to run and `RUNS` for the number of runs per implementation.
-For example, `make IMPLEMENTATIONS='blaze jsoncons' RUNS=5` will run the Blaze and jsoncons implementations 5 times each.
+There are several ways to run the benchmarks:
+
+* Run all benchmarks and produce a report: `make run` or `make dist/report.csv`
+* Run only specific implementations: `make IMPLEMENTATIONS='blaze jsoncons' RUNS=5`
+* Run only specific schemas: `make SCHEMAS='example-address-valid'`
 
 ## Implementations
 
