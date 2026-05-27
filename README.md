@@ -6,7 +6,7 @@ Each validator is run with multiple schemas and a collection of documents that m
 
 ## Results
 
-The most recent results can be seen (via GitHub Actions)[https://github.com/katydid/validator-jsonschema-benchmarks/actions/workflows/ci.yml].
+The most recent results can be seen [via GitHub Actions](https://github.com/katydid/validator-jsonschema-benchmarks/actions/workflows/ci.yml).
 
 ## Setup
 
