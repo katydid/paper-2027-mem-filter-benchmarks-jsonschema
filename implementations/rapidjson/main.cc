@@ -85,7 +85,7 @@ int validate(const std::filesystem::path &example) {
   const auto warm_duration{std::chrono::duration_cast<std::chrono::nanoseconds>(
       warm_end - warm_start)};
 
-  std::cout << cold_duration.count() << "," << warm_duration.count() << "," << compile_duration.count() << "\n";
+  std::cout << cold_duration.count() << "," << warm_duration.count() << "," << "TODO" << "," << compile_duration.count() << "\n";
 
   return EXIT_SUCCESS;
 }

@@ -142,7 +142,7 @@ public class JsonSchemaBenchmark
         String odelay = String.format("%.03f", overhead_delay);
         System.err.println("Java validation: pass=" + (values.length - errors) +
                            " fail=" + errors + " " + sdelay + " µs [" + odelay + " µs]");
-        System.out.println((long) (1000 * cold_run + 0.5) + "," + (long) (1000 * hot_run + 0.5));
+        System.out.println((long) (1000 * cold_run + 0.5) + "," + (long) (1000 * hot_run + 0.5) + "," + "TODO");
 
         // cleanup
         checker.free();

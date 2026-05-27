@@ -88,7 +88,7 @@ printf STDERR
     "pl validation: pass=$pass fail=$errors %.03f µs [%.03f µs]\n", $hot_delay, $overhead_delay;
 
 my ($ns_cold, $ns_warm) = (int($cold_delay * 1E3 + 0.5), int($hot_delay * 1E3 + 0.5));
-print "$ns_cold,$ns_warm\n";
+print "$ns_cold,$ns_warm,TODO\n";
 
 check_model_free();
 

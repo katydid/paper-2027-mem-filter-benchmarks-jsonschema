@@ -82,7 +82,7 @@ def jsonschema_benchmark():
           f"{delay:.03f} µs [{overhead_delay:.03f} µs]", file=sys.stderr)
 
     # cold-run-ns,warm-run-ns
-    print(f"{int(1000 * cold_delay + 0.5)},{int(1000 * delay + 0.5)}")
+    print(f"{int(1000 * cold_delay + 0.5)},{int(1000 * delay + 0.5)},TODO")
 
     schema.check_model_free()
     sys.exit(1 if errors else 0)

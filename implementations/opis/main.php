@@ -57,4 +57,4 @@ validate_all($validator, $schema_id, $instances);
 $warm_end = hrtime(true);
 $warm_duration = $warm_end - $warm_start;
 
-echo $cold_duration . ',' . $warm_duration . ',' . $compile_duration . "\n";
+echo $cold_duration . ',' . $warm_duration . ',' . 'TODO' . ',' . $compile_duration . "\n";

@@ -35,4 +35,4 @@ if __name__ == "__main__":
         validator.is_valid(instance)
     warm_end = time.time_ns()
 
-    print((cold_end - cold_start), ",", (warm_end - warm_start), ",", (compile_end - compile_start), sep='')
+    print((cold_end - cold_start), ",", (warm_end - warm_start), ",", "TODO", ",", (compile_end - compile_start), sep='')

@@ -44,5 +44,5 @@ stopWatch.Stop();
 TimeSpan warmTs = stopWatch.Elapsed;
 
 // Output file time and exit
-Console.WriteLine(coldTs.TotalNanoseconds + "," + warmTs.TotalNanoseconds);
+Console.WriteLine(coldTs.TotalNanoseconds + "," + warmTs.TotalNanoseconds + "," + "TODO");
 Environment.Exit(valid ? 0 : 1);

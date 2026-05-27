@@ -69,7 +69,7 @@ async function validateSchema(schemaPath, instancePath) {
   const warmEndTime = performance.now();
   const warmDurationNs = (warmEndTime - warmStartTime) * 1e6;
 
-  console.log(coldDurationNs.toFixed(0) + ',' + warmDurationNs.toFixed(0) + ',' + compileDurationNs.toFixed(0));
+  console.log(coldDurationNs.toFixed(0) + ',' + warmDurationNs.toFixed(0) + ',' + 'TODO' + ',' + compileDurationNs.toFixed(0));
 
   // Exit with non-zero status on validation failure
   if (failed) {

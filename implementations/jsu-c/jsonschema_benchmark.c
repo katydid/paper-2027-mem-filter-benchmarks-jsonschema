@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
     fprintf(stderr,
             "C validation: pass=%d fail=%d %.03f µs [%.03f µs]\n",
             npass, nfail, delay, overhead_delay);
-    fprintf(stdout, "%lld,%lld\n",
+    fprintf(stdout, "%lld,%lld,TODO\n",
             (long long int) (1000 * cold_delay + 0.5), (long long int) (1000 * delay + 0.5));
 
     check_model_free();

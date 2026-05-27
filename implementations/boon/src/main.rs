@@ -57,7 +57,7 @@ fn main() -> Result<(), Box<dyn Error>> {
   validate_all(&schemas, sch_index, &serde_lines);
   let warm_duration = warm_start.elapsed().as_nanos();
 
-  println!("{:?},{:?},{:?}", cold_duration, warm_duration, compile_duration);
+  println!("{:?},{:?},TODO,{:?}", cold_duration, warm_duration, compile_duration);
 
   Ok(())
 }

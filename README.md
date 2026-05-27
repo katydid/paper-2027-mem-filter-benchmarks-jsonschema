@@ -31,7 +31,7 @@ A summary of these implementations is given below:
 - [ajv-bun](./implementations/ajv-bun/) (JS with BUN runtime)
 - [blaze](./implementations/blaze/) (C++)
 - [boon](./implementations/boon/) (Rust)
-- [corvus](./implementations/corvus/) (C#)
+- [corvus](./implementations/corvus/) (generated C#)
 - [go-google](./implementations/go-google/) (Go)
 - [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go)
 - [go-kaptinlin](./implementations/go-kaptinlin/) (Go)

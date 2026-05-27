@@ -42,4 +42,4 @@ end)
 warm_end = System.monotonic_time(:nanosecond)
 warm_duration = warm_end - warm_start
 
-IO.puts(Integer.to_string(cold_duration) <> "," <> Integer.to_string(warm_duration) <> "," <> Integer.to_string(compile_duration))
+IO.puts(Integer.to_string(cold_duration) <> "," <> Integer.to_string(warm_duration) <> "," <> "TODO" <> "," <> Integer.to_string(compile_duration))

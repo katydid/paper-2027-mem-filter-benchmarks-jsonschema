@@ -78,7 +78,7 @@ export default async function main()
     console.error(`js validation: pass=${values.length - errors} fail=${errors}`,
                   `${(1000.0 * delay).toFixed(3)} µs [${(1000.0 * overhead_delay).toFixed(3)} µs]`)
 
-    console.log((1000000.0 * cold_delay).toFixed(0) + ',' + (1000000.0 * delay).toFixed(0))
+    console.log((1000000.0 * cold_delay).toFixed(0) + ',' + (1000000.0 * delay).toFixed(0) + ',' + 'TODO')
 
     check_model_free()
     process.exit(errors ? 1 : 0)

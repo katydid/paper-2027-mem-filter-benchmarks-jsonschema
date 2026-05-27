@@ -40,4 +40,4 @@ warm_start = Process.clock_gettime(Process::CLOCK_REALTIME, :nanosecond)
 validate_all(instances, schemer)
 warm_end = Process.clock_gettime(Process::CLOCK_REALTIME, :nanosecond)
 
-print (cold_end - cold_start), ",", (warm_end - warm_start), ",", (compile_end - compile_start), "\n"
+print (cold_end - cold_start), ",", (warm_end - warm_start), ",", "TODO", ",", (compile_end - compile_start), "\n"

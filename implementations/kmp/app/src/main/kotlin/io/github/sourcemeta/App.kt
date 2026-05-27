@@ -51,5 +51,5 @@ fun main(args: Array<String>) {
     validateAll(schema, docs)
     val warmEnd = System.nanoTime()
 
-    println("${coldEnd - coldStart},${warmEnd - warmStart},${compileEnd - compileStart}")
+    println("${coldEnd - coldStart},${warmEnd - warmStart},TODO,${compileEnd - compileStart}")
 }
