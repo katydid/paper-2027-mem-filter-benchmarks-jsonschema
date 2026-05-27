@@ -28,7 +28,6 @@ for schema in $SCHEMAS; do
   if [ "$FORMAT" = "csv" ]; then
     CSV_ROWS=$(printf "%s%s,%d,%.1f,%.0f%s" "$CSV_ROWS" "$schema" "$docs" "$size_kb" "$avg_doc_size" '\n')
   elif [ "$FORMAT" = "md" ]; then
-    LATEX_ROWS=$(printf "%s        %s & %d & %.1f & %.0f %s" "$LATEX_ROWS" "$schema" "$docs" "$size_kb" "$avg_doc_size" '\\\\\n')
     MARKDOWN_ROWS=$(printf "%s| %s | %d | %.1f | %.0f |%s" "$MARKDOWN_ROWS" "$schema" "$docs" "$size_kb" "$avg_doc_size" '\n')
   fi
 done
@@ -50,38 +49,4 @@ EOF
 
   echo -e $MARKDOWN_ROWS
 
-  cat << EOF
-<details>
-
-<summary>LaTeX table</summary>
-
-EOF
-
-  echo '```'
-
-  cat << EOF
-\begin{table}[h]
-    {\small
-    \centering
-    \begin{tabular}{l r r r}
-        \hline
-        Name & \# Docs & Schema Size (KB) & Avg. Doc. Size (B) \\\\
-        \hline
-EOF
-
-  echo -ne "$LATEX_ROWS"
-
-  # Print the table footer
-  cat << EOF
-    \end{tabular}
-    }
-    \caption{Datasets used for validator evaluation}\label{tab:datasets}
-\end{table}
-EOF
-
-  echo '```'
-
-  cat << EOF
-</details>
-EOF
 fi

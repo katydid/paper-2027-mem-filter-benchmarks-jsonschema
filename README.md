@@ -10,7 +10,11 @@ The most recent results can be seen [via GitHub Actions](https://github.com/katy
 
 ## Setup
 
-The benchmark requires make, [Docker](https://www.docker.com/), [dts](https://github.com/martinohmann/dts/releases) and sed.
+The benchmarks require:
+
+* posix tools: make, sed, printf
+* [Docker](https://www.docker.com/)
+* [dts](https://github.com/martinohmann/dts/releases), which can be installed by downloading the binary and putting it in your PATH.
 
 ## Running
 
