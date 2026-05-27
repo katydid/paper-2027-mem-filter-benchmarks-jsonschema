@@ -459,7 +459,7 @@ Finally, appropriate targets must be added to the `Makefile` to build the Docker
   <td>TODO</td>
   <td>TODO</td>
   <td>valid only</td>
-  <td>uniqueItems</td>
+  <td></td>
 </tr>
 <tr>
   <td><a href="./schemas/pre-commit-hooks/">pre-commit-hooks</a></td>

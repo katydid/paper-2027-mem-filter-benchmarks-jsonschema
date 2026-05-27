@@ -36,7 +36,6 @@ var notSupported = map[string]string{
 	"jsconfig":               "uniqueItems not supported",
 	"krakend":                "uniqueItems not supported",
 	"lazygit":                "uniqueItems not supported",
-	"openapi":                "uniqueItems not supported",
 	"stylecop":               "uniqueItems not supported",
 	"ui5-manifest":           "uniqueItems not supported",
 	"unreal-engine-uproject": "uniqueItems not supported",
