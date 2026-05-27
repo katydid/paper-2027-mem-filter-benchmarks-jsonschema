@@ -1,1 +1,0 @@
-[katydid-auto](https://github.com/katydid/validator-go-jsonschema) (Go) fully prepopulates the memoization table at compile time.
