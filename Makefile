@@ -74,6 +74,9 @@ implementations/%/memory-wrapper.sh: memory-wrapper.sh
 generate:
 	(cd generator && make generate)
 
+analytics-schemas:
+	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource ../../../schemas > ../../../schemas.latex)
+
 run:
 	make dist/report.csv
 

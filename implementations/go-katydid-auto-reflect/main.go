@@ -30,8 +30,8 @@ func validateAll(parser reflect.Parser, matcher jsonschema.Matcher, instances []
 }
 
 var notSupported = map[string]string{
-	"ajv_cosmicrealms-mixed": "uniqueItems not supported",
-	"ajv_cosmicrealms-valid": "uniqueItems not supported",
+	"ajv-cosmicrealms-mixed": "uniqueItems not supported",
+	"ajv-cosmicrealms-valid": "uniqueItems not supported",
 	"cspell":                 "uniqueItems not supported",
 	"deno":                   "uniqueItems not supported",
 	"draft-04":               "uniqueItems not supported",
@@ -41,10 +41,10 @@ var notSupported = map[string]string{
 	"stylecop":               "uniqueItems not supported",
 	"ui5-manifest":           "uniqueItems not supported",
 	"unreal-engine-uproject": "uniqueItems not supported",
-	"zschema_advanced-mixed": "uniqueItems not supported",
-	"zschema_advanced-valid": "uniqueItems not supported",
-	"zschema_basic-mixed":    "uniqueItems not supported",
-	"zschema_basic-valid":    "uniqueItems not supported",
+	"zschema-advanced-mixed": "uniqueItems not supported",
+	"zschema-advanced-valid": "uniqueItems not supported",
+	"zschema-basic-mixed":    "uniqueItems not supported",
+	"zschema-basic-valid":    "uniqueItems not supported",
 
 	"ansible-meta":  "json: cannot unmarshal bool into Go struct field Schema.Object.properties of type schema.Schema",
 	"cmake-presets": "just takes long",
