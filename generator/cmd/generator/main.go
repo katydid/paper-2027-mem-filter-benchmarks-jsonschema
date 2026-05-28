@@ -265,10 +265,18 @@ func main() {
 		if err != nil {
 			panic(fmt.Sprintf("given schema %s, error: %v", gen.schema, err))
 		}
+
+		// mark that this folder was generated
+		generatedFilename := filepath.Join(subfolder, ".generated")
+		if err := os.WriteFile(generatedFilename, []byte{}, 0644); err != nil {
+			panic(err)
+		}
+
 		schemaFilename := filepath.Join(subfolder, "schema.json")
 		if err := os.WriteFile(schemaFilename, []byte(gen.schema), 0644); err != nil {
 			panic(err)
 		}
+
 		number := *num
 		if gen.num > 0 {
 			fmt.Printf("overriding num with %d for schema %s\n", gen.num, gen.name)
