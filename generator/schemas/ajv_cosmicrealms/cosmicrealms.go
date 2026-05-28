@@ -38,7 +38,7 @@ func CosmicRealms() Rand {
 	))
 }
 
-func CosmicRealmsNoUniqueItems() Rand {
+func CosmicRealmsrmUniqueItems() Rand {
 	return Object(WithFields(
 		Field("fullName", String(), IsRequired()),
 		Field("age", Integer(WithMinimum(0)), IsRequired()),

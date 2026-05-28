@@ -42,11 +42,11 @@ func Product() Rand {
 }
 
 // exactly the same as the schema above, except we removed uniqueItems
-func ProductSetNoUniqueItems() Rand {
-	return ArrayOf(ProductNoUniqueItems())
+func ProductSetrmUniqueItems() Rand {
+	return ArrayOf(ProductrmUniqueItems())
 }
 
-func ProductNoUniqueItems() Rand {
+func ProductrmUniqueItems() Rand {
 	return Object(WithAdditionalFields(),
 		WithAlwaysRightFields(
 			Field("warhouseLocation", Any()),

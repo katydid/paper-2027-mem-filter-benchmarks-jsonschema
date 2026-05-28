@@ -72,14 +72,14 @@ func TmpFS() Rand {
 	))
 }
 
-func AdvancedNoUniqueItems() Rand {
+func AdvancedrmUniqueItems() Rand {
 	return Object(WithFields(
-		Field("/", EntryNoUniqueItems(), IsRequired()),
-		PatternField(FieldName(), EntryNoUniqueItems()),
+		Field("/", EntryrmUniqueItems(), IsRequired()),
+		PatternField(FieldName(), EntryrmUniqueItems()),
 	))
 }
 
-func EntryNoUniqueItems() Rand {
+func EntryrmUniqueItems() Rand {
 	return Object(WithAdditionalFields(), WithFields(
 		Field("storage", Storage(), IsRequired()),
 		Field("fstype", Or(WithAnyOf(Const(`"ext3"`), Const(`"ext4"`), Const(`"btrfs"`)))),

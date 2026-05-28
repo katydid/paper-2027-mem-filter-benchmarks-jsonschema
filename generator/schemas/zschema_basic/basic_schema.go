@@ -94,7 +94,7 @@ const SchemaBasic = `
 `
 
 // exactly the same as the schema above, except we removed uniqueItems
-const SchemaBasicNoUniqueItems = `
+const SchemaBasicrmUniqueItems = `
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Product set",

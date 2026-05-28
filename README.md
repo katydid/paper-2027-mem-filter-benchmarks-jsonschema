@@ -101,14 +101,14 @@ We can regenerate instances.jsonl files for some schemas by running: `make gener
   <td>uniqueItems</td>
 </tr>
 <tr>
-  <td><a href="./schemas/ajv_cosmicrealms-noUniqueItems-mixed/">ajv_cosmicrealms-noUniqueItems-mixed</a></td>
+  <td><a href="./schemas/ajv_cosmicrealms-rmUniqueItems-mixed/">ajv_cosmicrealms-rmUniqueItems-mixed</a></td>
   <td><a href="https://github.com/ajv-validator/ajv/blob/master/spec/tests/schemas/cosmicrealms.json">ajv</a> with uniqueItems removed</td>
   <td>generated</td>
   <td>mixed</td>
   <td></td>
 </tr>
 <tr>
-  <td><a href="./schemas/ajv_cosmicrealms-noUniqueItems-valid/">ajv_cosmicrealms-noUniqueItems-valid</a></td>
+  <td><a href="./schemas/ajv_cosmicrealms-rmUniqueItems-valid/">ajv_cosmicrealms-rmUniqueItems-valid</a></td>
   <td><a href="https://github.com/ajv-validator/ajv/blob/master/spec/tests/schemas/cosmicrealms.json">ajv</a> with uniqueItems removed</td>
   <td>generated</td>
   <td>valid only</td>
@@ -542,14 +542,14 @@ We can regenerate instances.jsonl files for some schemas by running: `make gener
   <td>uniqueItems</td>
 </tr>
 <tr>
-  <td><a href="./schemas/zschema_advanced-noUniqueItems-mixed/">zschema_advanced-noUniqueItems-mixed</a></td>
+  <td><a href="./schemas/zschema_advanced-rmUniqueItems-mixed/">zschema_advanced-rmUniqueItems-mixed</a></td>
   <td>TODO</td>
   <td>TODO</td>
   <td>mixed</td>
   <td></td>
 </tr>
 <tr>
-  <td><a href="./schemas/zschema_advanced-noUniqueItems-valid/">zschema_advanced-noUniqueItems-valid</a></td>
+  <td><a href="./schemas/zschema_advanced-rmUniqueItems-valid/">zschema_advanced-rmUniqueItems-valid</a></td>
   <td>TODO</td>
   <td>TODO</td>
   <td>valid only</td>
@@ -570,14 +570,14 @@ We can regenerate instances.jsonl files for some schemas by running: `make gener
   <td>uniqueItems</td>
 </tr>
 <tr>
-  <td><a href="./schemas/zschema_basic-noUniqueItems-mixed/">zschema_basic-noUniqueItems-mixed</a></td>
+  <td><a href="./schemas/zschema_basic-rmUniqueItems-mixed/">zschema_basic-rmUniqueItems-mixed</a></td>
   <td>TODO</td>
   <td>TODO</td>
   <td>mixed</td>
   <td></td>
 </tr>
 <tr>
-  <td><a href="./schemas/zschema_basic-noUniqueItems-valid/">zschema_basic-noUniqueItems-valid</a></td>
+  <td><a href="./schemas/zschema_basic-rmUniqueItems-valid/">zschema_basic-rmUniqueItems-valid</a></td>
   <td>TODO</td>
   <td>TODO</td>
   <td>valid only</td>
