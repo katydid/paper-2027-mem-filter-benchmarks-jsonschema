@@ -12,14 +12,15 @@ import (
 )
 
 type schema struct {
-	name                 string
-	features             []string
-	source               string
-	generated            bool
-	schemaSizeBytes      int
-	numInstances         int
-	avgInstanceSizeBytes float64
-	rmUniqueItems        bool
+	name                   string
+	features               []string
+	source                 string
+	generated              bool
+	schemaSizeBytes        int
+	numInstances           int
+	avgInstanceSizeBytes   float64
+	rmUniqueItems          bool
+	hasExistingReplacement bool
 }
 
 func main() {
@@ -28,6 +29,7 @@ func main() {
 	rmUniqueItems := flag.Bool("rmUniqueItems", false, "if there is an rmUniqueItems version replace the original with it")
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
 	rmSource := flag.Bool("rmSource", false, "remove prefix source, for example example-x becomes x")
+	groupGen := flag.Bool("groupGen", false, "group generated schemas together")
 	flag.Parse()
 	if len(flag.Args()) == 0 {
 		log.Fatalf("expected location of schemas folder as first argument to command")
@@ -50,12 +52,20 @@ func main() {
 			log.Fatal(err)
 		}
 		schemas = append(schemas, s)
+		for _, schema := range schemas {
+			if containsRmUniqueItems(schemas, schema.name) {
+				schema.hasExistingReplacement = true
+			}
+		}
 	}
 	if *rmUniqueItems {
 		schemas = removeUniqueItems(schemas)
 	}
 	if *rmSource {
 		schemas = removeSourcePrefix(schemas)
+	}
+	if *groupGen {
+		schemas = groupGenerated(schemas)
 	}
 	switch *format {
 	case "html":
@@ -173,7 +183,7 @@ func fprintLatex(w io.Writer, schemas []*schema, pifont bool) {
 	}
 	p("%% BEGIN Generated tabular\n")
 	p("\\begin{tabular}{l|lllll}\n")
-	p("name & schema size (bytes) & number of docs & avg doc size (bytes) & generated & rmUniqueItems \\\\\n")
+	p("name & schema size (B) & \\# Docs & avg doc size (B) & gen & rm \\\\\n")
 	p("\\hline\n")
 	for _, schema := range schemas {
 		p("%s", esc(schema.name))
@@ -196,15 +206,17 @@ func fprintLatex(w io.Writer, schemas []*schema, pifont bool) {
 
 func removeUniqueItems(schemas []*schema) []*schema {
 	res := []*schema{}
-	for _, schema := range schemas {
-		if strings.Contains(schema.name, "rmUniqueItems") {
-			schema.name = strings.Replace(schema.name, "-rmUniqueItems", "", 1)
-			res = append(res, schema)
+	for i, schema := range schemas {
+		if schema.hasExistingReplacement {
 			continue
 		}
-		if !containsRmUniqueItems(schemas, schema.name) {
-			res = append(res, schema)
+		if strings.Contains(schema.name, "rmUniqueItems") {
+			s := schema
+			s.name = strings.Replace(s.name, "-rmUniqueItems", "", 1)
+			res = append(res, s)
+			continue
 		}
+		res = append(res, schemas[i])
 	}
 	return res
 }
@@ -239,6 +251,48 @@ func removeSourcePrefix(schemas []*schema) []*schema {
 		if strings.HasPrefix(schemas[i].name, "zschema-") {
 			schemas[i].name = strings.Replace(schemas[i].name, "zschema-", "", 1)
 		}
+		if strings.HasPrefix(schemas[i].name, "katydid-") {
+			schemas[i].name = strings.Replace(schemas[i].name, "katydid-", "", 1)
+		}
 	}
 	return schemas
+}
+
+func groupGenerated(schemas []*schema) []*schema {
+	res := []*schema{}
+	for i := range schemas {
+		if strings.HasSuffix(schemas[i].name, "-mixed") {
+			mixedSchema := schemas[i]
+			name := mixedSchema.name[:len(mixedSchema.name)-6]
+			validName := name + "-valid"
+			validSchema := findSchema(schemas, validName)
+			groupSchema := &schema{
+				name:                   name,
+				features:               mixedSchema.features,
+				source:                 mixedSchema.source,
+				schemaSizeBytes:        mixedSchema.schemaSizeBytes,
+				numInstances:           mixedSchema.numInstances,
+				avgInstanceSizeBytes:   (mixedSchema.avgInstanceSizeBytes + validSchema.avgInstanceSizeBytes) / 2,
+				rmUniqueItems:          mixedSchema.rmUniqueItems,
+				hasExistingReplacement: mixedSchema.hasExistingReplacement,
+				generated:              true,
+			}
+			res = append(res, groupSchema)
+		} else if strings.HasSuffix(schemas[i].name, "-valid") {
+			// ignore, grouping happens in mixed
+			continue
+		} else {
+			res = append(res, schemas[i])
+		}
+	}
+	return res
+}
+
+func findSchema(schemas []*schema, name string) *schema {
+	for i := range schemas {
+		if schemas[i].name == name {
+			return schemas[i]
+		}
+	}
+	return nil
 }
