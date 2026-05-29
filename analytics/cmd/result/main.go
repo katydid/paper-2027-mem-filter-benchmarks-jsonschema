@@ -27,7 +27,7 @@ import (
 
 func main() {
 	log.SetFlags(log.Lshortfile)
-	format := flag.String("format", "latex", "output format (html|latex)")
+	format := flag.String("format", "latex", "output format (md|latex)")
 	rmUniqueItems := flag.Bool("rmUniqueItems", false, "if there is an rmUniqueItems version replace the original with it")
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
 	rmSource := flag.Bool("rmSource", false, "remove prefix source from schema name, for example example-x becomes x")
@@ -82,13 +82,21 @@ func main() {
 		return esc(name)
 	}
 
-	sprintBool := func(b bool) string {
-		return analytics.SprintLatexBool(*latexPifont, b)
-	}
-
 	switch *format {
 	case "latex":
+		sprintBool := func(b bool) string {
+			return analytics.SprintLatexBool(*latexPifont, b)
+		}
 		fprintLatex(os.Stdout, sprintName, sprintBool, scores)
+	case "md":
+		sprintBool := func(b bool) string {
+			if b {
+				return "yes"
+			} else {
+				return "no"
+			}
+		}
+		fprintMarkdown(os.Stdout, sprintName, sprintBool, scores)
 	}
 }
 
@@ -101,7 +109,6 @@ func fprintLatex(
 	p := func(format string, a ...any) {
 		fmt.Fprintf(w, format, a...)
 	}
-	//escape latex reserved characters
 
 	p("%% BEGIN Generated tabular\n")
 	p("\\begin{tabular}{lll|llll}\n")
@@ -127,4 +134,39 @@ func fprintLatex(
 	}
 	p("\\end{tabular}\n")
 	p("%% END Generated tabular\n")
+}
+
+func fprintMarkdown(
+	w io.Writer,
+	sprintName func(string) string,
+	sprintBool func(bool) string,
+	scores []*analytics.ScoredLine,
+) {
+	p := func(format string, a ...any) {
+		fmt.Fprintf(w, format, a...)
+	}
+
+	p(`| name | mixed | impl | # warm | %% warm | # cold | %% cold |`)
+	p("\n")
+	p(`| --- | --- | --- | --- | --- | --- | --- |`)
+	p("\n")
+	for _, score := range scores {
+		p("| ")
+		p("%s", sprintName(score.Line.Schema.Name))
+		p(" | ")
+		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))
+		p(" | ")
+		p("%s", score.Line.Implementation)
+		p(" | ")
+		p("%d", score.WarmRank)
+		p(" | ")
+		p("%.0f%%", score.WarmSlowDown*100)
+		p(" | ")
+		p("%d", score.ColdRank)
+		p(" | ")
+		p("%.0f%%", score.ColdSlowDown*100)
+		p(" |")
+		p("\n")
+
+	}
 }
