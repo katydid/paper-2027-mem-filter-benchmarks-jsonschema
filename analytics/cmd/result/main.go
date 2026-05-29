@@ -55,6 +55,7 @@ func main() {
 
 	if impl != nil && *impl != "" {
 		impls := strings.Split(*impl, " ")
+		log.Printf("filtering implementations: %#v", impls)
 		lines = analytics.FilterImplementations(lines, impls)
 	}
 
@@ -114,8 +115,13 @@ func fprintLatex(
 	p("\\begin{tabular}{lll|llll}\n")
 	p(`name & mixed & impl & \#warm & \%%warm & \#cold & \%%cold \\`)
 	p("\n")
-	p("\\hline\n")
+	currentSchemaName := ""
 	for _, score := range scores {
+		if currentSchemaName != score.Line.Schema.Name {
+			currentSchemaName = score.Line.Schema.Name
+			p("\\hline")
+			p("\n")
+		}
 		p("%s", sprintName(score.Line.Schema.Name))
 		p(" & ")
 		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))

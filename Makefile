@@ -54,10 +54,10 @@ implementations/%/memory-wrapper.sh: memory-wrapper.sh
 generate:
 	(cd generator && make generate)
 
-analytics-schemas:
+analytics-schemas-latex:
 	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --groupGen ../../../schemas > ../../../schemas.tex)
 
-analytics-results:
+analytics-results-latex:
 	(cd analytics/cmd/result && go run main.go \
 	  --format=latex \
 	  --latex.pifont \

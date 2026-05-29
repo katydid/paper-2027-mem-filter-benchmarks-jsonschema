@@ -243,7 +243,7 @@ func Score(lines []*Line) []*ScoredLine {
 	})
 	fastestWarmNs := lines[sortedWarm[0]].WarmNs
 	for i := range sortedWarm {
-		res[sortedWarm[i]].WarmRank = i
+		res[sortedWarm[i]].WarmRank = i + 1
 	}
 	for i := range lines {
 		res[i].WarmSlowDown = float64(lines[i].WarmNs) / float64(fastestWarmNs)
@@ -258,7 +258,7 @@ func Score(lines []*Line) []*ScoredLine {
 	})
 	fastestColdNs := lines[sortedCold[0]].ColdNs
 	for i := range sortedCold {
-		res[sortedCold[i]].ColdRank = i
+		res[sortedCold[i]].ColdRank = i + 1
 	}
 	for i := range lines {
 		res[i].ColdSlowDown = float64(lines[i].ColdNs) / float64(fastestColdNs)
