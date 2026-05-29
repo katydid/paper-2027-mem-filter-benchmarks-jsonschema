@@ -121,11 +121,15 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version: '1.26.2'
+      # downloads all previously uploaded artifacts
       - name: Download Reports
         uses: actions/download-artifact@v6
       - name: Add heading 1
         run: 
           echo "# Results" >> $GITHUB_STEP_SUMMARY  
+      - name: ls
+        run:
+          ls -R
       - name: Analyse Results
         run: 
           (cd analytics/cmd/result && go run main.go --format=md --schemas=../../../schemas ../../../dist/report.csv >> $GITHUB_STEP_SUMMARY)
