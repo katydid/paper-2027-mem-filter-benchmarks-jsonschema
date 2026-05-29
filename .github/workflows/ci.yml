@@ -126,7 +126,7 @@ jobs:
         uses: actions/download-artifact@v6
         with:
           name: report
-          path: dist/report.csv
+          path: dist/
       - name: Add heading 1
         run: 
           echo "# Results" >> $GITHUB_STEP_SUMMARY  
