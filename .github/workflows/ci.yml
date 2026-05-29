@@ -124,6 +124,9 @@ jobs:
           go-version: '1.26.2'
       - name: Download Report
         uses: actions/download-artifact@v6
+        with:
+          name: report
+          path: dist/report.csv
       - name: Add heading 1
         run: 
           echo "# Results" >> $GITHUB_STEP_SUMMARY  
