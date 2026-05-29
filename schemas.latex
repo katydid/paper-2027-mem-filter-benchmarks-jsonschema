@@ -1,0 +1,57 @@
+% BEGIN Generated tabular
+\begin{tabular}{l|lllll}
+name & schema size (B) & \# Docs & avg doc size (B) & gen & rm \\
+\hline
+cosmicrealms & 1583 & 10000 & 547 & \cmark & \cmark \\
+ansible-meta & 37015 & 333 & 312 & \xmark & \xmark \\
+aws-cdk & 740 & 483 & 1149 & \xmark & \xmark \\
+babelrc & 6717 & 794 & 140 & \xmark & \xmark \\
+clang-format & 55557 & 133 & 334 & \xmark & \xmark \\
+cmake-presets & 86084 & 967 & 2719 & \xmark & \xmark \\
+code-climate & 6051 & 2484 & 281 & \xmark & \xmark \\
+cql2 & 18400 & 109 & 124 & \xmark & \xmark \\
+cspell & 128640 & 981 & 819 & \xmark & \cmark \\
+cypress & 16457 & 981 & 403 & \xmark & \xmark \\
+deno & 22822 & 987 & 1022 & \xmark & \cmark \\
+dependabot & 9631 & 967 & 403 & \xmark & \xmark \\
+draft-04 & 4020 & 563 & 12635 & \xmark & \cmark \\
+address & 761 & 10000 & 140 & \cmark & \xmark \\
+blogpost & 1265 & 10000 & 328 & \cmark & \xmark \\
+calendar & 1499 & 10000 & 341 & \cmark & \xmark \\
+devicetype & 1457 & 10000 & 189 & \cmark & \xmark \\
+health-record & 1509 & 10000 & 416 & \cmark & \xmark \\
+job-posting & 674 & 10000 & 220 & \cmark & \xmark \\
+movie & 708 & 10000 & 243 & \cmark & \xmark \\
+userprofile & 631 & 10000 & 221 & \cmark & \xmark \\
+fabric-mod & 11446 & 911 & 691 & \xmark & \xmark \\
+geojson & 46177 & 500 & 52329 & \xmark & \xmark \\
+gitpod-configuration & 13489 & 986 & 357 & \xmark & \xmark \\
+helm-chart-lock & 1556 & 3888 & 342 & \xmark & \xmark \\
+importmap & 618 & 964 & 629 & \xmark & \xmark \\
+jasmine & 3690 & 980 & 133 & \xmark & \xmark \\
+complex & 4060 & 100 & 31530 & \cmark & \xmark \\
+medium & 1887 & 10000 & 365 & \cmark & \xmark \\
+jsconfig & 60482 & 981 & 177 & \xmark & \cmark \\
+jshintrc & 12142 & 966 & 428 & \xmark & \xmark \\
+conf & 1053 & 10000 & 223 & \cmark & \xmark \\
+krakend & 372808 & 47 & 2382 & \xmark & \cmark \\
+lazygit & 89462 & 280 & 276 & \xmark & \cmark \\
+lerna & 4717 & 985 & 173 & \xmark & \xmark \\
+nest-cli & 19450 & 1025 & 290 & \xmark & \xmark \\
+omnisharp & 13924 & 987 & 595 & \xmark & \xmark \\
+openapi & 33281 & 107 & 164593 & \xmark & \xmark \\
+pre-commit-hooks & 9920 & 985 & 551 & \xmark & \xmark \\
+pulumi & 7983 & 3807 & 251 & \xmark & \xmark \\
+semantic-release & 3422 & 794 & 461 & \xmark & \xmark \\
+stale & 3702 & 961 & 469 & \xmark & \xmark \\
+stylecop & 11732 & 983 & 568 & \xmark & \cmark \\
+tmuxinator & 4545 & 382 & 629 & \xmark & \xmark \\
+ui5 & 96365 & 942 & 487 & \xmark & \xmark \\
+ui5-manifest & 392675 & 611 & 2353 & \xmark & \cmark \\
+unreal-engine-uproject & 10402 & 859 & 394 & \xmark & \cmark \\
+vercel & 38187 & 710 & 406 & \xmark & \xmark \\
+yamllint & 890 & 984 & 352 & \xmark & \xmark \\
+advanced & 2618 & 10000 & 366 & \cmark & \cmark \\
+basic & 975 & 200 & 2783 & \cmark & \cmark \\
+\end{tabular}
+% END Generated tabular
