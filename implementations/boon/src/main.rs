@@ -6,11 +6,17 @@ use std::env;
 const WARMUP_ITERATIONS: u128 = 100;
 const MAX_WARMUP_TIME: u128 = 10_000_000_000; // 10 seconds
 
-fn validate_all(schemas: &Schemas, sch_index: SchemaIndex, serde_lines: &std::vec::Vec<Value>) {
+fn validate_all(schemas: &Schemas, sch_index: SchemaIndex, serde_lines: &std::vec::Vec<Value>) -> bool {
+  let mut failed: bool = false;
   for line in serde_lines {
     let result = schemas.validate(&line, sch_index);
-    assert!(result.is_ok(), "Validation failed for line: {}", line);
+    if !result.is_ok() {
+      failed = true;
+    }
+    // We allow failure, since we do process invalid documents too as part of the benchmark.
+    // assert!(result.is_ok(), "Validation failed for line: {}", line);
   }
+  return !failed;
 }
 
 fn main() -> Result<(), Box<dyn Error>> {

@@ -15,15 +15,18 @@
 #define MAX_WARMUP_TIME 10000000000
 
 bool validate_all(auto &evaluator, const auto &instances, const auto &schema_template) {
+  bool failed = false;
   for (std::size_t num = 0; num < instances.size(); num++) {
     const auto result{evaluator.validate(schema_template, instances[num])};
     if (!result) {
-      std::cerr << "Error validating instance " << num << "\n";
-      return false;
+      // We allow failure, since we do process invalid documents too as part of the benchmark.
+      // std::cerr << "Error validating instance " << num << "\n";
+      // return false;
+      failed = true;
     }
   }
 
-  return true;
+  return !failed;
 }
 
 int validate(const std::filesystem::path &example) {
@@ -50,7 +53,8 @@ int validate(const std::filesystem::path &example) {
 
   const auto cold_start{std::chrono::high_resolution_clock::now()};
   if (!validate_all(evaluator, instances, schema_template)) {
-    return EXIT_FAILURE;
+    // We allow failure, since we do process invalid documents too as part of the benchmark.
+    // return EXIT_FAILURE;
   }
   const auto cold_end{std::chrono::high_resolution_clock::now()};
   const auto cold_duration{std::chrono::duration_cast<std::chrono::nanoseconds>(

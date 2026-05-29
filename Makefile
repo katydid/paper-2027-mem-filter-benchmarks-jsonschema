@@ -36,7 +36,7 @@ define docker_run
 			docker run --rm -v $(CURDIR):/workspace \
 				jsonschema-benchmark/$($@_TOOL) $($@_INPUT) $($@_MISC) > $@.tmp ; \
 		STATUS=$$? ; \
-		if ! grep '.*,.*,' $@.tmp > /dev/null; then printf "0,0,TODO,0," >> $@ ; cat $@.tmp  >> $@ ; else cat $@.tmp >> $@ ; fi ; \
+		if ! grep '.*,.*,' $@.tmp > /dev/null; then printf "0,0,0,0," >> $@ ; cat $@.tmp  >> $@ ; else cat $@.tmp >> $@ ; fi ; \
 		sed "$$ s/$$/,$$STATUS/" $@ > $@.tmp ; mv $@.tmp $@ ; \
 		rm -f $@.tmp ; \
 	done

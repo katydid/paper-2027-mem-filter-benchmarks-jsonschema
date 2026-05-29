@@ -59,7 +59,7 @@ A summary of these implementations is given below:
 - [jsu-py](./implementations/jsu-py/) (generated Python)
 - [JSV](./implementations/jsv) (Elixir)
 - [kmp](./implementations/kmp) (Kotlin)
-- [networknt](./implementations/networknt/) (Java) (Ignored)
+- [networknt](./implementations/networknt/) (Java)
 - [opis](./implementations/opis/) (PHP)
 - [py-jsonschema](./implementations/py-jsonschema/) (Python)
 - [rapidjson](./implementations/rapidjson/) (C++)
