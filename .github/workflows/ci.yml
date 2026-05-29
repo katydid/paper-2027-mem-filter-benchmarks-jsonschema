@@ -121,6 +121,8 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version: '1.26.2'
+      - name: Download Reports
+        uses: actions/download-artifact@v6
       - name: Add heading 1
         run: 
           echo "# Results" >> $GITHUB_STEP_SUMMARY  
