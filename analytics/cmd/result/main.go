@@ -30,9 +30,9 @@ func main() {
 	format := flag.String("format", "latex", "output format (md|latex)")
 	rmUniqueItems := flag.Bool("rmUniqueItems", false, "if there is an rmUniqueItems version replace the original with it")
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
-	rmSource := flag.Bool("rmSource", false, "remove prefix source from schema name, for example example-x becomes x")
+	shortSchemaName := flag.Bool("shortSchemaName", false, "write short schema name")
 	rmSchema1 := flag.Bool("filterSchema1", false, "filter all schemas where one implementation had an non zero exit code")
-	schemasFolder := flag.String("schemas", "./schemas", "location of schemas folder")
+	schemasFolder := flag.String("schemasFolder", "./schemas", "location of schemas folder")
 	impl := flag.String("impls", "", "space separated list of implementations to filter")
 	flag.Parse()
 	reportFilename := "./dist/report.csv"
@@ -79,8 +79,12 @@ func main() {
 		if *rmUniqueItems {
 			name = strings.Replace(name, "-rmUniqueItems", "", 1)
 		}
-		if *rmSource {
-			_, name = analytics.RemovePrefix(name)
+		if *shortSchemaName {
+			schemaName, err := analytics.ParseSchemaName(name)
+			if err != nil {
+				panic(err)
+			}
+			name = schemaName.ShortName
 		}
 		esc := func(s string) string {
 			return strings.Replace(s, "_", "\\_", -1)
@@ -127,7 +131,7 @@ func fprintLatex(
 			p("\\hline")
 			p("\n")
 		}
-		p("%s", sprintName(score.Line.Schema.ShortName))
+		p("%s", sprintName(score.Line.Schema.Name))
 		p(" & ")
 		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))
 		p(" & ")

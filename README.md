@@ -29,7 +29,8 @@ There are several ways to run the benchmarks:
 Analytics currently requires Go to be installed:
 
 * `make analytics-schemas-latex` creates a latex file `schemas.latex` with analytics on the schemas.
-* `make analytics-results-latex` creates a latex file `results.latex` with analytics on the results after running.
+* `make analytics-results-latex` creates a latex file `results.latex` with analytics on the results after running per schema and implementation.
+* `make analytics-impls-md` creates a markdown file `impls.md` with analytics on the results after running per implementation.
 
 ## Implementations
 

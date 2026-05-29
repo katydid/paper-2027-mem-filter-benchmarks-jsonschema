@@ -67,7 +67,7 @@ func CollectSchemas(folder string) ([]*Schema, error) {
 	return schemas, nil
 }
 
-func parseSchemaName(name string) (*SchemaName, error) {
+func ParseSchemaName(name string) (*SchemaName, error) {
 	s := &SchemaName{Name: name}
 	shortName := name
 	if strings.Contains(name, "-mixed") {
@@ -88,7 +88,7 @@ func parseSchemaName(name string) (*SchemaName, error) {
 func collectSchema(folder string) (*Schema, error) {
 	s := &Schema{}
 	name := filepath.Base(folder)
-	schemaName, err := parseSchemaName(name)
+	schemaName, err := ParseSchemaName(name)
 	if err != nil {
 		return nil, err
 	}

@@ -62,10 +62,10 @@ analytics-results-latex:
 	  --format=latex \
 	  --latex.pifont \
 	  --rmUniqueItems \
-	  --rmSource \
+	  --shortSchemaName \
 	  --filterSchema1 \
 	  --impls='ajv-bun blaze boon go-santhosh-tekuri jsu-c go-katydid-auto-json go-katydid-auto-reflect go-katydid-mem-json go-katydid-mem-reflect' \
-	  --schemas=../../../schemas \
+	  --schemasFolder=../../../schemas \
 	  ../../../dist/report.csv \
 	  > ../../../results.tex)
 
@@ -73,12 +73,21 @@ analytics-results-md:
 	(cd analytics/cmd/result && go run main.go \
 	  --format=md \
 	  --rmUniqueItems \
-	  --rmSource \
+	  --shortSchemaName \
 	  --filterSchema1 \
 	  --impls='ajv-bun blaze boon go-santhosh-tekuri jsu-c go-katydid-auto-json go-katydid-auto-reflect go-katydid-mem-json go-katydid-mem-reflect' \
-	  --schemas=../../../schemas \
+	  --schemasFolder=../../../schemas \
 	  ../../../dist/report.csv \
 	  > ../../../results.md)
+
+analytics-impls-md:
+	(cd analytics/cmd/impls && go run main.go \
+	  --format=md \
+	  --filterSchema1 \
+	  --impls='ajv-bun blaze boon go-santhosh-tekuri jsu-c go-katydid-auto-json go-katydid-auto-reflect go-katydid-mem-json go-katydid-mem-reflect' \
+	  --schemasFolder=../../../schemas \
+	  ../../../dist/report.csv \
+	  > ../../../impls.md)
 
 run:
 	make dist/report.csv

@@ -129,16 +129,22 @@ jobs:
           path: dist/
       - name: Add heading 1
         run: 
-          echo "# Results" >> $GITHUB_STEP_SUMMARY  
+          echo "# Results Per Implementation" >> $GITHUB_STEP_SUMMARY  
+      - name: Analyse Results Per Implementation
+        run: 
+          (cd analytics/cmd/impls && go run main.go --format=md --schemasFolder=../../../schemas ../../../dist/report.csv >> $GITHUB_STEP_SUMMARY)
+      - name: Add heading 2
+        run: 
+          echo "# Results Per Schema" >> $GITHUB_STEP_SUMMARY  
       - name: ls
         run:
           ls -R | grep -C 3 report.csv
-      - name: Analyse Results
+      - name: Analyse Results Per Schema
         run: 
-          (cd analytics/cmd/result && go run main.go --format=md --schemas=../../../schemas ../../../dist/report.csv >> $GITHUB_STEP_SUMMARY)
-      - name: Add heading 2
+          (cd analytics/cmd/result && go run main.go --format=md --schemasFolder=../../../schemas ../../../dist/report.csv >> $GITHUB_STEP_SUMMARY)
+      - name: Add heading 3
         run: 
-          echo "# Schemas" >> $GITHUB_STEP_SUMMARY
+          echo "# Input Schemas" >> $GITHUB_STEP_SUMMARY
       - name: Analyse Schemas
         run:
           (cd analytics/cmd/schemas && go run main.go --format=md ../../../schemas >> $GITHUB_STEP_SUMMARY)
