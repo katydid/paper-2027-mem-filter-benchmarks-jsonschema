@@ -105,16 +105,6 @@ jobs:
           echo "implementation,version,name,cold_ns,warm_ns,parse_ns,compile_ns,memory,exit_status" > dist/report.csv
           tail -q -n +2 ./report-*/report.csv >> dist/report.csv
       - run: cat dist/report.csv
-      - name: Get jsonschema-strip binary
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
-        with:
-          repo: sourcemeta-research/jsonschema-strip
-          prerelease: true
-          extension-matching: disable
-      - name: Install dts
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
-        with:
-          repo: martinohmann/dts
       - uses: actions/upload-artifact@v6
         if: always()
         with:
