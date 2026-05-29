@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	analytics "github.com/katydid/validator-jsonschema-benchmarks/analytics/lib"
+	"github.com/katydid/validator-jsonschema-benchmarks/analytics/analytics"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	format := flag.String("format", "html", "output format (html|latex)")
 	rmUniqueItems := flag.Bool("rmUniqueItems", false, "if there is an rmUniqueItems version replace the original with it")
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
-	rmSource := flag.Bool("rmSource", false, "remove prefix source, for example example-x becomes x")
+	rmSource := flag.Bool("rmSource", false, "remove prefix source from schema name, for example example-x becomes x")
 	groupGen := flag.Bool("groupGen", false, "group generated schemas together")
 	flag.Parse()
 	if len(flag.Args()) == 0 {
@@ -89,19 +89,7 @@ func fprintLatex(w io.Writer, schemas []*analytics.Schema, pifont bool) {
 		return strings.Replace(s, "_", "\\_", -1)
 	}
 	sprintBool := func(b bool) string {
-		if pifont {
-			if b {
-				return "\\cmark"
-			} else {
-				return "\\xmark"
-			}
-		} else {
-			if b {
-				return "yes"
-			} else {
-				return "no"
-			}
-		}
+		return analytics.SprintLatexBool(pifont, b)
 	}
 	p("%% BEGIN Generated tabular\n")
 	p("\\begin{tabular}{l|lllll}\n")

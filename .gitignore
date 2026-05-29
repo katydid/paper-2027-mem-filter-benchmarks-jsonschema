@@ -7,3 +7,9 @@
 /node_modules
 .dockertimestamp
 .DS_Store
+schemas.tex
+schemas.html
+schemas.md
+results.tex
+results.html
+results.md

@@ -77,6 +77,9 @@ generate:
 analytics-schemas:
 	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --groupGen ../../../schemas > ../../../schemas.latex)
 
+analytics-results:
+	(cd analytics/cmd/result && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --schemas=../../../schemas ../../../dist/report.csv > ../../../results.latex)
+
 run:
 	make dist/report.csv
 

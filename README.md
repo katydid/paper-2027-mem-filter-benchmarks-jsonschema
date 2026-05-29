@@ -24,6 +24,13 @@ There are several ways to run the benchmarks:
 * Run only specific implementations: `make IMPLEMENTATIONS='blaze jsoncons' RUNS=5`
 * Run only specific schemas: `make SCHEMAS='example-address-valid'`
 
+## Analytics
+
+Analytics currently requires Go to be installed:
+
+* `make analytics-schemas` creates a latex file `schemas.latex` with analytics on the schemas.
+* `make analytics-results` creates a latex file `results.latex` with analytics on the results after running.
+
 ## Implementations
 
 All implementations can be found in the `implementations/` subdirectory.

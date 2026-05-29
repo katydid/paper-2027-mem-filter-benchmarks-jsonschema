@@ -22,15 +22,22 @@ import (
 	"strings"
 )
 
+type SchemaName struct {
+	Name          string
+	PrefixName    string
+	RmUniqueItems bool
+	GeneratedKind string
+	ShortName     string
+}
+
 type Schema struct {
-	Name                   string
+	SchemaName
 	Features               []string
 	Source                 string
 	Generated              bool
 	SchemaSizeBytes        int
 	NumInstances           int
 	AvgInstanceSizeBytes   float64
-	RmUniqueItems          bool
 	HasExistingReplacement bool
 }
 
@@ -60,12 +67,32 @@ func CollectSchemas(folder string) ([]*Schema, error) {
 	return schemas, nil
 }
 
+func parseSchemaName(name string) (*SchemaName, error) {
+	s := &SchemaName{Name: name}
+	shortName := name
+	if strings.Contains(name, "-mixed") {
+		s.GeneratedKind = "mixed"
+		shortName = strings.Replace(shortName, "-mixed", "", 1)
+	} else if strings.Contains(name, "-valid") {
+		s.GeneratedKind = "valid"
+		shortName = strings.Replace(shortName, "-valid", "", 1)
+	}
+	if strings.Contains(name, "-rmUniqueItems") {
+		s.RmUniqueItems = true
+		shortName = strings.Replace(shortName, "-rmUniqueItems", "", 1)
+	}
+	s.PrefixName, s.ShortName = RemovePrefix(shortName)
+	return s, nil
+}
+
 func collectSchema(folder string) (*Schema, error) {
 	s := &Schema{}
-	s.Name = filepath.Base(folder)
-	if strings.Contains(s.Name, "rmUniqueItems") {
-		s.RmUniqueItems = true
+	name := filepath.Base(folder)
+	schemaName, err := parseSchemaName(name)
+	if err != nil {
+		return nil, err
 	}
+	s.SchemaName = *schemaName
 	files, err := os.ReadDir(folder)
 	if err != nil {
 		log.Printf("error reading folder: %s", folder)
@@ -143,23 +170,28 @@ func RemoveUniqueItems(schemas []*Schema) []*Schema {
 
 func RemoveSourcePrefixFromName(schemas []*Schema) []*Schema {
 	for i := range schemas {
-		if strings.HasPrefix(schemas[i].Name, "ajv-") {
-			schemas[i].Name = strings.Replace(schemas[i].Name, "ajv-", "", 1)
-		}
-		if strings.HasPrefix(schemas[i].Name, "jsck-") {
-			schemas[i].Name = strings.Replace(schemas[i].Name, "jsck-", "", 1)
-		}
-		if strings.HasPrefix(schemas[i].Name, "example-") {
-			schemas[i].Name = strings.Replace(schemas[i].Name, "example-", "", 1)
-		}
-		if strings.HasPrefix(schemas[i].Name, "zschema-") {
-			schemas[i].Name = strings.Replace(schemas[i].Name, "zschema-", "", 1)
-		}
-		if strings.HasPrefix(schemas[i].Name, "katydid-") {
-			schemas[i].Name = strings.Replace(schemas[i].Name, "katydid-", "", 1)
-		}
+		_, schemas[i].Name = RemovePrefix(schemas[i].Name)
 	}
 	return schemas
+}
+
+func RemovePrefix(name string) (string, string) {
+	if strings.HasPrefix(name, "ajv-") {
+		return "ajv", strings.Replace(name, "ajv-", "", 1)
+	}
+	if strings.HasPrefix(name, "jsck-") {
+		return "jsck", strings.Replace(name, "jsck-", "", 1)
+	}
+	if strings.HasPrefix(name, "example-") {
+		return "example", strings.Replace(name, "example-", "", 1)
+	}
+	if strings.HasPrefix(name, "zschema-") {
+		return "zschema", strings.Replace(name, "zschema-", "", 1)
+	}
+	if strings.HasPrefix(name, "katydid-") {
+		return "katydid", strings.Replace(name, "katydid-", "", 1)
+	}
+	return "", name
 }
 
 func GroupGenerated(schemas []*Schema) []*Schema {
@@ -171,13 +203,18 @@ func GroupGenerated(schemas []*Schema) []*Schema {
 			validName := name + "-valid"
 			validSchema := FindSchema(schemas, validName)
 			groupSchema := &Schema{
-				Name:                   name,
+				SchemaName: SchemaName{
+					Name:          name,
+					PrefixName:    mixedSchema.PrefixName,
+					RmUniqueItems: mixedSchema.RmUniqueItems,
+					GeneratedKind: "",
+					ShortName:     mixedSchema.ShortName,
+				},
 				Features:               mixedSchema.Features,
 				Source:                 mixedSchema.Source,
 				SchemaSizeBytes:        mixedSchema.SchemaSizeBytes,
 				NumInstances:           mixedSchema.NumInstances,
 				AvgInstanceSizeBytes:   (mixedSchema.AvgInstanceSizeBytes + validSchema.AvgInstanceSizeBytes) / 2,
-				RmUniqueItems:          mixedSchema.RmUniqueItems,
 				HasExistingReplacement: mixedSchema.HasExistingReplacement,
 				Generated:              true,
 			}
