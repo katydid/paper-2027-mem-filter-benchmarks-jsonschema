@@ -121,9 +121,15 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version: '1.26.2'
+      - name: Add heading 1
+        run: 
+          echo "# Results" >> $GITHUB_STEP_SUMMARY  
       - name: Analyse Results
         run: 
-          echo "# Results" >> $GITHUB_STEP_SUMMARY
           (cd analytics/cmd/result && go run main.go --format=md --schemas=../../../schemas ../../../dist/report.csv >> $GITHUB_STEP_SUMMARY)
+      - name: Add heading 2
+        run: 
           echo "# Schemas" >> $GITHUB_STEP_SUMMARY
+      - name: Analyse Schemas
+        run:
           (cd analytics/cmd/schemas && go run main.go --format=md ../../../schemas >> $GITHUB_STEP_SUMMARY)
