@@ -13,7 +13,7 @@ import (
 
 func main() {
 	log.SetFlags(log.Lshortfile)
-	format := flag.String("format", "html", "output format (html|latex)")
+	format := flag.String("format", "html", "output format (html|latex|md)")
 	rmUniqueItems := flag.Bool("rmUniqueItems", false, "if there is an rmUniqueItems version replace the original with it")
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
 	rmSource := flag.Bool("rmSource", false, "remove prefix source from schema name, for example example-x becomes x")
@@ -42,6 +42,8 @@ func main() {
 		fprintHTML(os.Stdout, schemas)
 	case "latex":
 		fprintLatex(os.Stdout, schemas, *latexPifont)
+	case "md":
+		fprintMarkdown(os.Stdout, schemas)
 	}
 }
 
@@ -78,6 +80,26 @@ func fprintHTML(w io.Writer, schemas []*analytics.Schema) {
 	}
 	out()
 	p("</table>")
+}
+
+func fprintMarkdown(w io.Writer, schemas []*analytics.Schema) {
+	p := func(format string, a ...any) {
+		fmt.Fprintf(w, format, a...)
+	}
+	p("|Dataset name|# Docs|Schema Size (KB)|Avg. Doc. Size (B)|\n")
+	p("|---|---|---|---|\n")
+	for _, schema := range schemas {
+		p("| ")
+		p("%s", schema.Name)
+		p(" | ")
+		p("%d", schema.NumInstances)
+		p(" | ")
+		p("%d", schema.SchemaSizeBytes)
+		p(" | ")
+		p("%.0f", schema.AvgInstanceSizeBytes)
+		p(" |")
+		p("\n")
+	}
 }
 
 func fprintLatex(w io.Writer, schemas []*analytics.Schema, pifont bool) {

@@ -53,7 +53,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Restore cached run
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         id: cache-report
         with:
           path: dist/report.csv
@@ -74,14 +74,14 @@ jobs:
         run: make RUNS=${RUNS} IMPLEMENTATIONS=${IMPL} dist/report.csv
 
       - name: Upload Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: report-${{ matrix.impl }}
           path: dist/report.csv
           retention-days: 1
 
       - name: Cache report
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         if: ${{ steps.cache-report.outputs.cache-hit != 'true' }}
         with:
           path: dist/report.csv
@@ -97,7 +97,7 @@ jobs:
 
       # downloads all previously uploaded artifacts
       - name: Download Reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
 
       - name: Concatenate output
         run: |
@@ -105,11 +105,6 @@ jobs:
           echo "implementation,version,name,cold_ns,warm_ns,parse_ns,compile_ns,memory,exit_status" > dist/report.csv
           tail -q -n +2 ./report-*/report.csv >> dist/report.csv
       - run: cat dist/report.csv
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12.5'
-      - name: Install uv
-        run: pipx install uv
       - name: Get jsonschema-strip binary
         uses: jaxxstorm/action-install-gh-release@v2.1.0
         with:
@@ -120,7 +115,7 @@ jobs:
         uses: jaxxstorm/action-install-gh-release@v2.1.0
         with:
           repo: martinohmann/dts
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: report
