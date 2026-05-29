@@ -70,6 +70,8 @@ func main() {
 	analysed := analytics.AnalyseImplementations(scores)
 
 	switch *format {
+	case "latex":
+		fprintLatex(os.Stdout, analysed)
 	case "md":
 		fprintMarkdown(os.Stdout, analysed)
 	}
@@ -97,4 +99,29 @@ func fprintMarkdown(
 		p(" |")
 		p("\n")
 	}
+}
+
+func fprintLatex(
+	w io.Writer,
+	impls []*analytics.Implementation,
+) {
+	p := func(format string, a ...any) {
+		fmt.Fprintf(w, format, a...)
+	}
+
+	p("%% BEGIN Generated tabular\n")
+	p("\\begin{tabular}{l|ll}\n")
+	p(`impl & warm avg/doc & warm mean/doc \\`)
+	p("\n")
+	for _, impl := range impls {
+		p("%s", impl.Name)
+		p(" & ")
+		p("%.0f", impl.AverageWarmNsPerDoc)
+		p(" & ")
+		p("%.0f", impl.MedianWarmNsPerDoc)
+		p(" \\\\\n")
+
+	}
+	p("\\end{tabular}\n")
+	p("%% END Generated tabular\n")
 }

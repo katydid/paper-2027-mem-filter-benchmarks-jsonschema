@@ -89,6 +89,15 @@ analytics-impls-md:
 	  ../../../dist/report.csv \
 	  > ../../../impls.md)
 
+analytics-impls-latex:
+	(cd analytics/cmd/impls && go run main.go \
+	  --format=latex \
+	  --filterSchema1 \
+	  --impls='ajv-bun blaze boon go-santhosh-tekuri jsu-c go-katydid-auto-json go-katydid-auto-reflect go-katydid-mem-json go-katydid-mem-reflect' \
+	  --schemasFolder=../../../schemas \
+	  ../../../dist/report.csv \
+	  > ../../../impls.tex)
+
 run:
 	make dist/report.csv
 
