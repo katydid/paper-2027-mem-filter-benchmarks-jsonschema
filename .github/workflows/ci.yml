@@ -53,7 +53,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Restore cached run
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@v5
         id: cache-report
         with:
           path: dist/report.csv
@@ -81,7 +81,7 @@ jobs:
           retention-days: 1
 
       - name: Cache report
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@v5
         if: ${{ steps.cache-report.outputs.cache-hit != 'true' }}
         with:
           path: dist/report.csv
@@ -128,15 +128,8 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - name: Get jsonschema-strip binary
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
+      - uses: actions/setup-go@v6
         with:
-          repo: sourcemeta-research/jsonschema-strip
-          prerelease: true
-          extension-matching: disable
-      - name: Install dts
-        uses: jaxxstorm/action-install-gh-release@v2.1.0
-        with:
-          repo: martinohmann/dts
+          go-version: '1.26.2'
       - name: Create summary
-        run: ./dataset_summary.sh md >> $GITHUB_STEP_SUMMARY
+        run: (cd analytics/cmd/schemas && go run main.go --format=md ../../../schemas >> $GITHUB_STEP_SUMMARY)
