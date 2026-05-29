@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"log"
 	"math"
 	"os"
@@ -86,15 +85,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Open the JSONL file
-	f, err := os.Open(instanceFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
 	// Read instances
-	data, err := io.ReadAll(f)
+	data, err := os.ReadFile(instanceFile)
 	if err != nil {
 		log.Fatal(err)
 	}

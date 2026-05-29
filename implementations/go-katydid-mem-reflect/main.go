@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -89,16 +90,16 @@ func main() {
 	}
 
 	// Open the JSONL file
-	f, err := os.Open(instanceFile)
+	data, err := os.ReadFile(instanceFile)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
+	f := bytes.NewBuffer(data)
+	reader := bufio.NewReader(f)
 
 	// Decode and store JSON objects
 	parsingStart := time.Now()
 	var instances []goreflect.Value
-	reader := bufio.NewReader(f)
 	decoder := json.NewDecoder(reader)
 
 	for {

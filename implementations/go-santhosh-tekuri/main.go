@@ -75,15 +75,16 @@ func main() {
 	}
 
 	// Open the JSONL file
-	f, err := os.Open(instanceFile)
+	data, err := os.ReadFile(instanceFile)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
+	f := bytes.NewBuffer(data)
+	reader := bufio.NewReader(f)
 
 	// Decode and store JSON objects
+	parsingStart := time.Now()
 	var instances []any
-	reader := bufio.NewReader(f)
 	decoder := json.NewDecoder(reader)
 
 	for {
@@ -96,6 +97,7 @@ func main() {
 		}
 		instances = append(instances, inst)
 	}
+	parsingDuration := time.Since(parsingStart)
 
 	// Cold start
 	coldStart := time.Now()
@@ -116,5 +118,5 @@ func main() {
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
-	fmt.Printf("%d,%d,TODO,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), compile_duration.Nanoseconds())
+	fmt.Printf("%d,%d,%d,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), parsingDuration.Nanoseconds(), compile_duration.Nanoseconds())
 }
