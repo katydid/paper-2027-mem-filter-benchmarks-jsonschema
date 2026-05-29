@@ -38,26 +38,33 @@ fn main() -> Result<(), Box<dyn Error>> {
   let mut serde_lines = std::vec::Vec::new();
   for line in reader.lines() {
       let line = line?;
-      let instance: Value = serde_json::from_str(&line)?;
-      serde_lines.push(instance);
+      serde_lines.push(line);
   }
+
+  let parse_start = Instant::now();
+  let mut instances = std::vec::Vec::new();
+  for line in serde_lines {
+      let instance: Value = serde_json::from_str(&line)?;
+      instances.push(instance);
+  }
+  let parse_duration = parse_start.elapsed().as_nanos();
 
   // Validate the instances
   let cold_start = Instant::now();
-  validate_all(&schemas, sch_index, &serde_lines);
+  validate_all(&schemas, sch_index, &instances);
   let cold_duration = cold_start.elapsed().as_nanos();
 
   // Warmup
   let iterations: u128 = MAX_WARMUP_TIME / cold_duration;
   for _ in 0..std::cmp::min(iterations, WARMUP_ITERATIONS) {
-    validate_all(&schemas, sch_index, &serde_lines);
+    validate_all(&schemas, sch_index, &instances);
   }
 
   let warm_start = Instant::now();
-  validate_all(&schemas, sch_index, &serde_lines);
+  validate_all(&schemas, sch_index, &instances);
   let warm_duration = warm_start.elapsed().as_nanos();
 
-  println!("{:?},{:?},TODO,{:?}", cold_duration, warm_duration, compile_duration);
+  println!("{:?},{:?},{:?},{:?}", cold_duration, warm_duration, parse_duration, compile_duration);
 
   Ok(())
 }
