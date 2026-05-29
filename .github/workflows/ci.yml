@@ -112,7 +112,8 @@ jobs:
           path: |
             dist/report.csv
 
-  dataset-summary:
+  summary:
+    needs: aggregate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -123,8 +124,6 @@ jobs:
           go-version: '1.26.2'
       - name: Download Report
         uses: actions/download-artifact@v6
-        with:
-          name: report
       - name: Add heading 1
         run: 
           echo "# Results" >> $GITHUB_STEP_SUMMARY  
