@@ -599,7 +599,7 @@ We can regenerate instances.jsonl files for some schemas by running: `make gener
 </tr>
 </table>
 
-## Shortcomings
+## Shortcomings of document generator
 
 * Lots of libraries do not support unicode strings properly, so random generation of documents has been limited to ascii strings.
 * Since we using JSONL for documents, we do not generate newlines in strings.

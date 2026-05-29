@@ -140,6 +140,13 @@ func FilterNoUniqueItems(lines []*Line) []*Line {
 	})
 }
 
+// Remove exit status 1
+func FilterExitStatus0(lines []*Line) []*Line {
+	return filter(lines, func(line *Line) bool {
+		return line.ExitStatus == 0
+	})
+}
+
 func GroupBySchema(lines []*Line) [][]*Line {
 	groupIndexes := make(map[string]int)
 	groups := [][]*Line{}
@@ -160,6 +167,60 @@ func nums(n int) []int {
 		ns[i] = i
 	}
 	return ns
+}
+
+func AverageRuns(lines []*Line) []*Line {
+	runs := map[string][]int{}
+	runNames := []string{}
+	for i, line := range lines {
+		runName := line.Implementation + ":" + line.Schema.Name
+		if _, ok := runs[runName]; !ok {
+			runs[runName] = []int{}
+			runNames = append(runNames, runName)
+		}
+		runs[runName] = append(runs[runName], i)
+	}
+
+	res := make([]*Line, len(runNames))
+	for i, runName := range runNames {
+		runIndexes := runs[runName]
+		avgColdNs := average(runIndexes, func(index int) int {
+			return lines[index].ColdNs
+		})
+		avgWarmNs := average(runIndexes, func(index int) int {
+			return lines[index].WarmNs
+		})
+		avgParseNs := average(runIndexes, func(index int) int {
+			return lines[index].ParseNs
+		})
+		avgCompileNs := average(runIndexes, func(index int) int {
+			return lines[index].CompileNs
+		})
+		avgMemory := average(runIndexes, func(index int) int {
+			return lines[index].Memory
+		})
+		line := lines[runIndexes[0]]
+		res[i] = &Line{
+			Schema:         line.Schema,
+			Implementation: line.Implementation,
+			Version:        line.Version,
+			ColdNs:         avgColdNs,
+			WarmNs:         avgWarmNs,
+			ParseNs:        avgParseNs,
+			CompileNs:      avgCompileNs,
+			Memory:         avgMemory,
+			ExitStatus:     line.ExitStatus,
+		}
+	}
+	return res
+}
+
+func average(indexes []int, get func(int) int) int {
+	sum := 0
+	for _, index := range indexes {
+		sum += get(index)
+	}
+	return sum / len(indexes)
 }
 
 func ScoreGroups(groups [][]*Line) []*ScoredLine {

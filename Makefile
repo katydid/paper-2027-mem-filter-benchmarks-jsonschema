@@ -75,10 +75,18 @@ generate:
 	(cd generator && make generate)
 
 analytics-schemas:
-	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --groupGen ../../../schemas > ../../../schemas.latex)
+	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --groupGen ../../../schemas > ../../../schemas.tex)
 
 analytics-results:
-	(cd analytics/cmd/result && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --schemas=../../../schemas ../../../dist/report.csv > ../../../results.latex)
+	(cd analytics/cmd/result && go run main.go \
+	  --format=latex \
+	  --latex.pifont \
+	  --rmUniqueItems \
+	  --rmSource \
+	  --impls='ajv-bun blaze boon go-santhosh-tekuri jsu-c go-katydid-auto-json go-katydid-auto-reflect go-katydid-mem-json go-katydid-mem-reflect' \
+	  --schemas=../../../schemas \
+	  ../../../dist/report.csv \
+	  > ../../../results.tex)
 
 run:
 	make dist/report.csv

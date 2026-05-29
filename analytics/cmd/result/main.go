@@ -53,14 +53,18 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if impl != nil {
+	if impl != nil && *impl != "" {
 		impls := strings.Split(*impl, " ")
 		lines = analytics.FilterImplementations(lines, impls)
 	}
 
+	lines = analytics.FilterExitStatus0(lines)
+
 	if *rmUniqueItems {
 		lines = analytics.FilterNoUniqueItems(lines)
 	}
+
+	lines = analytics.AverageRuns(lines)
 
 	groups := analytics.GroupBySchema(lines)
 	scores := analytics.ScoreGroups(groups)
@@ -101,7 +105,7 @@ func fprintLatex(
 
 	p("%% BEGIN Generated tabular\n")
 	p("\\begin{tabular}{lll|llll}\n")
-	p(`name & mixed & impl & \#warm & %%warm & \#cold & %%cold \\`)
+	p(`name & mixed & impl & \#warm & \%%warm & \#cold & \%%cold \\`)
 	p("\n")
 	p("\\hline\n")
 	for _, score := range scores {
@@ -109,15 +113,15 @@ func fprintLatex(
 		p(" & ")
 		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))
 		p(" & ")
-		p("%s", sprintName(score.Line.Implementation))
+		p("%s", score.Line.Implementation)
 		p(" & ")
 		p("%d", score.WarmRank)
 		p(" & ")
-		p("%d", score.WarmSlowDown)
+		p("%.0f\\%%", score.WarmSlowDown*100)
 		p(" & ")
 		p("%d", score.ColdRank)
 		p(" & ")
-		p("%d", score.ColdSlowDown)
+		p("%.0f\\%%", score.ColdSlowDown*100)
 		p(" \\\\\n")
 
 	}
