@@ -63,10 +63,22 @@ analytics-results-latex:
 	  --latex.pifont \
 	  --rmUniqueItems \
 	  --rmSource \
+	  --filterSchema1 \
 	  --impls='ajv-bun blaze boon go-santhosh-tekuri jsu-c go-katydid-auto-json go-katydid-auto-reflect go-katydid-mem-json go-katydid-mem-reflect' \
 	  --schemas=../../../schemas \
 	  ../../../dist/report.csv \
 	  > ../../../results.tex)
+
+analytics-results-md:
+	(cd analytics/cmd/result && go run main.go \
+	  --format=md \
+	  --rmUniqueItems \
+	  --rmSource \
+	  --filterSchema1 \
+	  --impls='ajv-bun blaze boon go-santhosh-tekuri jsu-c go-katydid-auto-json go-katydid-auto-reflect go-katydid-mem-json go-katydid-mem-reflect' \
+	  --schemas=../../../schemas \
+	  ../../../dist/report.csv \
+	  > ../../../results.md)
 
 run:
 	make dist/report.csv

@@ -116,8 +116,8 @@ func parseLine(schemas []*Schema, record []string) (*Line, error) {
 	return line, nil
 }
 
-func filter(lines []*Line, pred func(*Line) bool) []*Line {
-	res := []*Line{}
+func filter[A any](lines []A, pred func(A) bool) []A {
+	res := []A{}
 	for i := range lines {
 		if pred(lines[i]) {
 			res = append(res, lines[i])
@@ -133,10 +133,32 @@ func FilterImplementations(lines []*Line, impls []string) []*Line {
 	})
 }
 
+// Remove all schemas where one implementation had an exit status 1
+func FilterSchemasExitStatus0(lines []*Line) []*Line {
+	groups := GroupBySchema(lines)
+	filteredGroups := filter(groups, func(lines []*Line) bool {
+		for _, line := range lines {
+			if line.ExitStatus == 1 {
+				return false
+			}
+		}
+		return true
+	})
+	return Ungroup(filteredGroups)
+}
+
+func Ungroup(groups [][]*Line) []*Line {
+	res := []*Line{}
+	for _, group := range groups {
+		res = append(res, group...)
+	}
+	return res
+}
+
 // Remove any schema with uniqueItems
 func FilterNoUniqueItems(lines []*Line) []*Line {
 	return filter(lines, func(line *Line) bool {
-		return slices.Contains(line.Schema.Features, "uniqueItems")
+		return !slices.Contains(line.Schema.Features, "uniqueItems")
 	})
 }
 

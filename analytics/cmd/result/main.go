@@ -31,6 +31,7 @@ func main() {
 	rmUniqueItems := flag.Bool("rmUniqueItems", false, "if there is an rmUniqueItems version replace the original with it")
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
 	rmSource := flag.Bool("rmSource", false, "remove prefix source from schema name, for example example-x becomes x")
+	rmSchema1 := flag.Bool("filterSchema1", false, "filter all schemas where one implementation had an non zero exit code")
 	schemasFolder := flag.String("schemas", "./schemas", "location of schemas folder")
 	impl := flag.String("impls", "", "space separated list of implementations to filter")
 	flag.Parse()
@@ -53,16 +54,20 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if *rmUniqueItems {
+		lines = analytics.FilterNoUniqueItems(lines)
+	}
+
 	if impl != nil && *impl != "" {
 		impls := strings.Split(*impl, " ")
 		log.Printf("filtering implementations: %#v", impls)
 		lines = analytics.FilterImplementations(lines, impls)
 	}
 
-	lines = analytics.FilterExitStatus0(lines)
-
-	if *rmUniqueItems {
-		lines = analytics.FilterNoUniqueItems(lines)
+	if *rmSchema1 {
+		lines = analytics.FilterSchemasExitStatus0(lines)
+	} else {
+		lines = analytics.FilterExitStatus0(lines)
 	}
 
 	lines = analytics.AverageRuns(lines)
@@ -92,9 +97,9 @@ func main() {
 	case "md":
 		sprintBool := func(b bool) string {
 			if b {
-				return "yes"
+				return ":white-check-mark:"
 			} else {
-				return "no"
+				return ":x:"
 			}
 		}
 		fprintMarkdown(os.Stdout, sprintName, sprintBool, scores)
@@ -122,7 +127,7 @@ func fprintLatex(
 			p("\\hline")
 			p("\n")
 		}
-		p("%s", sprintName(score.Line.Schema.Name))
+		p("%s", sprintName(score.Line.Schema.ShortName))
 		p(" & ")
 		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))
 		p(" & ")
@@ -152,13 +157,13 @@ func fprintMarkdown(
 		fmt.Fprintf(w, format, a...)
 	}
 
-	p(`| name | mixed | impl | # warm | %% warm | # cold | %% cold |`)
+	p(`| name | mixed | impl | # warm | %% warm | ns/warm | # cold | %% cold | ns/cold |`)
 	p("\n")
-	p(`| --- | --- | --- | --- | --- | --- | --- |`)
+	p(`| --- | --- | --- | --- | --- | --- | --- | --- | --- |`)
 	p("\n")
 	for _, score := range scores {
 		p("| ")
-		p("%s", sprintName(score.Line.Schema.Name))
+		p("%s", sprintName(score.Line.Schema.ShortName))
 		p(" | ")
 		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))
 		p(" | ")
@@ -168,9 +173,13 @@ func fprintMarkdown(
 		p(" | ")
 		p("%.0f%%", score.WarmSlowDown*100)
 		p(" | ")
+		p("%.0f", score.WarmNsPerDoc)
+		p(" | ")
 		p("%d", score.ColdRank)
 		p(" | ")
 		p("%.0f%%", score.ColdSlowDown*100)
+		p(" | ")
+		p("%.0f", score.ColdNsPerDoc)
 		p(" |")
 		p("\n")
 
