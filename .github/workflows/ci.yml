@@ -32,7 +32,7 @@ jobs:
     outputs:
       implementations: ${{ steps.implementations.outputs.implementations }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - name: Set implementations
@@ -49,7 +49,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.set-implementations.outputs.implementations) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - name: Restore cached run
@@ -91,7 +91,7 @@ jobs:
     needs: benchmark
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -130,7 +130,7 @@ jobs:
   dataset-summary:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - name: Get jsonschema-strip binary
