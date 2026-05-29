@@ -356,6 +356,12 @@ type Implementation struct {
 	Scores              []*ScoredLine
 	AverageWarmNsPerDoc float64
 	MedianWarmNsPerDoc  float64
+	AverageWarmRank     float64
+	MedianWarmRank      float64
+	AverageColdNsPerDoc float64
+	MedianColdNsPerDoc  float64
+	AverageColdRank     float64
+	MedianColdRank      float64
 }
 
 func AnalyseImplementations(scores []*ScoredLine) []*Implementation {
@@ -375,6 +381,24 @@ func AnalyseImplementation(scores []*ScoredLine) *Implementation {
 	})
 	res.AverageWarmNsPerDoc = Average(len(scores), func(index int) float64 {
 		return scores[index].WarmNsPerDoc
+	})
+	res.MedianColdNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
+		return scores[index].ColdNsPerDoc
+	})
+	res.AverageColdNsPerDoc = Average(len(scores), func(index int) float64 {
+		return scores[index].ColdNsPerDoc
+	})
+	res.MedianWarmRank = MedianFloat(len(scores), func(index int) float64 {
+		return float64(scores[index].WarmRank)
+	})
+	res.AverageWarmRank = Average(len(scores), func(index int) float64 {
+		return float64(scores[index].WarmRank)
+	})
+	res.MedianColdRank = MedianFloat(len(scores), func(index int) float64 {
+		return float64(scores[index].ColdRank)
+	})
+	res.AverageColdRank = Average(len(scores), func(index int) float64 {
+		return float64(scores[index].ColdRank)
 	})
 	return res
 }

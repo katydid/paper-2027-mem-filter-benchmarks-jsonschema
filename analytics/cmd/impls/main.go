@@ -85,9 +85,9 @@ func fprintMarkdown(
 		fmt.Fprintf(w, format, a...)
 	}
 
-	p(`| impl | warm avg/doc | warm mean/doc |`)
+	p(`| impl | warm avg/doc | warm mean/doc | warm avg rank | warm mean rank | cold avg/doc | cold mean/doc | cold avg rank | cold mean rank |`)
 	p("\n")
-	p(`| --- | --- | --- |`)
+	p(`| ---  | ---          | ---           | ---           | ---            | ---          | ---           | ---           | --- | `)
 	p("\n")
 	for _, impl := range impls {
 		p("| ")
@@ -96,6 +96,18 @@ func fprintMarkdown(
 		p("%.0f", impl.AverageWarmNsPerDoc)
 		p(" | ")
 		p("%.0f", impl.MedianWarmNsPerDoc)
+		p(" | ")
+		p("%.0f", impl.AverageWarmRank)
+		p(" | ")
+		p("%.0f", impl.MedianWarmRank)
+		p(" | ")
+		p("%.0f", impl.AverageColdNsPerDoc)
+		p(" | ")
+		p("%.0f", impl.MedianColdNsPerDoc)
+		p(" | ")
+		p("%.0f", impl.AverageColdRank)
+		p(" | ")
+		p("%.0f", impl.MedianColdRank)
 		p(" |")
 		p("\n")
 	}
@@ -110,8 +122,10 @@ func fprintLatex(
 	}
 
 	p("%% BEGIN Generated tabular\n")
-	p("\\begin{tabular}{l|ll}\n")
-	p(`impl & warm avg/doc & warm mean/doc \\`)
+	p("\\begin{tabular}{l|llll}\n")
+	p(`impl & warm avg/doc & warm mean/doc & cold avg/doc & cold mean/doc \\`)
+	p("\n")
+	p(`\hline`)
 	p("\n")
 	for _, impl := range impls {
 		p("%s", impl.Name)
@@ -119,6 +133,10 @@ func fprintLatex(
 		p("%.0f", impl.AverageWarmNsPerDoc)
 		p(" & ")
 		p("%.0f", impl.MedianWarmNsPerDoc)
+		p(" & ")
+		p("%.0f", impl.AverageColdNsPerDoc)
+		p(" & ")
+		p("%.0f", impl.MedianColdNsPerDoc)
 		p(" \\\\\n")
 
 	}
