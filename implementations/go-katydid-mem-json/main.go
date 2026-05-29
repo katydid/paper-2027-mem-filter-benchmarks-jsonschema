@@ -121,5 +121,5 @@ func main() {
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
-	fmt.Printf("%d,%d,TODO,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), compile_duration.Nanoseconds())
+	fmt.Printf("%d,%d,0,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), compile_duration.Nanoseconds())
 }

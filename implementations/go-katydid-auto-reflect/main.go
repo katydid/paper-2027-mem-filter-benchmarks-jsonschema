@@ -96,6 +96,7 @@ func main() {
 	defer f.Close()
 
 	// Decode and store JSON objects
+	parsingStart := time.Now()
 	var instances []goreflect.Value
 	reader := bufio.NewReader(f)
 	decoder := json.NewDecoder(reader)
@@ -110,6 +111,7 @@ func main() {
 		}
 		instances = append(instances, goreflect.ValueOf(inst))
 	}
+	parsingDuration := time.Since(parsingStart)
 	parser := reflect.NewParser()
 
 	// Cold start
@@ -131,5 +133,5 @@ func main() {
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
-	fmt.Printf("%d,%d,TODO,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), compile_duration.Nanoseconds())
+	fmt.Printf("%d,%d,%d,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), parsingDuration.Nanoseconds(), compile_duration.Nanoseconds())
 }
