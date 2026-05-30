@@ -75,10 +75,9 @@ int main(int argc, char* argv[])
     assert(checker != NULL);
 
     size_t size = 1024;
-    int nvalues = 0;
-    json_t **values = (json_t **) malloc(sizeof(json_t *) * size);
+    int nstrs = 0;
+    char **strs = (char **) malloc(sizeof(char *) * size);
 
-    // load all as jsonl
     for (int i = optind; i < argc; i++)
     {
         FILE *input = fopen(argv[i], "r");
@@ -89,19 +88,46 @@ int main(int argc, char* argv[])
             exit(3);
         }
 
-        json_error_t error;
-        json_t *value;
-        while ((value = json_loadf(input,
-                                   JSON_DISABLE_EOF_CHECK|JSON_DECODE_ANY|JSON_ALLOW_NUL,
-                                   &error)))
+        fseek(input, 0, SEEK_END);
+        long fsize = ftell(input);
+        fseek(input, 0, SEEK_SET);  /* same as rewind(f); */
+
+        char *input_contents = malloc(fsize + 1);
+        if (!fread(input_contents, fsize, 1, input)) {
+                exit(1);
+        }
+        fclose(input);
+
+        char* pch = NULL;
+        pch = strtok(input_contents, "\r\n");
+
+        while (pch != NULL)
         {
-            if (nvalues == size) {
+            if (nstrs == size) {
                 size *= 2;
-                values = (json_t **) realloc(values, sizeof(json_t *) * size);
+                strs = (char **) realloc(strs, sizeof(char *) * size);
             }
-            values[nvalues++] = value;
+            strs[nstrs++] = pch;
+            pch = strtok(NULL, "\r\n");
         }
     }
+    
+    
+    int nvalues = nstrs;
+    double parse_start = now();
+    json_t **values = (json_t **) malloc(sizeof(json_t *) * nstrs);
+
+    // load all as jsonl
+    for (int i = 0; i < nstrs; i++)
+    {
+        json_error_t error;
+        json_t *value;
+        value = json_loads(strs[i],
+                                   JSON_DISABLE_EOF_CHECK|JSON_DECODE_ANY|JSON_ALLOW_NUL,
+                                   &error);
+        values[i] = value;
+    }
+    double parse_delay = now() - parse_start;
 
     // overhead estimation
     int count = 0;
@@ -137,8 +163,8 @@ int main(int argc, char* argv[])
     fprintf(stderr,
             "C validation: pass=%d fail=%d %.03f µs [%.03f µs]\n",
             npass, nfail, delay, overhead_delay);
-    fprintf(stdout, "%lld,%lld,TODO\n",
-            (long long int) (1000 * cold_delay + 0.5), (long long int) (1000 * delay + 0.5));
+    fprintf(stdout, "%lld,%lld,%lld\n",
+            (long long int) (1000 * cold_delay + 0.5), (long long int) (1000 * delay + 0.5), (long long int) (1000 * parse_delay + 0.5));
 
     check_model_free();
 
