@@ -47,4 +47,5 @@ TimeSpan warmTs = stopWatch.Elapsed;
 
 // Output file time and exit
 Console.WriteLine(coldTs.TotalNanoseconds + "," + warmTs.TotalNanoseconds + "," + "TODO" + "," + compileTs.TotalNanoseconds);
-Environment.Exit(valid ? 0 : 1);
+// We allow failure, since we do process invalid documents too as part of the benchmark.
+// Environment.Exit(valid ? 0 : 1);
