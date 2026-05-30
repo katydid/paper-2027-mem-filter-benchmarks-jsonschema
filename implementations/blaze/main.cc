@@ -10,9 +10,31 @@
 #include <filesystem>
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <string>
 
 #define WARMUP_ITERATIONS 100L
 #define MAX_WARMUP_TIME 10000000000
+
+namespace fs = std::filesystem;
+
+std::string read_file(const fs::path &path) {
+  std::ifstream f(path, std::ios::binary);
+  if (!f) {
+    throw std::runtime_error(std::format("Cannot open file: {}", path.string()));
+  }
+  return {std::istreambuf_iterator<char>{f}, {}};
+}
+
+std::vector<std::string> split_string_by_newline(const std::string& str)
+{
+    auto result = std::vector<std::string>{};
+    auto ss = std::stringstream{str};
+    for (std::string line; std::getline(ss, line, '\n');) {
+        result.push_back(line);
+    }
+    return result;
+}
 
 bool validate_all(auto &evaluator, const auto &instances, const auto &schema_template) {
   bool failed = false;
@@ -32,11 +54,18 @@ bool validate_all(auto &evaluator, const auto &instances, const auto &schema_tem
 int validate(const std::filesystem::path &example) {
   const auto schema{
       sourcemeta::core::read_json(example / "schema-noformat.json")};
-  auto stream{sourcemeta::core::read_file(example / "instances.jsonl")};
+  std::string instance_str = read_file(example / "instances.jsonl");
+  std::vector<std::string> instance_lines = split_string_by_newline(instance_str);
+
+  const auto parse_start{std::chrono::high_resolution_clock::now()};
   std::vector<sourcemeta::core::JSON> instances;
-  for (const auto &instance : sourcemeta::core::JSONL{stream}) {
+  for (const auto &instance_line : instance_lines) {
+    sourcemeta::core::JSON instance = sourcemeta::core::parse_json(instance_line);
     instances.push_back(instance);
   }
+  const auto parse_end{std::chrono::high_resolution_clock::now()};
+  const auto parse_duration{std::chrono::duration_cast<std::chrono::nanoseconds>(
+      parse_end - parse_start)};
 
   const auto compile_start{std::chrono::high_resolution_clock::now()};
   const auto schema_template{sourcemeta::blaze::compile(
@@ -71,7 +100,7 @@ int validate(const std::filesystem::path &example) {
   const auto warm_duration{std::chrono::duration_cast<std::chrono::nanoseconds>(
       warm_end - warm_start)};
 
-  std::cout << cold_duration.count() << "," << warm_duration.count() << "," << "TODO" << "," << compile_duration.count() << "\n";
+  std::cout << cold_duration.count() << "," << warm_duration.count() << "," << parse_duration.count() << "," << compile_duration.count() << "\n";
 
   return EXIT_SUCCESS;
 }
