@@ -22,3 +22,12 @@ func IntCompare(x, y int) int {
 	}
 	return 0
 }
+
+func FloatCompare(x, y float64) int {
+	if x < y {
+		return -1
+	} else if x > y {
+		return 1
+	}
+	return 0
+}

@@ -94,7 +94,7 @@ Finally, appropriate targets must be added to the `Makefile` to build the Docker
 Some schemas had a collection of instances gathered from github.
 The rest we can regenerate `instances.jsonl` files for by running: `make generate`.
 
-## Shortcomings of document generator
+### Shortcomings of document generator
 
 * Lots of libraries do not support unicode strings properly, so random generation of documents has been limited to ascii strings.
 * Since we using JSONL for documents, we do not generate newlines in strings.
