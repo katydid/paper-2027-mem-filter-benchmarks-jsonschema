@@ -101,7 +101,7 @@ func main() {
 	case "md":
 		sprintBool := func(b bool) string {
 			if b {
-				return ":white-check-mark:"
+				return ":white_check_mark:"
 			} else {
 				return ":x:"
 			}
