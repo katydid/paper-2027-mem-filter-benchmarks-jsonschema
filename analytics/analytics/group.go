@@ -36,6 +36,25 @@ func GroupBySchema(lines []*Line) [][]*Line {
 	return groups
 }
 
+// group by valid, mixed and also group no kind with valid, since they are all valid
+func GroupByKind(lines []*Line) [][]*Line {
+	groupIndexes := make(map[string]int)
+	groups := [][]*Line{}
+	for i, line := range lines {
+		kind := line.Schema.GeneratedKind
+		if kind == "" {
+			kind = "valid"
+		}
+		if _, ok := groupIndexes[kind]; !ok {
+			groupIndexes[kind] = len(groups)
+			groups = append(groups, []*Line{})
+		}
+		index := groupIndexes[kind]
+		groups[index] = append(groups[index], lines[i])
+	}
+	return groups
+}
+
 func GroupByImplementation(lines []*ScoredLine) [][]*ScoredLine {
 	groupIndexes := make(map[string]int)
 	groups := [][]*ScoredLine{}

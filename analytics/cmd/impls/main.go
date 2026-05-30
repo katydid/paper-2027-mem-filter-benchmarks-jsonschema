@@ -65,138 +65,175 @@ func main() {
 
 	lines = analytics.AverageRuns(lines)
 
-	groups := analytics.GroupBySchema(lines)
-	scores := analytics.ScoreGroups(groups)
-	analysed := analytics.AnalyseImplementations(scores)
+	kindGroups := analytics.GroupByKind(lines)
+	analyseds := [][]*analytics.Implementation{}
+	for i := range kindGroups {
+		kind := kindGroups[i][0].Schema.GeneratedKind
+		if kind == "" {
+			kind = "valid"
+		}
+		log.Printf("analysing kind group %d = %v with %d lines", i, kind, len(kindGroups[i]))
+		groups := analytics.GroupBySchema(kindGroups[i])
+		log.Printf("got %d groups", len(groups))
+		scores := analytics.ScoreGroups(groups)
+		log.Printf("got %d scores", len(scores))
+		analysed := analytics.AnalyseImplementations(scores)
+		if len(analysed[0].Scores) == 0 {
+			log.Fatalf("no scores for kind %v", kind)
+		}
+		analyseds = append(analyseds, analysed)
+	}
 
 	switch *format {
 	case "latex":
-		fprintLatex(os.Stdout, analysed)
+		fprintLatex(os.Stdout, analyseds)
 	case "md":
-		fprintMarkdown(os.Stdout, analysed)
+		fprintMarkdown(os.Stdout, analyseds)
 	}
+}
+
+func getKind(impls []*analytics.Implementation) string {
+	for _, impl := range impls {
+		if len(impl.Scores) == 0 {
+			log.Fatalf("no scores for %s", impl.Name)
+		}
+		for _, score := range impl.Scores {
+			kind := score.Line.Schema.GeneratedKind
+			if kind == "" {
+				return "valid"
+			}
+			return kind
+		}
+	}
+	log.Fatalf("could not find kind in %v", impls)
+	return ""
 }
 
 func fprintMarkdown(
 	w io.Writer,
-	impls []*analytics.Implementation,
+	implss [][]*analytics.Implementation,
 ) {
 	p := func(format string, a ...any) {
 		fmt.Fprintf(w, format, a...)
 	}
 
-	p(`## Exclude Parse Time`)
-	p("\n")
-	p("\n")
-	p(`| impl | warm avg/doc | warm mean/doc | warm avg rank | warm mean rank | cold avg/doc | cold mean/doc | cold avg rank | cold mean rank |`)
-	p("\n")
-	p(`| ---  | ---          | ---           | ---           | ---            | ---          | ---           | ---           | --- | `)
-	p("\n")
-	for _, impl := range impls {
-		p("| ")
-		p("%s", impl.Name)
-		p(" | ")
-		p("%.0f", impl.AverageWarmNsPerDoc)
-		p(" | ")
-		p("%.0f", impl.MedianWarmNsPerDoc)
-		p(" | ")
-		p("%.0f", impl.AverageWarmRank)
-		p(" | ")
-		p("%.0f", impl.MedianWarmRank)
-		p(" | ")
-		p("%.0f", impl.AverageColdNsPerDoc)
-		p(" | ")
-		p("%.0f", impl.MedianColdNsPerDoc)
-		p(" | ")
-		p("%.0f", impl.AverageColdRank)
-		p(" | ")
-		p("%.0f", impl.MedianColdRank)
-		p(" |")
+	for i, impls := range implss {
+		p(`## Exclude Parse Time (%s)`, getKind(implss[i]))
 		p("\n")
-	}
-
-	p("\n")
-	p(`## Include Parse Time`)
-	p("\n")
-	p("\n")
-	p(`| impl | warm avg/doc | warm mean/doc | warm avg rank | warm mean rank | cold avg/doc | cold mean/doc | cold avg rank | cold mean rank |`)
-	p("\n")
-	p(`| ---  | ---          | ---           | ---           | ---            | ---          | ---           | ---           | --- | `)
-	p("\n")
-	for _, impl := range impls {
-		if !impl.ParseTODO {
+		p("\n")
+		p(`| impl | warm avg/doc | warm mean/doc | warm avg rank | warm mean rank | cold avg/doc | cold mean/doc | cold avg rank | cold mean rank |`)
+		p("\n")
+		p(`| ---  | ---          | ---           | ---           | ---            | ---          | ---           | ---           | --- | `)
+		p("\n")
+		for _, impl := range impls {
 			p("| ")
 			p("%s", impl.Name)
 			p(" | ")
-			p("%.0f", impl.AverageParsePlusWarmNsPerDoc)
+			p("%.0f", impl.AverageWarmNsPerDoc)
 			p(" | ")
-			p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
+			p("%.0f", impl.MedianWarmNsPerDoc)
 			p(" | ")
-			p("%.0f", impl.AverageParsePlusWarmRank)
+			p("%.0f", impl.AverageWarmRank)
 			p(" | ")
-			p("%.0f", impl.MedianParsePlusWarmRank)
+			p("%.0f", impl.MedianWarmRank)
 			p(" | ")
-			p("%.0f", impl.AverageParsePlusColdNsPerDoc)
+			p("%.0f", impl.AverageColdNsPerDoc)
 			p(" | ")
-			p("%.0f", impl.MedianParsePlusColdNsPerDoc)
+			p("%.0f", impl.MedianColdNsPerDoc)
 			p(" | ")
-			p("%.0f", impl.AverageParsePlusColdRank)
+			p("%.0f", impl.AverageColdRank)
 			p(" | ")
-			p("%.0f", impl.MedianParsePlusColdRank)
-			p(" |")
-			p("\n")
-		} else {
-			p("| ")
-			p("%s", impl.Name)
-			p(" | ")
-			p("TODO")
-			p(" | ")
-			p("TODO")
-			p(" | ")
-			p("TODO")
-			p(" | ")
-			p("TODO")
-			p(" | ")
-			p("TODO")
-			p(" | ")
-			p("TODO")
-			p(" | ")
-			p("TODO")
-			p(" | ")
-			p("TODO")
+			p("%.0f", impl.MedianColdRank)
 			p(" |")
 			p("\n")
 		}
+
+		p("\n")
+		p(`## Include Parse Time (%s)`, getKind(implss[i]))
+		p("\n")
+		p("\n")
+		p(`| impl | warm avg/doc | warm mean/doc | warm avg rank | warm mean rank | cold avg/doc | cold mean/doc | cold avg rank | cold mean rank |`)
+		p("\n")
+		p(`| ---  | ---          | ---           | ---           | ---            | ---          | ---           | ---           | --- | `)
+		p("\n")
+		for _, impl := range impls {
+			if !impl.ParseTODO {
+				p("| ")
+				p("%s", impl.Name)
+				p(" | ")
+				p("%.0f", impl.AverageParsePlusWarmNsPerDoc)
+				p(" | ")
+				p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
+				p(" | ")
+				p("%.0f", impl.AverageParsePlusWarmRank)
+				p(" | ")
+				p("%.0f", impl.MedianParsePlusWarmRank)
+				p(" | ")
+				p("%.0f", impl.AverageParsePlusColdNsPerDoc)
+				p(" | ")
+				p("%.0f", impl.MedianParsePlusColdNsPerDoc)
+				p(" | ")
+				p("%.0f", impl.AverageParsePlusColdRank)
+				p(" | ")
+				p("%.0f", impl.MedianParsePlusColdRank)
+				p(" |")
+				p("\n")
+			} else {
+				p("| ")
+				p("%s", impl.Name)
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" |")
+				p("\n")
+			}
+		}
+		p("\n")
 	}
 }
 
 func fprintLatex(
 	w io.Writer,
-	impls []*analytics.Implementation,
+	implss [][]*analytics.Implementation,
 ) {
 	p := func(format string, a ...any) {
 		fmt.Fprintf(w, format, a...)
 	}
 
-	p("%% BEGIN Generated tabular\n")
-	p("\\begin{tabular}{l|llll}\n")
-	p(`impl & warm avg/doc & warm mean/doc & cold avg/doc & cold mean/doc \\`)
-	p("\n")
-	p(`\hline`)
-	p("\n")
-	for _, impl := range impls {
-		p("%s", impl.Name)
-		p(" & ")
-		p("%.0f", impl.AverageWarmNsPerDoc)
-		p(" & ")
-		p("%.0f", impl.MedianWarmNsPerDoc)
-		p(" & ")
-		p("%.0f", impl.AverageColdNsPerDoc)
-		p(" & ")
-		p("%.0f", impl.MedianColdNsPerDoc)
-		p(" \\\\\n")
+	for i, impls := range implss {
+		p("%% BEGIN Generated tabular for kind: %s\n", getKind(implss[i]))
+		p("\\begin{tabular}{l|llll}\n")
+		p(`impl & warm avg/doc & warm mean/doc & cold avg/doc & cold mean/doc \\`)
+		p("\n")
+		p(`\hline`)
+		p("\n")
+		for _, impl := range impls {
+			p("%s", impl.Name)
+			p(" & ")
+			p("%.0f", impl.AverageWarmNsPerDoc)
+			p(" & ")
+			p("%.0f", impl.MedianWarmNsPerDoc)
+			p(" & ")
+			p("%.0f", impl.AverageColdNsPerDoc)
+			p(" & ")
+			p("%.0f", impl.MedianColdNsPerDoc)
+			p(" \\\\\n")
 
+		}
+		p("\\end{tabular}\n")
+		p("%% END Generated tabular\n")
 	}
-	p("\\end{tabular}\n")
-	p("%% END Generated tabular\n")
 }

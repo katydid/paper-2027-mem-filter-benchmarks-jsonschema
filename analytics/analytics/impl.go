@@ -19,8 +19,9 @@ import (
 )
 
 type Implementation struct {
-	Name                string
-	Scores              []*ScoredLine
+	Name   string
+	Scores []*ScoredLine
+
 	AverageWarmNsPerDoc float64
 	MedianWarmNsPerDoc  float64
 	AverageWarmRank     float64
@@ -98,6 +99,7 @@ func AnalyseImplementations(scores []*ScoredLine) []*Implementation {
 
 func AnalyseImplementation(scores []*ScoredLine) *Implementation {
 	res := &Implementation{}
+	res.Scores = scores
 	res.Name = scores[0].Line.Implementation
 
 	res.MedianWarmNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
