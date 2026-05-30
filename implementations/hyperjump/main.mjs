@@ -75,7 +75,8 @@ async function validateSchema(schemaPath, instancePath) {
 
   // Exit with non-zero status on validation failure
   if (failed) {
-    process.exit(1);
+    // We allow failure, since we do process invalid documents too as part of the benchmark.
+    // process.exit(1);
   }
 }
 

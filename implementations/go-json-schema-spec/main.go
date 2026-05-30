@@ -20,13 +20,13 @@ const WarmupIterations = 1000
 const MaxWarmupTime = 10_000_000_000
 
 func validateAll(instances []any, sch jsonschema.Validator) error {
+	var res error
 	for _, inst := range instances {
 		if _, err := sch.Validate(inst); err != nil {
-			// result.IsValid()
-			return err
+			res = err
 		}
 	}
-	return nil
+	return res
 }
 
 func main() {
@@ -98,7 +98,8 @@ func main() {
 	coldStart := time.Now()
 	err = validateAll(instances, validator)
 	if err != nil {
-		log.Fatalf("Validation failed: %v", err)
+		// We allow failure, since we do process invalid documents too as part of the benchmark.
+		// log.Fatalf("Validation failed: %v", err)
 	}
 	coldDuration := time.Since(coldStart)
 
