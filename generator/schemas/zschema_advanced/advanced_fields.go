@@ -31,6 +31,7 @@ func FieldName() Rand {
 
 type randFieldName struct{}
 
+// TODO: generate more options
 func (o *randFieldName) Right(r rand.Rand) string {
 	switch r.Intn(3) {
 	case 0:
@@ -59,6 +60,7 @@ func DiskDevicePattern() Rand {
 
 type randDevicePattern struct{}
 
+// TODO: generate more options
 func (o *randDevicePattern) Right(r rand.Rand) string {
 	return `"/dev/sda1"`
 }
@@ -79,6 +81,7 @@ func DiskUUIDLabel() Rand {
 
 type randDiskUUIDLabel struct{}
 
+// TODO: generate more options
 func (o *randDiskUUIDLabel) Right(r rand.Rand) string {
 	return `"8f3ba6f4-5c70-46ec-83af-0d5434953e5f"`
 }
@@ -99,6 +102,7 @@ func NFSRemotePath() Rand {
 
 type randNFSRemotePath struct{}
 
+// TODO: generate more options
 func (o *randNFSRemotePath) Right(r rand.Rand) string {
 	return `"/exports/mypath"`
 }
@@ -119,10 +123,12 @@ func NFSServer() Rand {
 
 type randNFSServer struct{}
 
+// TODO: generate more options
 func (o *randNFSServer) Right(r rand.Rand) string {
 	return `"my.nfs.server"`
 }
 
+// TODO: generate more options
 func (o *randNFSServer) Wrong(r rand.Rand) string {
 	return `"123.123.123.45@"`
 }

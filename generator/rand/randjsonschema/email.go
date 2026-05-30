@@ -16,6 +16,7 @@ package randjsonschema
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
 )
@@ -31,5 +32,9 @@ func (o *randEmail) Right(r rand.Rand) string {
 }
 
 func (o *randEmail) Wrong(r rand.Rand) string {
-	return strconv.Quote(randId(r, 20)) // misses an @ and .
+	s := strconv.Quote(randId(r, 20))
+	for strings.Contains(s, "@") {
+		s = strconv.Quote(randId(r, 20))
+	}
+	return s
 }
