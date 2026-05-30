@@ -97,7 +97,7 @@ jobs:
 
       # downloads all previously uploaded artifacts
       - name: Download Reports
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
 
       - name: Concatenate output
         run: |
@@ -123,7 +123,7 @@ jobs:
         with:
           go-version: '1.26.2'
       - name: Download Report
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: report
           path: dist/
