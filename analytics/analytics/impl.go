@@ -126,7 +126,13 @@ func AnalyseImplementation(scores []*ScoredLine) *Implementation {
 		return float64(scores[index].ColdRank)
 	})
 
-	res.ParseTODO = scores[0].ParseTODO
+	hasParseTODO := false
+	for i := range scores {
+		if scores[i].ParseTODO {
+			hasParseTODO = true
+		}
+	}
+	res.ParseTODO = hasParseTODO
 
 	res.MedianParsePlusWarmNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].ParsePlusWarmNsPerDoc
