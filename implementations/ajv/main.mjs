@@ -29,13 +29,13 @@ function readFile(filePath) {
 }
 
 function validateAll(instances, validator, want) {
-  let allmatched = true;
   for (const instance of instances) {
-    if (!validator(instance)) {
-      allmatched = false;
+    const result = validator(instance);
+    if (result != want) {
+      return true;
     }
   }
-  return want != allmatched;
+  return false;
 }
 
 async function validateSchema(schemaPath, instancePath, want) {
