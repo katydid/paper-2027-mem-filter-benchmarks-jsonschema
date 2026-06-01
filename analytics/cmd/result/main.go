@@ -122,7 +122,7 @@ func fprintLatex(
 
 	p("%% BEGIN Generated tabular\n")
 	p("\\begin{tabular}{lll|llll}\n")
-	p(`name & mixed & impl & \#warm & \%%warm & \#cold & \%%cold \\`)
+	p(`name & valid & impl & \#warm & \%%warm & \#cold & \%%cold \\`)
 	p("\n")
 	currentSchemaName := ""
 	for _, score := range scores {
@@ -133,7 +133,7 @@ func fprintLatex(
 		}
 		p("%s", sprintName(score.Line.Schema.Name))
 		p(" & ")
-		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))
+		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "valid" || score.Line.Schema.GeneratedKind == ""))
 		p(" & ")
 		p("%s", score.Line.Implementation)
 		p(" & ")
@@ -161,7 +161,7 @@ func fprintMarkdown(
 		fmt.Fprintf(w, format, a...)
 	}
 
-	p(`| name | mixed | impl | # warm | %% warm | ns/warm | # cold | %% cold | ns/cold |`)
+	p(`| name | valid | impl | # warm | %% warm | ns/warm | # cold | %% cold | ns/cold |`)
 	p("\n")
 	p(`| --- | --- | --- | --- | --- | --- | --- | --- | --- |`)
 	p("\n")
@@ -169,7 +169,7 @@ func fprintMarkdown(
 		p("| ")
 		p("%s", sprintName(score.Line.Schema.ShortName))
 		p(" | ")
-		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "mixed"))
+		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "valid" || score.Line.Schema.GeneratedKind == ""))
 		p(" | ")
 		p("%s", score.Line.Implementation)
 		p(" | ")

@@ -38,206 +38,223 @@ import (
 )
 
 type schemaGenerator struct {
-	name      string
-	gen       randjsonschema.Rand
-	schema    string
-	validOnly bool
-	num       int
+	name   string
+	gen    randjsonschema.Rand
+	schema string
+	kind   string
+	num    int
 }
 
 var generators = []schemaGenerator{
 	{
-		name:   "example-address-mixed",
+		name:   "example-address-invalid",
 		gen:    schemas.RandomAddress(),
 		schema: schemas.SchemaJSONSchemaExampleAddress,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-address-valid",
-		gen:       schemas.RandomAddress(),
-		schema:    schemas.SchemaJSONSchemaExampleAddress,
-		validOnly: true,
+		name:   "example-address-valid",
+		gen:    schemas.RandomAddress(),
+		schema: schemas.SchemaJSONSchemaExampleAddress,
+		kind:   "valid",
 	},
 	{
-		name:   "example-blogpost-mixed",
+		name:   "example-blogpost-invalid",
 		gen:    schemas.RandomBlogPost(),
 		schema: schemas.SchemaJSONSchemaExampleBlogPost,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-blogpost-valid",
-		gen:       schemas.RandomBlogPost(),
-		schema:    schemas.SchemaJSONSchemaExampleBlogPost,
-		validOnly: true,
+		name:   "example-blogpost-valid",
+		gen:    schemas.RandomBlogPost(),
+		schema: schemas.SchemaJSONSchemaExampleBlogPost,
+		kind:   "valid",
 	},
 	{
-		name:   "jsck-complex-mixed",
+		name:   "jsck-complex-invalid",
 		gen:    complex.Complex(),
 		schema: complex.SchemaComplexNew,
+		kind:   "invalid",
 		num:    100,
 	},
 	{
-		name:      "jsck-complex-valid",
-		gen:       complex.Complex(),
-		schema:    complex.SchemaComplexNew,
-		validOnly: true,
-		num:       100,
+		name:   "jsck-complex-valid",
+		gen:    complex.Complex(),
+		schema: complex.SchemaComplexNew,
+		kind:   "valid",
+		num:    100,
 	},
 	{
-		name:   "katydid-conf-mixed",
+		name:   "katydid-conf-invalid",
 		gen:    schemas.RandomConfIsIn2026OrLate2025AndEU(),
 		schema: schemas.SchemaConfIsIn2026OrLate2025AndEU,
+		kind:   "invalid",
 	},
 	{
-		name:      "katydid-conf-valid",
-		gen:       schemas.RandomConfIsIn2026OrLate2025AndEU(),
-		schema:    schemas.SchemaConfIsIn2026OrLate2025AndEU,
-		validOnly: true,
+		name:   "katydid-conf-valid",
+		gen:    schemas.RandomConfIsIn2026OrLate2025AndEU(),
+		schema: schemas.SchemaConfIsIn2026OrLate2025AndEU,
+		kind:   "valid",
 	},
 	{
-		name:   "example-userprofile-mixed",
+		name:   "example-userprofile-invalid",
 		gen:    schemas.RandomUserProfile(),
 		schema: schemas.SchemaJSONSchemaExampleUserProfile,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-userprofile-valid",
-		gen:       schemas.RandomUserProfile(),
-		schema:    schemas.SchemaJSONSchemaExampleUserProfile,
-		validOnly: true,
+		name:   "example-userprofile-valid",
+		gen:    schemas.RandomUserProfile(),
+		schema: schemas.SchemaJSONSchemaExampleUserProfile,
+		kind:   "valid",
 	},
 	{
-		name:   "example-calendar-mixed",
+		name:   "example-calendar-invalid",
 		gen:    schemas.RandomCalendar(),
 		schema: schemas.SchemaJSONSchemaExampleCalendar,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-calendar-valid",
-		gen:       schemas.RandomCalendar(),
-		schema:    schemas.SchemaJSONSchemaExampleCalendar,
-		validOnly: true,
+		name:   "example-calendar-valid",
+		gen:    schemas.RandomCalendar(),
+		schema: schemas.SchemaJSONSchemaExampleCalendar,
+		kind:   "valid",
 	},
 	{
-		name:   "example-devicetype-mixed",
+		name:   "example-devicetype-invalid",
 		gen:    schemas.RandomDevicetype(),
 		schema: schemas.SchemaJSONSchemaExampleDevicetype,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-devicetype-valid",
-		gen:       schemas.RandomDevicetype(),
-		schema:    schemas.SchemaJSONSchemaExampleDevicetype,
-		validOnly: true,
+		name:   "example-devicetype-valid",
+		gen:    schemas.RandomDevicetype(),
+		schema: schemas.SchemaJSONSchemaExampleDevicetype,
+		kind:   "valid",
 	},
 	{
-		name:   "example-health-record-mixed",
+		name:   "example-health-record-invalid",
 		gen:    schemas.RandomHealthRecord(),
 		schema: schemas.SchemaJSONSchemaExampleHealthRecord,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-health-record-valid",
-		gen:       schemas.RandomHealthRecord(),
-		schema:    schemas.SchemaJSONSchemaExampleHealthRecord,
-		validOnly: true,
+		name:   "example-health-record-valid",
+		gen:    schemas.RandomHealthRecord(),
+		schema: schemas.SchemaJSONSchemaExampleHealthRecord,
+		kind:   "valid",
 	},
 	{
-		name:   "example-job-posting-mixed",
+		name:   "example-job-posting-invalid",
 		gen:    schemas.RandomJobPosting(),
 		schema: schemas.SchemaJSONSchemaExampleJobPosting,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-job-posting-valid",
-		gen:       schemas.RandomJobPosting(),
-		schema:    schemas.SchemaJSONSchemaExampleJobPosting,
-		validOnly: true,
+		name:   "example-job-posting-valid",
+		gen:    schemas.RandomJobPosting(),
+		schema: schemas.SchemaJSONSchemaExampleJobPosting,
+		kind:   "valid",
 	},
 	{
-		name:   "example-movie-mixed",
+		name:   "example-movie-invalid",
 		gen:    schemas.RandomMovie(),
 		schema: schemas.SchemaJSONSchemaExampleMovie,
+		kind:   "invalid",
 	},
 	{
-		name:      "example-movie-valid",
-		gen:       schemas.RandomMovie(),
-		schema:    schemas.SchemaJSONSchemaExampleMovie,
-		validOnly: true,
+		name:   "example-movie-valid",
+		gen:    schemas.RandomMovie(),
+		schema: schemas.SchemaJSONSchemaExampleMovie,
+		kind:   "valid",
 	},
 	{
-		name:   "jsck-medium-mixed",
+		name:   "jsck-medium-invalid",
 		gen:    medium.Medium(),
 		schema: medium.SchemaMedium,
+		kind:   "invalid",
 	},
 	{
-		name:      "jsck-medium-valid",
-		gen:       medium.Medium(),
-		schema:    medium.SchemaMedium,
-		validOnly: true,
+		name:   "jsck-medium-valid",
+		gen:    medium.Medium(),
+		schema: medium.SchemaMedium,
+		kind:   "valid",
 	},
 	{
-		name:   "zschema-basic-mixed",
+		name:   "zschema-basic-invalid",
 		gen:    basic.ProductSet(),
 		schema: basic.SchemaBasic,
+		kind:   "invalid",
 		num:    200,
 	},
 	{
-		name:      "zschema-basic-valid",
-		gen:       basic.ProductSet(),
-		schema:    basic.SchemaBasic,
-		validOnly: true,
-		num:       200,
+		name:   "zschema-basic-valid",
+		gen:    basic.ProductSet(),
+		schema: basic.SchemaBasic,
+		kind:   "valid",
+		num:    200,
 	},
 	{
-		name:   "zschema-basic-rmUniqueItems-mixed",
+		name:   "zschema-basic-rmUniqueItems-invalid",
 		gen:    basic.ProductSetrmUniqueItems(),
 		schema: basic.SchemaBasicrmUniqueItems,
+		kind:   "invalid",
 		num:    200,
 	},
 	{
-		name:      "zschema-basic-rmUniqueItems-valid",
-		gen:       basic.ProductSetrmUniqueItems(),
-		schema:    basic.SchemaBasicrmUniqueItems,
-		validOnly: true,
-		num:       200,
+		name:   "zschema-basic-rmUniqueItems-valid",
+		gen:    basic.ProductSetrmUniqueItems(),
+		schema: basic.SchemaBasicrmUniqueItems,
+		kind:   "valid",
+		num:    200,
 	},
 	{
-		name:   "zschema-advanced-mixed",
+		name:   "zschema-advanced-invalid",
 		gen:    advanced.Advanced(),
 		schema: advanced.SchemaAdvanced,
+		kind:   "invalid",
 	},
 	{
-		name:      "zschema-advanced-valid",
-		gen:       advanced.Advanced(),
-		schema:    advanced.SchemaAdvanced,
-		validOnly: true,
+		name:   "zschema-advanced-valid",
+		gen:    advanced.Advanced(),
+		schema: advanced.SchemaAdvanced,
+		kind:   "valid",
 	},
 	{
-		name:   "zschema-advanced-rmUniqueItems-mixed",
+		name:   "zschema-advanced-rmUniqueItems-invalid",
 		gen:    advanced.AdvancedrmUniqueItems(),
 		schema: advanced.SchemaAdvancedrmUniqueItems,
+		kind:   "invalid",
 	},
 	{
-		name:      "zschema-advanced-rmUniqueItems-valid",
-		gen:       advanced.AdvancedrmUniqueItems(),
-		schema:    advanced.SchemaAdvancedrmUniqueItems,
-		validOnly: true,
+		name:   "zschema-advanced-rmUniqueItems-valid",
+		gen:    advanced.AdvancedrmUniqueItems(),
+		schema: advanced.SchemaAdvancedrmUniqueItems,
+		kind:   "valid",
 	},
 	{
-		name:   "ajv-cosmicrealms-mixed",
+		name:   "ajv-cosmicrealms-invalid",
 		gen:    ajv_cosmicrealms.CosmicRealms(),
 		schema: ajv_cosmicrealms.SchemaCosmicRealms,
+		kind:   "invalid",
 	},
 	{
-		name:      "ajv-cosmicrealms-valid",
-		gen:       ajv_cosmicrealms.CosmicRealms(),
-		schema:    ajv_cosmicrealms.SchemaCosmicRealms,
-		validOnly: true,
+		name:   "ajv-cosmicrealms-valid",
+		gen:    ajv_cosmicrealms.CosmicRealms(),
+		schema: ajv_cosmicrealms.SchemaCosmicRealms,
+		kind:   "valid",
 	},
 	{
-		name:   "ajv-cosmicrealms-rmUniqueItems-mixed",
+		name:   "ajv-cosmicrealms-rmUniqueItems-invalid",
 		gen:    ajv_cosmicrealms.CosmicRealmsrmUniqueItems(),
 		schema: ajv_cosmicrealms.SchemaCosmicRealmsrmUniqueItems,
+		kind:   "invalid",
 	},
 	{
-		name:      "ajv-cosmicrealms-rmUniqueItems-valid",
-		gen:       ajv_cosmicrealms.CosmicRealmsrmUniqueItems(),
-		schema:    ajv_cosmicrealms.SchemaCosmicRealmsrmUniqueItems,
-		validOnly: true,
+		name:   "ajv-cosmicrealms-rmUniqueItems-valid",
+		gen:    ajv_cosmicrealms.CosmicRealmsrmUniqueItems(),
+		schema: ajv_cosmicrealms.SchemaCosmicRealmsrmUniqueItems,
+		kind:   "valid",
 	},
 }
 
@@ -282,24 +299,26 @@ func main() {
 			fmt.Printf("overriding num with %d for schema %s\n", gen.num, gen.name)
 			number = gen.num
 		}
-		generateJSONL(*seed, gen.gen, validator, number, subfolder, !gen.validOnly)
+		generateJSONL(*seed, gen.gen, validator, number, subfolder, gen.kind)
 	}
 
 }
 
-func generateJSONL(seed int64, gen randjsonschema.Rand, validator *jsonschema.Schema, num int, folder string, mixed bool) {
+func generateJSONL(seed int64, gen randjsonschema.Rand, validator *jsonschema.Schema, num int, folder string, kind string) {
 	file, err := os.Create(filepath.Join(folder, "instances.jsonl"))
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
 	r := rand.NewRandWithSeed(seed)
-	for i := range num {
+	for range num {
 		var s string
-		if mixed && i%2 == 0 && i > 10 {
+		if kind == "valid" {
+			s = genRight(r, gen, validator)
+		} else if kind == "invalid" {
 			s = genWrong(r, gen, validator)
 		} else {
-			s = genRight(r, gen, validator)
+			panic(fmt.Sprintf("kind: %q not supported", kind))
 		}
 		file.WriteString(s + "\n")
 	}

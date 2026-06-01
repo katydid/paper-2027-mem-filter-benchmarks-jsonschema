@@ -36,7 +36,7 @@ func GroupBySchema(lines []*Line) [][]*Line {
 	return groups
 }
 
-// group by valid, mixed and also group no kind with valid, since they are all valid
+// group by valid/invalid and also group no kind with valid, since they are all valid
 func GroupByKind(lines []*Line) [][]*Line {
 	groupIndexes := make(map[string]int)
 	groups := [][]*Line{}

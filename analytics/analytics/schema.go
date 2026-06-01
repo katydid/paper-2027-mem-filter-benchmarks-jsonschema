@@ -70,9 +70,9 @@ func CollectSchemas(folder string) ([]*Schema, error) {
 func ParseSchemaName(name string) (*SchemaName, error) {
 	s := &SchemaName{Name: name}
 	shortName := name
-	if strings.Contains(name, "-mixed") {
-		s.GeneratedKind = "mixed"
-		shortName = strings.Replace(shortName, "-mixed", "", 1)
+	if strings.Contains(name, "-invalid") {
+		s.GeneratedKind = "invalid"
+		shortName = strings.Replace(shortName, "-invalid", "", 1)
 	} else if strings.Contains(name, "-valid") {
 		s.GeneratedKind = "valid"
 		shortName = strings.Replace(shortName, "-valid", "", 1)
@@ -136,8 +136,8 @@ func collectFeatures(data []byte) []string {
 }
 
 func ContainsRmUniqueItems(schemas []*Schema, name string) bool {
-	if strings.HasSuffix(name, "-mixed") {
-		name = name[:len(name)-6] + "-rmUniqueItems-mixed"
+	if strings.HasSuffix(name, "-invalid") {
+		name = name[:len(name)-6] + "-rmUniqueItems-invalid"
 	} else if strings.HasSuffix(name, "-valid") {
 		name = name[:len(name)-6] + "-rmUniqueItems-valid"
 	} else {
@@ -197,30 +197,30 @@ func RemovePrefix(name string) (string, string) {
 func GroupGenerated(schemas []*Schema) []*Schema {
 	res := []*Schema{}
 	for i := range schemas {
-		if strings.HasSuffix(schemas[i].Name, "-mixed") {
-			mixedSchema := schemas[i]
-			name := mixedSchema.Name[:len(mixedSchema.Name)-6]
-			validName := name + "-valid"
-			validSchema := FindSchema(schemas, validName)
+		if strings.HasSuffix(schemas[i].Name, "-valid") {
+			validSchema := schemas[i]
+			name := validSchema.Name[:len(validSchema.Name)-6]
+			invalidName := name + "-invalid"
+			invalidSchema := FindSchema(schemas, invalidName)
 			groupSchema := &Schema{
 				SchemaName: SchemaName{
 					Name:          name,
-					PrefixName:    mixedSchema.PrefixName,
-					RmUniqueItems: mixedSchema.RmUniqueItems,
+					PrefixName:    validSchema.PrefixName,
+					RmUniqueItems: validSchema.RmUniqueItems,
 					GeneratedKind: "",
-					ShortName:     mixedSchema.ShortName,
+					ShortName:     validSchema.ShortName,
 				},
-				Features:               mixedSchema.Features,
-				Source:                 mixedSchema.Source,
-				SchemaSizeBytes:        mixedSchema.SchemaSizeBytes,
-				NumInstances:           mixedSchema.NumInstances,
-				AvgInstanceSizeBytes:   (mixedSchema.AvgInstanceSizeBytes + validSchema.AvgInstanceSizeBytes) / 2,
-				HasExistingReplacement: mixedSchema.HasExistingReplacement,
+				Features:               validSchema.Features,
+				Source:                 validSchema.Source,
+				SchemaSizeBytes:        validSchema.SchemaSizeBytes,
+				NumInstances:           validSchema.NumInstances,
+				AvgInstanceSizeBytes:   (validSchema.AvgInstanceSizeBytes + invalidSchema.AvgInstanceSizeBytes) / 2,
+				HasExistingReplacement: validSchema.HasExistingReplacement,
 				Generated:              true,
 			}
 			res = append(res, groupSchema)
-		} else if strings.HasSuffix(schemas[i].Name, "-valid") {
-			// ignore, grouping happens in mixed
+		} else if strings.HasSuffix(schemas[i].Name, "-invalid") {
+			// ignore, grouping happens in valid
 			continue
 		} else {
 			res = append(res, schemas[i])
