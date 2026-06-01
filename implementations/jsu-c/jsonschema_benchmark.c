@@ -74,6 +74,11 @@ int main(int argc, char* argv[])
     const jm_check_fun_t checker = check_model_map("");
     assert(checker != NULL);
 
+    bool want = true;
+    if (strstr(argv[optind], "-invalid") != NULL) {
+        want = false;
+    }
+
     size_t size = 1024;
     int nstrs = 0;
     char **strs = (char **) malloc(sizeof(char *) * size);
@@ -141,8 +146,13 @@ int main(int argc, char* argv[])
     int nfail = 0;
     double cold_start = now();
     for (int i = 0; i < nvalues; i++)
-        if (unlikely(!checker(values[i], NULL, NULL)))
+        if (!checker(values[i], NULL, NULL)) {
+            if (want) {
+                nfail++;
+            }
+        } else if (!want) {
             nfail++;
+        }
     double cold_delay = now() - cold_start;
     int npass = nvalues - nfail;
 
@@ -168,7 +178,5 @@ int main(int argc, char* argv[])
 
     check_model_free();
 
-    // We allow failure, since we do process invalid documents too as part of the benchmark.
-    // return nfail? 1: 0;
-    return 0;
+    return nfail? 1: 0;
 }
