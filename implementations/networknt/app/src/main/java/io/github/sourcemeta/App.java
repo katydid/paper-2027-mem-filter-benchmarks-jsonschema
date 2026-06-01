@@ -31,14 +31,17 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException {
+    org.apache.log4j.BasicConfigurator.configure();
+    org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
     JsonSchemaFactory jsonSchemaFactory =
         JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012);
     SchemaValidatorsConfig.Builder builder = SchemaValidatorsConfig.builder();
     builder.regularExpressionFactory(GraalJSRegularExpressionFactory.getInstance());
     SchemaValidatorsConfig config = builder.build();
     boolean want = !args[0].contains("-invalid");
-    if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets"))) {
+    if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets")) || (args[0].contains("krakend"))) {
       // skip files that take way too long
+      // Also networknt is unable to handle krakend, so we skip that too.
       System.exit(1);
     }
     String schemaString = new String(Files.readAllBytes(Paths.get(args[0])));

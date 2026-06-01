@@ -10,8 +10,10 @@ repositories {
 
 dependencies {
     // This dependency is used by the application.
+    implementation("org.slf4j:slf4j-api:2.0.18")
+    implementation("org.slf4j:slf4j-log4j12:2.0.18")
     implementation(libs.graalJs)
-    implementation(libs.networknt)
+    implementation(libs.networknt)  
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
