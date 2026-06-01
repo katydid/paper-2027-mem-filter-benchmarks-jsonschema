@@ -15,19 +15,19 @@ namespace fs = std::filesystem;
 #define WARMUP_ITERATIONS 100L
 #define MAX_WARMUP_TIME 10000000000
 
-bool validate_all(const auto &instances, const auto &schema_template) {
+bool validate_all(const auto &instances, const auto &schema_template, bool want) {
+    rapidjson::SchemaValidator validator(schema_template);
+    rapidjson::GenericReader<rapidjson::UTF8<>, rapidjson::UTF8<>> reader;
     bool failed = false;
     for (std::size_t num = 0; num < instances.size(); num++) {
         const std::string json = instances[num];
-        rapidjson::SchemaValidator validator(schema_template);
-        rapidjson::GenericReader<rapidjson::UTF8<>, rapidjson::UTF8<>> reader;
-        rapidjson::StringStream is(json.c_str());
-        reader.Parse(is, validator);
-        if (!validator.IsValid()) {
-            // We allow failure, since we do process invalid documents too as part of the benchmark.
-            // std::cerr << "Error validating instance " << num << "\n";
-            // return false;
-            failed = true;
+        rapidjson::StringStream stream(json.c_str());
+        bool validParse = reader.Parse(stream, validator);
+        bool validValidator = validator.IsValid();
+        bool res = validParse && validValidator;
+        if (res != want) {
+            std::cerr << "Error validating instance " << num << " wanted " << want << " got " << res << " input: " << instances[num] << "\n";
+            return false;
         }
   }
 
@@ -47,14 +47,16 @@ int validate(const std::filesystem::path &example) {
   const std::string instances_text = read_file(example / "instances.jsonl");
 
   std::vector<std::string> instances;
-   std::stringstream instances_stream(instances_text);
-   std::string line;
-
-    while (getline(instances_stream, line)) {
-        instances.push_back(line);
-    }
+  std::stringstream instances_stream(instances_text);
+  std::string line;
+  while (getline(instances_stream, line)) {
+    instances.push_back(line);
+  }
 
   const std::string schema_text = read_file(example / "schema.json");
+  bool want = !example.string().contains("-invalid");
+  std::cerr << std::boolalpha;
+  std::cerr << "want:" << want << "\n";
 
   const auto compile_start{std::chrono::high_resolution_clock::now()};
   rapidjson::Document json_schema_source;
@@ -70,9 +72,8 @@ int validate(const std::filesystem::path &example) {
       compile_end - compile_start)};
 
   const auto cold_start{std::chrono::high_resolution_clock::now()};
-  if (!validate_all(instances, rapidjson_schema)) {
-    // We allow failure, since we do process invalid documents too as part of the benchmark.
-    // return EXIT_FAILURE;
+  if (!validate_all(instances, rapidjson_schema, want)) {
+    return EXIT_FAILURE;
   }
   const auto cold_end{std::chrono::high_resolution_clock::now()};
   const auto cold_duration{std::chrono::duration_cast<std::chrono::nanoseconds>(
@@ -80,11 +81,11 @@ int validate(const std::filesystem::path &example) {
 
   const auto iterations = 1 + ((MAX_WARMUP_TIME - 1) / cold_duration.count());
   for (int i = 0; i < std::min(iterations, WARMUP_ITERATIONS); i++) {
-    validate_all(instances, rapidjson_schema);
+    validate_all(instances, rapidjson_schema, want);
   }
 
   const auto warm_start{std::chrono::high_resolution_clock::now()};
-  validate_all(instances, rapidjson_schema);
+  validate_all(instances, rapidjson_schema, want);
   const auto warm_end{std::chrono::high_resolution_clock::now()};
   const auto warm_duration{std::chrono::duration_cast<std::chrono::nanoseconds>(
       warm_end - warm_start)};
