@@ -39,9 +39,12 @@ public class App {
     builder.regularExpressionFactory(GraalJSRegularExpressionFactory.getInstance());
     SchemaValidatorsConfig config = builder.build();
     boolean want = !args[0].contains("-invalid");
-    if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets")) || (args[0].contains("krakend"))) {
+    if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets"))) {
       // skip files that take way too long
-      // Also networknt is unable to handle krakend, so we skip that too.
+      System.exit(1);
+    }
+    if ((args[0].contains("krakend")) || (args[0].contains("ui5-manifest"))) {
+      // unable to handle these and throws an exception
       System.exit(1);
     }
     String schemaString = new String(Files.readAllBytes(Paths.get(args[0])));
