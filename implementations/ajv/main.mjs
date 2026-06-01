@@ -28,18 +28,17 @@ function readFile(filePath) {
   }
 }
 
-function validateAll(instances, validator) {
-  let failed = false;
+function validateAll(instances, validator, want) {
+  let allmatched = true;
   for (const instance of instances) {
     if (!validator(instance)) {
-      failed = true;
+      allmatched = false;
     }
   }
-
-  return failed;
+  return want != allmatched;
 }
 
-async function validateSchema(schemaPath, instancePath) {
+async function validateSchema(schemaPath, instancePath, want) {
   const schema = readJSONFile(schemaPath);
 
   const ajv = new DRAFTS[schema['$schema'].replace(/#$/, '')]({strict: false});
@@ -63,17 +62,17 @@ async function validateSchema(schemaPath, instancePath) {
   const parseDurationNs = (parseEndTime - parseStartTime) * 1e6;
 
   const coldStartTime = performance.now();
-  const failed = validateAll(instances, validate);
+  const failed = validateAll(instances, validate, want);
   const coldEndTime = performance.now();
   const coldDurationNs = (coldEndTime - coldStartTime) * 1e6;
 
   const iterations = Math.ceil(MAX_WARMUP_TIME / coldDurationNs);
   for (let i = 0; i < Math.min(iterations, WARMUP_ITERATIONS); i++) {
-    validateAll(instances, validate);
+    validateAll(instances, validate, want);
   }
 
   const warmStartTime = performance.now();
-  validateAll(instances, validate);
+  validateAll(instances, validate, want);
   const warmEndTime = performance.now();
   const warmDurationNs = (warmEndTime - warmStartTime) * 1e6;
 
@@ -81,8 +80,7 @@ async function validateSchema(schemaPath, instancePath) {
 
   // Exit with non-zero status on validation failure
   if (failed) {
-    // process.exit(1);
-    // We allow failure, since we do process invalid documents too as part of the benchmark.
+    process.exit(1);
   }
 }
 
@@ -93,4 +91,6 @@ if (process.argv.length !== 4) {
 const schemaPath = process.argv[2];
 const instancePath = process.argv[3];
 
-await validateSchema(schemaPath, instancePath);
+const want = !schemaPath.includes("-invalid");
+
+await validateSchema(schemaPath, instancePath, want);
