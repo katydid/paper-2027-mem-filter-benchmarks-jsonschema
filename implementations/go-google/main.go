@@ -108,8 +108,7 @@ func main() {
 	coldStart := time.Now()
 	err = validateAll(instances, rs, want)
 	if err != nil {
-		// We allow failure, since we do process invalid documents too as part of the benchmark.
-		// log.Fatalf("Validation failed: %v", err)
+		log.Fatalf("Validation failed: %v", err)
 	}
 	coldDuration := time.Since(coldStart)
 
