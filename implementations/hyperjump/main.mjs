@@ -29,18 +29,18 @@ async function* readJSONLines(filePath) {
   }
 }
 
-async function validateAll(instances, schemaId) {
+async function validateAll(instances, schemaId, want) {
   let failed = false;
   for (const instance of instances) {
     const output = await validate(schemaId, instance);
-    if (!output.valid) {
+    if (output.valid != want) {
       failed = true;
     }
   }
   return failed;
 }
 
-async function validateSchema(schemaPath, instancePath) {
+async function validateSchema(schemaPath, instancePath, want) {
   const schema = readJSONFile(schemaPath);
 
   const schemaId = schema["$id"] || "https://example.com" + schemaPath;
@@ -57,17 +57,17 @@ async function validateSchema(schemaPath, instancePath) {
   }
 
   const coldStartTime = performance.now();
-  const failed = await validateAll(instances, schemaId);
+  const failed = await validateAll(instances, schemaId, want);
   const coldEndTime = performance.now();
   const coldDurationNs = (coldEndTime - coldStartTime) * 1e6;
 
   const iterations = Math.ceil(MAX_WARMUP_TIME / coldDurationNs);
   for (let i = 0; i < Math.min(iterations, WARMUP_ITERATIONS); i++) {
-    await validateAll(instances, schemaId);
+    await validateAll(instances, schemaId, want);
   }
 
   const warmStartTime = performance.now();
-  await validateAll(instances, schemaId);
+  await validateAll(instances, schemaId, want);
   const warmEndTime = performance.now();
   const warmDurationNs = (warmEndTime - warmStartTime) * 1e6;
 
@@ -75,8 +75,7 @@ async function validateSchema(schemaPath, instancePath) {
 
   // Exit with non-zero status on validation failure
   if (failed) {
-    // We allow failure, since we do process invalid documents too as part of the benchmark.
-    // process.exit(1);
+    process.exit(1);
   }
 }
 
@@ -87,4 +86,6 @@ if (process.argv.length !== 4) {
 const schemaPath = process.argv[2];
 const instancePath = process.argv[3];
 
-await validateSchema(schemaPath, instancePath);
+const want = !schemaPath.includes("-invalid");
+
+await validateSchema(schemaPath, instancePath, want);
