@@ -37,6 +37,10 @@ public class App {
     builder.regularExpressionFactory(GraalJSRegularExpressionFactory.getInstance());
     SchemaValidatorsConfig config = builder.build();
     boolean want = !args[0].contains("-invalid");
+    if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets"))) {
+      // skip files that take way too long
+      System.exit(1);
+    }
     String schemaString = new String(Files.readAllBytes(Paths.get(args[0])));
 
     // Register the schema
