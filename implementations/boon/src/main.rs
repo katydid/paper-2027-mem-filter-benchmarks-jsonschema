@@ -6,15 +6,18 @@ use std::env;
 const WARMUP_ITERATIONS: u128 = 100;
 const MAX_WARMUP_TIME: u128 = 10_000_000_000; // 10 seconds
 
-fn validate_all(schemas: &Schemas, sch_index: SchemaIndex, serde_lines: &std::vec::Vec<Value>) -> bool {
+fn validate_all(schemas: &Schemas, sch_index: SchemaIndex, serde_lines: &std::vec::Vec<Value>, want: bool) -> bool {
   let mut failed: bool = false;
   for line in serde_lines {
     let result = schemas.validate(&line, sch_index);
     if !result.is_ok() {
       failed = true;
     }
-    // We allow failure, since we do process invalid documents too as part of the benchmark.
-    // assert!(result.is_ok(), "Validation failed for line: {}", line);
+    if want {
+      assert!(result.is_ok(), "Validation failed for line: {}", line);
+    } else {
+      assert!(result.is_err(), "Validation succeeded for line: {}", line);
+    }
   }
   return !failed;
 }
@@ -23,6 +26,7 @@ fn main() -> Result<(), Box<dyn Error>> {
   // Get arguments
   let args: Vec<String> = env::args().collect();
   let example_folder = &args[1];
+  let want = !example_folder.contains("-invalid");
 
   // Get the schema and instance paths
   let schema_file =   std::fs::canonicalize(example_folder.to_owned() + "/schema-noformat.json")?;
@@ -57,17 +61,17 @@ fn main() -> Result<(), Box<dyn Error>> {
 
   // Validate the instances
   let cold_start = Instant::now();
-  validate_all(&schemas, sch_index, &instances);
+  validate_all(&schemas, sch_index, &instances, want);
   let cold_duration = cold_start.elapsed().as_nanos();
 
   // Warmup
   let iterations: u128 = MAX_WARMUP_TIME / cold_duration;
   for _ in 0..std::cmp::min(iterations, WARMUP_ITERATIONS) {
-    validate_all(&schemas, sch_index, &instances);
+    validate_all(&schemas, sch_index, &instances, want);
   }
 
   let warm_start = Instant::now();
-  validate_all(&schemas, sch_index, &instances);
+  validate_all(&schemas, sch_index, &instances, want);
   let warm_duration = warm_start.elapsed().as_nanos();
 
   println!("{:?},{:?},{:?},{:?}", cold_duration, warm_duration, parse_duration, compile_duration);
