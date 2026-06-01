@@ -9,6 +9,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	jsonschema "github.com/kaptinlin/jsonschema"
@@ -19,12 +20,14 @@ import (
 const WarmupIterations = 1000
 const MaxWarmupTime = 10_000_000_000
 
-func validateAll(instances []any, sch *jsonschema.Schema) error {
+func validateAll(instances []any, sch *jsonschema.Schema, want bool) error {
 	var result error
-	for _, inst := range instances {
-		err := sch.Validate(inst)
-		if !err.IsValid() {
+	for i := range instances {
+		err := sch.Validate(instances[i])
+		if want && !err.IsValid() {
 			result = err
+		} else if !want && err.IsValid() {
+			result = fmt.Errorf("expected invalid, but got valid at %d", i)
 		}
 	}
 	return result
@@ -37,7 +40,8 @@ func main() {
 	}
 
 	exampleFolder := os.Args[1]
-	log.Printf("benchmarking schema in folder: %s", exampleFolder)
+	want := !strings.Contains(exampleFolder, "-invalid")
+	log.Printf("folder %q with base %s expect %v", exampleFolder, filepath.Base(exampleFolder), want)
 
 	// Construct and canonicalize file paths
 	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema-noformat.json"))
@@ -95,21 +99,20 @@ func main() {
 
 	// Cold start
 	coldStart := time.Now()
-	err = validateAll(instances, validator)
+	err = validateAll(instances, validator, want)
 	if err != nil {
-		// We allow failure, since we do process invalid documents too as part of the benchmark.
-		// log.Fatalf("Validation failed: %v", err)
+		log.Fatalf("Validation failed: %v", err)
 	}
 	coldDuration := time.Since(coldStart)
 
 	// Warmup
 	iterations := math.Ceil(float64(MaxWarmupTime) / float64(coldDuration.Nanoseconds()))
 	for _ = range int64(min(iterations, WarmupIterations)) {
-		validateAll(instances, validator)
+		validateAll(instances, validator, want)
 	}
 
 	warmStart := time.Now()
-	validateAll(instances, validator)
+	validateAll(instances, validator, want)
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
