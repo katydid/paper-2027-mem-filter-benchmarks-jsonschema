@@ -9,6 +9,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	jsonschema "github.com/json-schema-spec/json-schema-go"
@@ -19,14 +20,17 @@ import (
 const WarmupIterations = 1000
 const MaxWarmupTime = 10_000_000_000
 
-func validateAll(instances []any, sch jsonschema.Validator) error {
-	var res error
-	for _, inst := range instances {
-		if _, err := sch.Validate(inst); err != nil {
-			res = err
+func validateAll(instances []any, sch jsonschema.Validator, want bool) error {
+	var result error
+	for i := range instances {
+		_, err := sch.Validate(instances[i])
+		if want && err != nil {
+			result = err
+		} else if !want && err == nil {
+			result = fmt.Errorf("expected invalid, but got valid at %d", i)
 		}
 	}
-	return res
+	return result
 }
 
 func main() {
@@ -36,7 +40,8 @@ func main() {
 	}
 
 	exampleFolder := os.Args[1]
-	log.Printf("benchmarking schema in folder: %s", exampleFolder)
+	want := !strings.Contains(exampleFolder, "-invalid")
+	log.Printf("folder %q with base %s expect %v", exampleFolder, filepath.Base(exampleFolder), want)
 
 	// Construct and canonicalize file paths
 	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema-noformat.json"))
@@ -96,21 +101,20 @@ func main() {
 
 	// Cold start
 	coldStart := time.Now()
-	err = validateAll(instances, validator)
+	err = validateAll(instances, validator, want)
 	if err != nil {
-		// We allow failure, since we do process invalid documents too as part of the benchmark.
-		// log.Fatalf("Validation failed: %v", err)
+		log.Fatalf("Validation failed: %v", err)
 	}
 	coldDuration := time.Since(coldStart)
 
 	// Warmup
 	iterations := math.Ceil(float64(MaxWarmupTime) / float64(coldDuration.Nanoseconds()))
 	for _ = range int64(min(iterations, WarmupIterations)) {
-		validateAll(instances, validator)
+		validateAll(instances, validator, want)
 	}
 
 	warmStart := time.Now()
-	validateAll(instances, validator)
+	validateAll(instances, validator, want)
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
