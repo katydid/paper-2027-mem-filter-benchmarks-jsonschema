@@ -5,11 +5,13 @@ using System.Linq;
 const int WarmupIterations = 1000;
 const long MaxWarmupTime = 10_000_000_000;
 
-bool ValidateAll(JSB.Schema[] docs) {
+bool ValidateAll(JSB.Schema[] docs, bool want) {
   var valid = true;
   foreach (var doc in docs) {
     var result = doc.Validate(ValidationContext.ValidContext, ValidationLevel.Flag);
-    valid = valid && result.IsValid;
+    if (result.IsValid != want) {
+      valid = false;  
+    }
   }
 
   return valid;
@@ -18,6 +20,7 @@ bool ValidateAll(JSB.Schema[] docs) {
 
 // Read and parse all instances
 var lines = File.ReadLines(args[0]);
+var want = !args[0].Contains("-invalid");
 JSB.Schema[] docs = Array.Empty<JSB.Schema>();
 try  {
   docs = lines.Select(l => JSB.Schema.Parse(l)).ToArray();
@@ -29,21 +32,20 @@ Stopwatch stopWatch = new Stopwatch();
 
 // Loop and validate all instances
 stopWatch.Start();
-var valid = ValidateAll(docs);
+var valid = ValidateAll(docs, want);
 stopWatch.Stop();
 TimeSpan coldTs = stopWatch.Elapsed;
 
 var iterations = (int) Math.Ceiling(((double) MaxWarmupTime) / coldTs.TotalNanoseconds);
 for (int i = 0; i < Math.Min(iterations, WarmupIterations); i++) {
-  ValidateAll(docs);
+  ValidateAll(docs, want);
 }
 
 stopWatch.Restart();
-ValidateAll(docs);
+ValidateAll(docs, want);
 stopWatch.Stop();
 TimeSpan warmTs = stopWatch.Elapsed;
 
 // Output file time and exit
 Console.WriteLine(coldTs.TotalNanoseconds + "," + warmTs.TotalNanoseconds + "," + "TODO");
-// We allow failure, since we do process invalid documents too as part of the benchmark.
-// Environment.Exit(valid ? 0 : 1);
+Environment.Exit(valid ? 0 : 1);
