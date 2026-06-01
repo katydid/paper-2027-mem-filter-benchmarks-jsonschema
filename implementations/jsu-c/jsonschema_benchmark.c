@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
                 size *= 2;
                 strs = (char **) realloc(strs, sizeof(char *) * size);
             }
-            strs[nstrs++] = pch;
+            strs[nstrs++] = strdup(pch);
             pch = strtok(NULL, "\r\n");
         }
     }
