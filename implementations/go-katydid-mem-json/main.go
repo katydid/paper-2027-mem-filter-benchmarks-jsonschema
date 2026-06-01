@@ -7,6 +7,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/katydid/parser-go-json/json"
@@ -16,11 +17,15 @@ import (
 const WarmupIterations = 1000
 const MaxWarmupTime = 10_000_000_000
 
-func validateAll(parser json.Parser, matcher jsonschema.Matcher, instances [][]byte) error {
-	for _, inst := range instances {
-		parser.Init(inst)
-		if _, err := matcher.MatchParser(parser); err != nil {
+func validateAll(parser json.Parser, matcher jsonschema.Matcher, instances [][]byte, want bool) error {
+	for i := range instances {
+		parser.Init(instances[i])
+		got, err := matcher.MatchParser(parser)
+		if err != nil {
 			return err
+		}
+		if got != want {
+			return fmt.Errorf("want %v, but got %v for instance: %s", want, got, instances[i])
 		}
 	}
 	return nil
@@ -56,7 +61,8 @@ func main() {
 	}
 
 	exampleFolder := os.Args[1]
-	log.Printf("folder %q with base %s", exampleFolder, filepath.Base(exampleFolder))
+	want := !strings.Contains(exampleFolder, "-invalid")
+	log.Printf("folder %q with base %s expect %v", exampleFolder, filepath.Base(exampleFolder), want)
 	if reason, ok := notSupported[filepath.Base(exampleFolder)]; ok {
 		log.Fatalf("%s is not supported, because %s", exampleFolder, reason)
 	}
@@ -91,12 +97,14 @@ func main() {
 		log.Fatal(err)
 	}
 	instances := bytes.Split(data, []byte("\n"))
+	instances = instances[:len(instances)-1]
+	log.Printf("number of instances: %d", len(instances))
 
 	parser := json.NewJSONSchemaParser()
 
 	// Cold start
 	coldStart := time.Now()
-	err = validateAll(parser, matcher, instances)
+	err = validateAll(parser, matcher, instances, want)
 	if err != nil {
 		log.Fatalf("Validation failed: %v", err)
 	}
@@ -105,11 +113,11 @@ func main() {
 	// Warmup
 	iterations := math.Ceil(float64(MaxWarmupTime) / float64(coldDuration.Nanoseconds()))
 	for _ = range int64(min(iterations, WarmupIterations)) {
-		validateAll(parser, matcher, instances)
+		validateAll(parser, matcher, instances, want)
 	}
 
 	warmStart := time.Now()
-	validateAll(parser, matcher, instances)
+	validateAll(parser, matcher, instances, want)
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
