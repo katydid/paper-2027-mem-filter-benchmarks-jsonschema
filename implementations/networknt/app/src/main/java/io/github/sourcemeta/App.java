@@ -19,10 +19,13 @@ public class App {
   static int WARMUP_ITERATIONS = 1000;
   static long MAX_WARMUP_TIME = (long) 1e9 * 10;
 
-  public static boolean validateAll(JsonSchema schema, List<JsonNode> docs) {
+  public static boolean validateAll(JsonSchema schema, List<JsonNode> docs, boolean want) {
     boolean valid = true;
     for (JsonNode doc : docs) {
-      valid = valid && schema.validate(doc, OutputFormat.BOOLEAN);
+      boolean res = schema.validate(doc, OutputFormat.BOOLEAN);
+      if (want != res) {
+        valid = false;
+      }
     }
     return valid;
   }
@@ -33,6 +36,7 @@ public class App {
     SchemaValidatorsConfig.Builder builder = SchemaValidatorsConfig.builder();
     builder.regularExpressionFactory(GraalJSRegularExpressionFactory.getInstance());
     SchemaValidatorsConfig config = builder.build();
+    boolean want = !args[0].contains("-invalid");
     String schemaString = new String(Files.readAllBytes(Paths.get(args[0])));
 
     // Register the schema
@@ -55,7 +59,7 @@ public class App {
             .collect(Collectors.toList());
 
     Long coldStart = System.nanoTime();
-    boolean valid = validateAll(schema, docs);
+    boolean valid = validateAll(schema, docs, want);
     Long coldEnd = System.nanoTime();
 
     if (!valid) {
@@ -65,11 +69,11 @@ public class App {
     // Warmup
     long iterations = (long) Math.ceil(((double) MAX_WARMUP_TIME) / (coldEnd - coldStart));
     for (int i = 0; i < WARMUP_ITERATIONS; i++) {
-      validateAll(schema, docs);
+      validateAll(schema, docs, want);
     }
 
     Long warmStart = System.nanoTime();
-    validateAll(schema, docs);
+    validateAll(schema, docs, want);
     Long warmEnd = System.nanoTime();
 
     System.out.println(

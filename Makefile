@@ -565,7 +565,7 @@ dist/results/kmp/%: \
 
 implementations/networknt/.dockertimestamp: \
 	implementations/networknt/memory-wrapper.sh \
-	implementations/networknt/app/src/main/java/io/github/sourcemeta/*.java \
+	implementations/networknt/app/src/main/java/io/github/sourcemeta/App.java \
 	implementations/networknt/app/build.gradle.kts \
 	implementations/networknt/gradle/libs.versions.toml \
 	implementations/networknt/gradle/wrapper/gradle-wrapper.properties \
