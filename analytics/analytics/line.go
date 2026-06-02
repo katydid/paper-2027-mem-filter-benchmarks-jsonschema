@@ -105,7 +105,7 @@ func parseLine(schemas []*Schema, record []string) (*Line, error) {
 	if err != nil {
 		return nil, err
 	}
-	if line.WarmNs == 0 || line.ColdNs == 0 {
+	if line.WarmNs == 0 {
 		line.ExitStatus = 1
 	}
 	return line, nil

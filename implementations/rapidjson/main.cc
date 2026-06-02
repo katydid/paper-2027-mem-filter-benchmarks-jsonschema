@@ -52,6 +52,7 @@ int validate(const std::filesystem::path &example) {
   while (getline(instances_stream, line)) {
     instances.push_back(line);
   }
+  std::cerr << "instances: " << instances.size() << "\n";
 
   const std::string schema_text = read_file(example / "schema.json");
   bool want = !example.string().contains("-invalid");
