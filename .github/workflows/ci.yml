@@ -77,7 +77,6 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: report-${{ matrix.impl }}
-          archive: false
           path: dist/report.csv
           retention-days: 1
 
@@ -102,7 +101,6 @@ jobs:
 
       - name: Concatenate output
         run: |
-          ls -Rl
           mkdir dist
           echo "implementation,version,name,cold_ns,warm_ns,parse_ns,compile_ns,memory,exit_status" > dist/report.csv
           tail -q -n +2 ./report-*/report.csv >> dist/report.csv
