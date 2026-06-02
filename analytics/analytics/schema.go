@@ -37,7 +37,7 @@ type Schema struct {
 	Generated              bool
 	SchemaSizeBytes        int
 	NumInstances           int
-	AvgInstanceSizeBytes   float64
+	MeanInstanceSizeBytes  float64
 	HasExistingReplacement bool
 }
 
@@ -121,7 +121,7 @@ func collectSchema(folder string) (*Schema, error) {
 			if len(bytes.TrimSpace(instances[len(instances)-1])) == 0 {
 				s.NumInstances = s.NumInstances - 1
 			}
-			s.AvgInstanceSizeBytes = float64(len(data)) / float64(len(instances))
+			s.MeanInstanceSizeBytes = float64(len(data)) / float64(len(instances))
 		}
 	}
 	return s, nil
@@ -214,7 +214,7 @@ func GroupGenerated(schemas []*Schema) []*Schema {
 				Source:                 validSchema.Source,
 				SchemaSizeBytes:        validSchema.SchemaSizeBytes,
 				NumInstances:           validSchema.NumInstances,
-				AvgInstanceSizeBytes:   (validSchema.AvgInstanceSizeBytes + invalidSchema.AvgInstanceSizeBytes) / 2,
+				MeanInstanceSizeBytes:  (validSchema.MeanInstanceSizeBytes + invalidSchema.MeanInstanceSizeBytes) / 2,
 				HasExistingReplacement: validSchema.HasExistingReplacement,
 				Generated:              true,
 			}

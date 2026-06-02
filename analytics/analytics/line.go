@@ -111,7 +111,7 @@ func parseLine(schemas []*Schema, record []string) (*Line, error) {
 	return line, nil
 }
 
-func average(indexes []int, get func(int) int) int {
+func mean(indexes []int, get func(int) int) int {
 	sum := 0
 	for _, index := range indexes {
 		sum += get(index)
@@ -119,7 +119,7 @@ func average(indexes []int, get func(int) int) int {
 	return sum / len(indexes)
 }
 
-func AverageRuns(lines []*Line) []*Line {
+func MeanRuns(lines []*Line) []*Line {
 	runs := map[string][]int{}
 	runNames := []string{}
 	for i, line := range lines {
@@ -134,19 +134,19 @@ func AverageRuns(lines []*Line) []*Line {
 	res := make([]*Line, len(runNames))
 	for i, runName := range runNames {
 		runIndexes := runs[runName]
-		avgColdNs := average(runIndexes, func(index int) int {
+		meanColdNs := mean(runIndexes, func(index int) int {
 			return lines[index].ColdNs
 		})
-		avgWarmNs := average(runIndexes, func(index int) int {
+		meanWarmNs := mean(runIndexes, func(index int) int {
 			return lines[index].WarmNs
 		})
-		avgParseNs := average(runIndexes, func(index int) int {
+		meanParseNs := mean(runIndexes, func(index int) int {
 			return lines[index].ParseNs
 		})
-		avgCompileNs := average(runIndexes, func(index int) int {
+		meanCompileNs := mean(runIndexes, func(index int) int {
 			return lines[index].CompileNs
 		})
-		avgMemory := average(runIndexes, func(index int) int {
+		meanMemory := mean(runIndexes, func(index int) int {
 			return lines[index].Memory
 		})
 		line := lines[runIndexes[0]]
@@ -154,12 +154,12 @@ func AverageRuns(lines []*Line) []*Line {
 			Schema:         line.Schema,
 			Implementation: line.Implementation,
 			Version:        line.Version,
-			ColdNs:         avgColdNs,
-			WarmNs:         avgWarmNs,
-			ParseNs:        avgParseNs,
+			ColdNs:         meanColdNs,
+			WarmNs:         meanWarmNs,
+			ParseNs:        meanParseNs,
 			ParseTODO:      line.ParseTODO,
-			CompileNs:      avgCompileNs,
-			Memory:         avgMemory,
+			CompileNs:      meanCompileNs,
+			Memory:         meanMemory,
 			ExitStatus:     line.ExitStatus,
 		}
 	}

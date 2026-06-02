@@ -70,7 +70,7 @@ func main() {
 		lines = analytics.FilterExitStatus0(lines)
 	}
 
-	lines = analytics.AverageRuns(lines)
+	lines = analytics.MeanRuns(lines)
 
 	groups := analytics.GroupBySchema(lines)
 	scores := analytics.ScoreGroups(groups)

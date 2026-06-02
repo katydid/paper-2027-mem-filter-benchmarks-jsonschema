@@ -25,24 +25,24 @@ type Implementation struct {
 	CompletedSchemas int
 	TotalSchemas     int
 
-	AverageWarmNsPerDoc float64
-	MedianWarmNsPerDoc  float64
-	AverageWarmRank     float64
-	MedianWarmRank      float64
-	AverageColdNsPerDoc float64
-	MedianColdNsPerDoc  float64
-	AverageColdRank     float64
-	MedianColdRank      float64
+	MeanWarmNsPerDoc   float64
+	MedianWarmNsPerDoc float64
+	MeanWarmRank       float64
+	MedianWarmRank     float64
+	MeanColdNsPerDoc   float64
+	MedianColdNsPerDoc float64
+	MeanColdRank       float64
+	MedianColdRank     float64
 
-	ParseTODO                    bool
-	AverageParsePlusWarmNsPerDoc float64
-	MedianParsePlusWarmNsPerDoc  float64
-	AverageParsePlusWarmRank     float64
-	MedianParsePlusWarmRank      float64
-	AverageParsePlusColdNsPerDoc float64
-	MedianParsePlusColdNsPerDoc  float64
-	AverageParsePlusColdRank     float64
-	MedianParsePlusColdRank      float64
+	ParseTODO                   bool
+	MeanParsePlusWarmNsPerDoc   float64
+	MedianParsePlusWarmNsPerDoc float64
+	MeanParsePlusWarmRank       float64
+	MedianParsePlusWarmRank     float64
+	MeanParsePlusColdNsPerDoc   float64
+	MedianParsePlusColdNsPerDoc float64
+	MeanParsePlusColdRank       float64
+	MedianParsePlusColdRank     float64
 }
 
 func MedianInt(num int, get func(int) int) int {
@@ -83,7 +83,7 @@ func MedianFloat(num int, get func(int) float64) float64 {
 	return (nums[medianIndex1] + nums[medianIndex2]) / 2
 }
 
-func Average(num int, get func(int) float64) float64 {
+func Mean(num int, get func(int) float64) float64 {
 	sum := float64(0)
 	for i := range num {
 		sum += get(i)
@@ -111,26 +111,26 @@ func AnalyseImplementation(scores []*ScoredLine, totalSchemas int, completedSche
 	res.MedianWarmNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].WarmNsPerDoc
 	})
-	res.AverageWarmNsPerDoc = Average(len(scores), func(index int) float64 {
+	res.MeanWarmNsPerDoc = Mean(len(scores), func(index int) float64 {
 		return scores[index].WarmNsPerDoc
 	})
 	res.MedianWarmRank = MedianFloat(len(scores), func(index int) float64 {
 		return float64(scores[index].WarmRank)
 	})
-	res.AverageWarmRank = Average(len(scores), func(index int) float64 {
+	res.MeanWarmRank = Mean(len(scores), func(index int) float64 {
 		return float64(scores[index].WarmRank)
 	})
 
 	res.MedianColdNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].ColdNsPerDoc
 	})
-	res.AverageColdNsPerDoc = Average(len(scores), func(index int) float64 {
+	res.MeanColdNsPerDoc = Mean(len(scores), func(index int) float64 {
 		return scores[index].ColdNsPerDoc
 	})
 	res.MedianColdRank = MedianFloat(len(scores), func(index int) float64 {
 		return float64(scores[index].ColdRank)
 	})
-	res.AverageColdRank = Average(len(scores), func(index int) float64 {
+	res.MeanColdRank = Mean(len(scores), func(index int) float64 {
 		return float64(scores[index].ColdRank)
 	})
 
@@ -145,26 +145,26 @@ func AnalyseImplementation(scores []*ScoredLine, totalSchemas int, completedSche
 	res.MedianParsePlusWarmNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].ParsePlusWarmNsPerDoc
 	})
-	res.AverageParsePlusWarmNsPerDoc = Average(len(scores), func(index int) float64 {
+	res.MeanParsePlusWarmNsPerDoc = Mean(len(scores), func(index int) float64 {
 		return scores[index].ParsePlusWarmNsPerDoc
 	})
 	res.MedianParsePlusWarmRank = MedianFloat(len(scores), func(index int) float64 {
 		return float64(scores[index].ParsePlusWarmRank)
 	})
-	res.AverageParsePlusWarmRank = Average(len(scores), func(index int) float64 {
+	res.MeanParsePlusWarmRank = Mean(len(scores), func(index int) float64 {
 		return float64(scores[index].ParsePlusWarmRank)
 	})
 
 	res.MedianParsePlusColdNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].ParsePlusColdNsPerDoc
 	})
-	res.AverageParsePlusColdNsPerDoc = Average(len(scores), func(index int) float64 {
+	res.MeanParsePlusColdNsPerDoc = Mean(len(scores), func(index int) float64 {
 		return scores[index].ParsePlusColdNsPerDoc
 	})
 	res.MedianParsePlusColdRank = MedianFloat(len(scores), func(index int) float64 {
 		return float64(scores[index].ParsePlusColdRank)
 	})
-	res.AverageParsePlusColdRank = Average(len(scores), func(index int) float64 {
+	res.MeanParsePlusColdRank = Mean(len(scores), func(index int) float64 {
 		return float64(scores[index].ParsePlusColdRank)
 	})
 

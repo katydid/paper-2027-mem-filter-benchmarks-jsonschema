@@ -65,7 +65,7 @@ func fprintHTML(w io.Writer, schemas []*analytics.Schema) {
 	p("<td>%s</td>", "name")
 	p("<td>%s</td>", "schema size (bytes)")
 	p("<td>%s</td>", "number of docs")
-	p("<td>%s</td>", "avg doc size (bytes)")
+	p("<td>%s</td>", "mean doc size (bytes)")
 	out()
 	p("</tr>")
 	for _, schema := range schemas {
@@ -74,7 +74,7 @@ func fprintHTML(w io.Writer, schemas []*analytics.Schema) {
 		p("<!-- name --><td>%s</td>", schema.Name)
 		p("<!-- schema size (bytes) --><td>%d</td>", schema.SchemaSizeBytes)
 		p("<!-- number of docs --><td>%d</td>", schema.NumInstances)
-		p("<!-- avg doc size (bytes) --><td>%.0f</td>", schema.AvgInstanceSizeBytes)
+		p("<!-- mean doc size (bytes) --><td>%.0f</td>", schema.MeanInstanceSizeBytes)
 		out()
 		p("</tr>")
 	}
@@ -86,7 +86,7 @@ func fprintMarkdown(w io.Writer, schemas []*analytics.Schema) {
 	p := func(format string, a ...any) {
 		fmt.Fprintf(w, format, a...)
 	}
-	p("|Dataset name|# Docs|Schema Size (KB)|Avg. Doc. Size (B)|\n")
+	p("|Dataset name|# Docs|Schema Size (KB)|Mean Doc. Size (B)|\n")
 	p("|---|---|---|---|\n")
 	for _, schema := range schemas {
 		p("| ")
@@ -96,7 +96,7 @@ func fprintMarkdown(w io.Writer, schemas []*analytics.Schema) {
 		p(" | ")
 		p("%d", schema.SchemaSizeBytes)
 		p(" | ")
-		p("%.0f", schema.AvgInstanceSizeBytes)
+		p("%.0f", schema.MeanInstanceSizeBytes)
 		p(" |")
 		p("\n")
 	}
@@ -115,7 +115,7 @@ func fprintLatex(w io.Writer, schemas []*analytics.Schema, pifont bool) {
 	}
 	p("%% BEGIN Generated tabular\n")
 	p("\\begin{tabular}{l|lllll}\n")
-	p("name & schema size (B) & \\# Docs & avg doc size (B) & gen & rm \\\\\n")
+	p("name & schema size (B) & \\# Docs & mean doc size (B) & gen & rm \\\\\n")
 	p("\\hline\n")
 	for _, schema := range schemas {
 		p("%s", esc(schema.Name))
@@ -124,7 +124,7 @@ func fprintLatex(w io.Writer, schemas []*analytics.Schema, pifont bool) {
 		p(" & ")
 		p("%d", schema.NumInstances)
 		p(" & ")
-		p("%.0f", schema.AvgInstanceSizeBytes)
+		p("%.0f", schema.MeanInstanceSizeBytes)
 		p(" & ")
 		p("%s", sprintBool(schema.Generated))
 		p(" & ")
