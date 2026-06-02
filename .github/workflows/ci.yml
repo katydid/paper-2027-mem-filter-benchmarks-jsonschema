@@ -74,9 +74,10 @@ jobs:
         run: make RUNS=${RUNS} IMPLEMENTATIONS=${IMPL} dist/report.csv
 
       - name: Upload Report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: report-${{ matrix.impl }}
+          archive: false
           path: dist/report.csv
           retention-days: 1
 
@@ -105,10 +106,11 @@ jobs:
           echo "implementation,version,name,cold_ns,warm_ns,parse_ns,compile_ns,memory,exit_status" > dist/report.csv
           tail -q -n +2 ./report-*/report.csv >> dist/report.csv
       - run: cat dist/report.csv
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: report
+          archive: false
           path: |
             dist/report.csv
 
