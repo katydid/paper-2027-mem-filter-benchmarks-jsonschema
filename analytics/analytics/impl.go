@@ -22,6 +22,9 @@ type Implementation struct {
 	Name   string
 	Scores []*ScoredLine
 
+	CompletedSchemas int
+	TotalSchemas     int
+
 	AverageWarmNsPerDoc float64
 	MedianWarmNsPerDoc  float64
 	AverageWarmRank     float64
@@ -88,19 +91,22 @@ func Average(num int, get func(int) float64) float64 {
 	return sum / float64(num)
 }
 
-func AnalyseImplementations(scores []*ScoredLine) []*Implementation {
+func AnalyseImplementations(scores []*ScoredLine, totalSchemas int, completedPerImpl map[string]int) []*Implementation {
 	groups := GroupByImplementation(scores)
 	impls := make([]*Implementation, len(groups))
 	for i := range groups {
-		impls[i] = AnalyseImplementation(groups[i])
+		name := groups[i][0].Line.Implementation
+		impls[i] = AnalyseImplementation(groups[i], totalSchemas, completedPerImpl[name])
 	}
 	return impls
 }
 
-func AnalyseImplementation(scores []*ScoredLine) *Implementation {
+func AnalyseImplementation(scores []*ScoredLine, totalSchemas int, completedSchemas int) *Implementation {
 	res := &Implementation{}
 	res.Scores = scores
 	res.Name = scores[0].Line.Implementation
+	res.CompletedSchemas = completedSchemas
+	res.TotalSchemas = totalSchemas
 
 	res.MedianWarmNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].WarmNsPerDoc

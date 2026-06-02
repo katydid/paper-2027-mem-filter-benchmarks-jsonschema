@@ -104,7 +104,7 @@ jobs:
           mkdir dist
           echo "implementation,version,name,cold_ns,warm_ns,parse_ns,compile_ns,memory,exit_status" > dist/report.csv
           tail -q -n +2 ./report-*/report.csv >> dist/report.csv
-          cp dist/report.csv report.csv
+          cp dist/report.csv final.csv
       - run: cat dist/report.csv
       - uses: actions/upload-artifact@v7
         if: always()
@@ -118,7 +118,7 @@ jobs:
           name: final
           archive: false
           path: |
-            report.csv
+            final.csv
 
   summary:
     needs: aggregate
