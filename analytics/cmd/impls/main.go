@@ -23,6 +23,8 @@ import (
 	"strings"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/analytics/analytics"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 func main() {
@@ -190,18 +192,20 @@ func fprintMarkdown(
 	}
 }
 
+var messagePrinter *message.Printer = message.NewPrinter(language.English)
+
 func fprintLatex(
 	w io.Writer,
 	implss [][]*analytics.Implementation,
 ) {
 	p := func(format string, a ...any) {
-		fmt.Fprintf(w, format, a...)
+		messagePrinter.Fprintf(w, format, a...)
 	}
 
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing included\n", getKind(implss[i]))
 		p("\\begin{tabular}{l|ll}\n")
-		p(`impl & mean/doc & median/doc \\`)
+		p(`impl & mean ns/doc & median ns/doc \\`)
 		p("\n")
 		p(`\hline`)
 		p("\n")
@@ -221,7 +225,7 @@ func fprintLatex(
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing excluded\n", getKind(implss[i]))
 		p("\\begin{tabular}{l|ll}\n")
-		p(`impl & mean/doc & median/doc \\`)
+		p(`impl & mean ns/doc & median ns/doc \\`)
 		p("\n")
 		p(`\hline`)
 		p("\n")
