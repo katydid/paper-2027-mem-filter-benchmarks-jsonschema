@@ -199,7 +199,27 @@ func fprintLatex(
 	}
 
 	for i, impls := range implss {
-		p("%% BEGIN Generated tabular for kind: %s\n", getKind(implss[i]))
+		p("%% BEGIN Generated tabular for kind: %s and parsing included\n", getKind(implss[i]))
+		p("\\begin{tabular}{l|ll}\n")
+		p(`impl & mean/doc & median/doc \\`)
+		p("\n")
+		p(`\hline`)
+		p("\n")
+		for _, impl := range impls {
+			p("%s", impl.Name)
+			p(" & ")
+			p("%.0f", impl.MeanParsePlusWarmNsPerDoc)
+			p(" & ")
+			p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
+			p(" \\\\\n")
+
+		}
+		p("\\end{tabular}\n")
+		p("%% END Generated tabular\n")
+	}
+
+	for i, impls := range implss {
+		p("%% BEGIN Generated tabular for kind: %s and parsing excluded\n", getKind(implss[i]))
 		p("\\begin{tabular}{l|ll}\n")
 		p(`impl & mean/doc & median/doc \\`)
 		p("\n")

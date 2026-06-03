@@ -57,6 +57,9 @@ generate:
 analytics-schemas-latex:
 	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --groupGen ../../../schemas > ../../../schemas.tex)
 
+analytics-schemas-md:
+	(cd analytics/cmd/schemas && go run main.go --format=md ../../../schemas > ../../../schemas.md)
+
 analytics-results-latex:
 	(cd analytics/cmd/result && go run main.go \
 	  --format=latex \
