@@ -16,22 +16,19 @@ namespace fs = std::filesystem;
 #define MAX_WARMUP_TIME 10000000000
 
 bool validate_all(const auto &instances, const auto &schema_template, bool want) {
-    rapidjson::SchemaValidator validator(schema_template);
-    rapidjson::GenericReader<rapidjson::UTF8<>, rapidjson::UTF8<>> reader;
-    bool failed = false;
     for (std::size_t num = 0; num < instances.size(); num++) {
+        rapidjson::SchemaValidator validator(schema_template);
         const std::string json = instances[num];
         rapidjson::StringStream stream(json.c_str());
+        rapidjson::GenericReader<rapidjson::UTF8<>, rapidjson::UTF8<>> reader;
         bool validParse = reader.Parse(stream, validator);
         bool validValidator = validator.IsValid();
-        bool res = validParse && validValidator;
-        if (res != want) {
-            std::cerr << "Error validating instance " << num << " wanted " << want << " got " << res << " input: " << instances[num] << "\n";
+        if (validValidator != want) {
+            std::cerr << "Error validating instance " << num << " wanted " << want << " got " << validValidator << " input: " << instances[num] << "\n";
             return false;
         }
   }
-
-  return !failed;
+  return true;
 }
 
 std::string read_file(const fs::path &path) {
