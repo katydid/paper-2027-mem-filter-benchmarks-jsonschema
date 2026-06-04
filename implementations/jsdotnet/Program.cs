@@ -14,16 +14,16 @@ var evaluationOptions = new EvaluationOptions
 
 bool ValidateAll(JsonSchema schema, JsonNode[] docs, bool want) {
   foreach (var doc in docs) {
-    var valid = false;
     try
 		{
       var result = schema.Evaluate(doc, evaluationOptions);
-      valid = result.IsValid;
+      if (result.IsValid != want) {
+        return false; 
+      }
     } catch (Exception e) {
-      // do nothing valid = false;
-    }
-    if (valid!= want) {
-      valid = false;  
+      if (want) {
+        return false;
+      }
     }
   }
 
