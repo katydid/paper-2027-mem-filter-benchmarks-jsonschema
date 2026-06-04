@@ -92,7 +92,6 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these to handle invalid inputs
 
-* json_schemer
 * jsu-java, jsu-js, jsu-pl and jsu-py.
 * jsv
 * kmp
@@ -101,7 +100,6 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these need to handle format or be removed from the curated list
 
-* json_schemer
 * jsv
 * kmp
 * networknt
@@ -110,7 +108,6 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these need to add a measurement for parsing time
 
-* json_schemer
 * jsu-java, jsu-js, jsu-pl and jsu-py
 * jsv
 * kmp
