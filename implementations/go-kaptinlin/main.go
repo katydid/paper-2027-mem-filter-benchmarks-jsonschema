@@ -1,10 +1,9 @@
 package main
 
 import (
-	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"math"
 	"os"
@@ -74,28 +73,25 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Open the JSONL file
-	f, err := os.Open(instanceFile)
+	data, err := os.ReadFile(instanceFile)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
+	lines := bytes.Split(data, []byte("\n"))
+	lines = lines[:len(lines)-1]
+	log.Printf("number of instances: %d", len(lines))
 
 	// Decode and store JSON objects
-	var instances []any
-	reader := bufio.NewReader(f)
-	decoder := json.NewDecoder(reader)
-
-	for {
-		var inst any
-		if err := decoder.Decode(&inst); err != nil {
-			if err == io.EOF {
-				break
-			}
-			log.Fatalf("Error decoding JSON: %v", err)
+	parsingStart := time.Now()
+	instances := make([]any, 0, len(lines))
+	for i := range lines {
+		var instance any
+		if err := json.Unmarshal(lines[i], &instance); err != nil {
+			log.Fatalf("Error unmarshaling instance: %v", err)
 		}
-		instances = append(instances, inst)
+		instances = append(instances, instance)
 	}
+	parsingDuration := time.Since(parsingStart)
 
 	// Cold start
 	coldStart := time.Now()
@@ -116,7 +112,7 @@ func main() {
 	warmDuration := time.Since(warmStart)
 
 	// Print timing
-	fmt.Printf("%d,%d,TODO,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), compile_duration.Nanoseconds())
+	fmt.Printf("%d,%d,%d,%d\n", coldDuration.Nanoseconds(), warmDuration.Nanoseconds(), parsingDuration.Nanoseconds(), compile_duration.Nanoseconds())
 }
 
 func unmarshalToAny(data []byte) (any, error) {
