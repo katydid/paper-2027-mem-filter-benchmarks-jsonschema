@@ -11,6 +11,8 @@ await Promise.all([
   import("@hyperjump/json-schema/draft-07"),
 ]);
 
+import "@hyperjump/json-schema/formats";
+
 function readJSONFile(filePath) {
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8');

@@ -467,7 +467,6 @@ implementations/hyperjump/.dockertimestamp: \
 	implementations/hyperjump/memory-wrapper.sh \
 	implementations/hyperjump/main.mjs \
 	implementations/hyperjump/package.json \
-	implementations/hyperjump/package-lock.json \
 	implementations/hyperjump/Dockerfile
 	docker build -t jsonschema-benchmark/hyperjump implementations/hyperjump
 	touch $@
