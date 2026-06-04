@@ -6,7 +6,6 @@ babelrc
 clang-format
 cmake-presets
 code-climate
-cspell-rmUniqueItems
 cypress
 deno-rmUniqueItems
 dependabot
@@ -53,7 +52,6 @@ stale
 stylecop-rmUniqueItems
 tmuxinator
 ui5
-ui5-manifest-rmUniqueItems
 unreal-engine-uproject-rmUniqueItems
 vercel
 yamllint

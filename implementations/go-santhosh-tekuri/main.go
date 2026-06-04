@@ -21,7 +21,7 @@ func validateAll(instances []any, sch *jsonschema.Schema, want bool) error {
 	for i := range instances {
 		err := sch.Validate(instances[i])
 		if want && err != nil {
-			result = err
+			result = fmt.Errorf("expected valid, but got %v at %d: %s", err, i, instances[i])
 		} else if !want && err == nil {
 			result = fmt.Errorf("expected invalid, but got valid at %d: %s", i, instances[i])
 		}

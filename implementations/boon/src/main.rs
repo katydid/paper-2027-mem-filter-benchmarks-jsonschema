@@ -8,15 +8,15 @@ const MAX_WARMUP_TIME: u128 = 10_000_000_000; // 10 seconds
 
 fn validate_all(schemas: &Schemas, sch_index: SchemaIndex, serde_lines: &std::vec::Vec<Value>, want: bool) -> bool {
   let mut failed: bool = false;
-  for line in serde_lines {
+  for (i, line) in serde_lines.iter().enumerate() {
     let result = schemas.validate(&line, sch_index);
     if !result.is_ok() {
       failed = true;
     }
     if want {
-      assert!(result.is_ok(), "Validation failed for line: {}", line);
+      assert!(result.is_ok(), "Validation failed for line {} with err {:?}: {}", i, result, line);
     } else {
-      assert!(result.is_err(), "Validation succeeded for line: {}", line);
+      assert!(result.is_err(), "Validation succeeded for line {}: {}", i, line);
     }
   }
   return !failed;
