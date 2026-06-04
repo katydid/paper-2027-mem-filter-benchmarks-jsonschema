@@ -22,8 +22,9 @@ type Implementation struct {
 	Name   string
 	Scores []*ScoredLine
 
-	CompletedSchemas int
-	TotalSchemas     int
+	CompletedSchemas    []string
+	NotCompletedSchemas []string
+	AllSchemas          []string
 
 	MeanWarmNsPerDoc   float64
 	MedianWarmNsPerDoc float64
@@ -91,22 +92,30 @@ func Mean(num int, get func(int) float64) float64 {
 	return sum / float64(num)
 }
 
-func AnalyseImplementations(scores []*ScoredLine, totalSchemas int, completedPerImpl map[string]int) []*Implementation {
+func AnalyseImplementations(scores []*ScoredLine, allSchemas []string, completedPerImpl map[string][]string) []*Implementation {
 	groups := GroupByImplementation(scores)
 	impls := make([]*Implementation, len(groups))
 	for i := range groups {
 		name := groups[i][0].Line.Implementation
-		impls[i] = AnalyseImplementation(groups[i], totalSchemas, completedPerImpl[name])
+		impls[i] = AnalyseImplementation(groups[i], allSchemas, completedPerImpl[name])
 	}
 	return impls
 }
 
-func AnalyseImplementation(scores []*ScoredLine, totalSchemas int, completedSchemas int) *Implementation {
+func AnalyseImplementation(scores []*ScoredLine, allSchemas []string, completedSchemas []string) *Implementation {
 	res := &Implementation{}
 	res.Scores = scores
 	res.Name = scores[0].Line.Implementation
 	res.CompletedSchemas = completedSchemas
-	res.TotalSchemas = totalSchemas
+	res.AllSchemas = allSchemas
+	notCompleted := []string{}
+	for i := range allSchemas {
+		schema := allSchemas[i]
+		if !slices.Contains(res.CompletedSchemas, schema) {
+			notCompleted = append(notCompleted, schema)
+		}
+	}
+	res.NotCompletedSchemas = notCompleted
 
 	res.MedianWarmNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].WarmNsPerDoc

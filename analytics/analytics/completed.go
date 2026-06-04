@@ -14,17 +14,24 @@
 
 package analytics
 
-import "fmt"
+import (
+	"fmt"
+	"maps"
+	"slices"
+	"sort"
+)
 
-func CountTotalSchemas(lines []*Line) int {
+func ListSchemas(lines []*Line) []string {
 	schemas := map[string]struct{}{}
 	for i := range lines {
 		schemas[lines[i].Schema.Name] = struct{}{}
 	}
-	return len(schemas)
+	schemaList := slices.Collect(maps.Keys(schemas))
+	sort.Strings(schemaList)
+	return schemaList
 }
 
-func CountCompletedPerImplementation(lines []*Line) map[string]int {
+func ListCompletedSchemasPerImplementation(lines []*Line) map[string][]string {
 	res := make(map[string]map[string]bool)
 	for i := range lines {
 		impl := lines[i].Implementation
@@ -42,15 +49,16 @@ func CountCompletedPerImplementation(lines []*Line) map[string]int {
 			}
 		}
 	}
-	result := make(map[string]int)
+	result := make(map[string][]string)
 	for impl := range res {
-		count := 0
-		for _, succ := range res[impl] {
-			if succ {
-				count++
+		for schema := range res[impl] {
+			if res[impl][schema] {
+				if _, ok := result[impl]; !ok {
+					result[impl] = []string{}
+				}
+				result[impl] = append(result[impl], schema)
 			}
 		}
-		result[impl] = count
 	}
 	return result
 }
