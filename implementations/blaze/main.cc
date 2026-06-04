@@ -68,11 +68,13 @@ int validate(const std::filesystem::path &example) {
       parse_end - parse_start)};
 
   const auto compile_start{std::chrono::high_resolution_clock::now()};
+  sourcemeta::blaze::Tweaks tweaks;
+  tweaks.format_assertion = true;
   const auto schema_template{sourcemeta::blaze::compile(
       schema, sourcemeta::blaze::schema_walker,
       sourcemeta::blaze::schema_resolver,
       sourcemeta::blaze::default_schema_compiler,
-      sourcemeta::blaze::Mode::FastValidation)};
+      sourcemeta::blaze::Mode::FastValidation, "", "", "", (tweaks))};
 
   const auto compile_end{std::chrono::high_resolution_clock::now()};
   const auto compile_duration{std::chrono::duration_cast<std::chrono::nanoseconds>(
