@@ -82,6 +82,54 @@ Then, at runtime, a folder containing the schema and the necessary dependencies 
 Implementations can be ignored by adding a `.benchmark-ignore` file in the implementation subdirectory.
 It also worth noting that some implementations compile schemas ahead of time into a more efficient representation, while others interpret the entire schema at runtime.
 
+### Curated implementations
+
+We also have a list of [curated_implemenatations.txt](./curated_implemenatations.txt).
+So far we have filtered out the following implementations for not supporting `format`: 
+* go-google
+* go-json-schema-spec
+* rapidjson
+
+### TODO these to handle invalid inputs
+
+* json_schemer
+* jsoncons
+* jsu-java, jsu-js, jsu-pl and jsu-py.
+* jsv
+* kmp
+* opis
+* py-jsonschema
+* schemasafe
+
+### TODO these need to handle format or be removed from the curated list
+
+* json_schemer
+* jsoncons
+* jsv
+* kmp
+* networknt
+* opis
+* py-jsonschema
+* schemasafe
+
+### TODO these need to add a measurement for parsing time
+
+* corvus
+* go-google
+* go-json-schema-spec
+* go-kaptinlin
+* hyperjump
+* jsdotnet
+* json_schemer
+* jsoncons
+* jsu-java, jsu-js, jsu-pl and jsu-py
+* jsv
+* kmp
+* networknt
+* opis
+* py-jsonschema
+* schemasafe
+
 ### Adding a new implementation
 
 First, each implementation must have a `Dockerfile` that copies in any necessary scripts and installs dependencies.
@@ -91,7 +139,7 @@ Finally, appropriate targets must be added to the `Makefile` to build the Docker
 ## Schemas
 
 All schemas are found in the schemas folder
-We run a curated list of [schemas](./schemas.txt) where:
+We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
 * `uniqueItems` have been removed,
 * we have removed `cspell` and `ui5-manifest` for using Perl syntax regexes `(?=`
 * we have deleted instances of `helm-chart-lock` that had empty strings for `repository` fields, since they are not valid uri's.
