@@ -102,6 +102,14 @@ analytics-impls-latex:
 	  ../../../dist/report.csv \
 	  > ../../../impls.tex)
 
+analytics-impls-latex-all:
+	(cd analytics/cmd/impls && go run main.go \
+	  --format=latex \
+	  --filterSchema1 \
+	  --schemasFolder=../../../schemas \
+	  ../../../dist/report.csv \
+	  > ../../../impls.tex)
+
 run:
 	make dist/report.csv
 

@@ -20,6 +20,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/analytics/analytics"
@@ -210,17 +211,22 @@ func fprintLatex(
 
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing included\n", getKind(implss[i]))
-		p("\\begin{tabular}{l|ll}\n")
-		p(`impl & mean ns/doc & median ns/doc \\`)
+		p("\\begin{tabular}{ll|ll}\n")
+		p(`\# & impl & median ns/doc & mean ns/doc \\`)
 		p("\n")
 		p(`\hline`)
 		p("\n")
-		for _, impl := range impls {
+		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
+			return analytics.FloatCompare(x.MedianParsePlusWarmNsPerDoc, y.MedianParsePlusWarmNsPerDoc)
+		})
+		for i, impl := range impls {
+			p("%d", i)
+			p(" & ")
 			p("%s", impl.Name)
 			p(" & ")
-			p("%.0f", impl.MeanParsePlusWarmNsPerDoc)
-			p(" & ")
 			p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
+			p(" & ")
+			p("%.0f", impl.MeanParsePlusWarmNsPerDoc)
 			p(" \\\\\n")
 
 		}
@@ -230,17 +236,22 @@ func fprintLatex(
 
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing excluded\n", getKind(implss[i]))
-		p("\\begin{tabular}{l|ll}\n")
-		p(`impl & mean ns/doc & median ns/doc \\`)
+		p("\\begin{tabular}{ll|ll}\n")
+		p(`\# & impl & median ns/doc & mean ns/doc \\`)
 		p("\n")
 		p(`\hline`)
 		p("\n")
-		for _, impl := range impls {
+		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
+			return analytics.FloatCompare(x.MedianWarmNsPerDoc, y.MedianWarmNsPerDoc)
+		})
+		for i, impl := range impls {
+			p("%d", i)
+			p(" & ")
 			p("%s", impl.Name)
 			p(" & ")
-			p("%.0f", impl.MeanWarmNsPerDoc)
-			p(" & ")
 			p("%.0f", impl.MedianWarmNsPerDoc)
+			p(" & ")
+			p("%.0f", impl.MeanWarmNsPerDoc)
 			p(" \\\\\n")
 
 		}
