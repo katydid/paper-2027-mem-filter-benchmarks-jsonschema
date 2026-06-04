@@ -17,3 +17,8 @@ impls.html
 impls.md
 schema.c
 schema.exe
+*.class
+Schema.java
+schema.mjs
+schema.py
+*.pyc

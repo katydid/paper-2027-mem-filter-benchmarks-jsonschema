@@ -48,7 +48,7 @@ compile_start=$(date +%s%N)
 
 jsu-compile \
     --quiet \
-    --no-id --no-strict --no-fix --no-format --no-reporting --loose \
+    --no-id --no-strict --no-fix --format --no-reporting --loose \
     -o "$workdir/schema.mjs" \
     "$SCHEMA" \
     -- \
