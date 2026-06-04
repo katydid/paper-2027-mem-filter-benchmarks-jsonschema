@@ -14,7 +14,6 @@ The benchmarks require:
 
 * posix tools: make, sed, printf
 * [Docker](https://www.docker.com/)
-* [dts](https://github.com/martinohmann/dts/releases), which can be installed by downloading the binary and putting it in your PATH.
 
 ## Running
 

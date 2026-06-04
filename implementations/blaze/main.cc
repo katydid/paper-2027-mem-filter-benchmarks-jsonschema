@@ -50,7 +50,7 @@ bool validate_all(auto &evaluator, const auto &instances, const auto &schema_tem
 
 int validate(const std::filesystem::path &example) {
   const auto schema{
-      sourcemeta::core::read_json(example / "schema-noformat.json")};
+      sourcemeta::core::read_json(example / "schema.json")};
   std::string instance_str = read_file(example / "instances.jsonl");
   const bool want = !example.string().contains("-invalid");
   std::cerr << std::boolalpha;

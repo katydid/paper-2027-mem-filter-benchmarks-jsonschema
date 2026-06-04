@@ -28,7 +28,7 @@ $validator = new CompliantValidator();
 $compile_start = hrtime(true);
 $validator->resolver()->registerFile(
     $schema_id,
-    $schema_path . DIRECTORY_SEPARATOR . 'schema-noformat.json'
+    $schema_path . DIRECTORY_SEPARATOR . 'schema.json'
 );
 $compile_end = hrtime(true);
 $compile_duration = $compile_end - $compile_start;

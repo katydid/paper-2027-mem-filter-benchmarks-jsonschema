@@ -57,13 +57,8 @@ jobs:
         id: cache-report
         with:
           path: dist/report.csv
-          key: noformat-${{ matrix.impl }}-${{ hashFiles(format('implementations/{0}/**/*', matrix.impl), 'schemas/**/*', 'report.sh') }}-${{ inputs.runs || 3 }}
+          key: cache-key-${{ matrix.impl }}-${{ hashFiles(format('implementations/{0}/**/*', matrix.impl), 'schemas/**/*', 'report.sh') }}-${{ inputs.runs || 3 }}
           lookup-only: ${{ matrix.skip_cache || github.event_name == 'schedule' || inputs.skip_cache }}
-
-      - name: Install dts
-        uses: jaxxstorm/action-install-gh-release@v3.0.0
-        with:
-          repo: martinohmann/dts
 
       - name: Run benchmarks
         if: ${{ steps.cache-report.outputs.cache-hit != 'true' || github.event_name == 'schedule' || inputs.skip_cache || matrix.skip_cache }}

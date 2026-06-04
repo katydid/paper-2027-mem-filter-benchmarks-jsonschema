@@ -1,6 +1,6 @@
 module github.com/katydid/validator-jsonschema-benchmarks/generator
 
-go 1.26.2
+go 1.26.3
 
 require (
 	github.com/dlclark/regexp2/v2 v2.0.1

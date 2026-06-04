@@ -2,7 +2,7 @@ warmup_iterations = 100
 max_warmup_time = 10000000000 # 10 seconds in ns
 
 schema_path = Enum.at(System.argv(), 0)
-{:ok, schema_string} = File.read(Path.join(schema_path, "schema-noformat.json"))
+{:ok, schema_string} = File.read(Path.join(schema_path, "schema.json"))
 schema = Poison.Parser.parse!(schema_string, %{})
 
 resolver = {JSV.Resolver.BuiltIn, allowed_prefixes: ["https://json-schema.org/", "http://json-schema.org/"]}

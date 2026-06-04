@@ -32,7 +32,7 @@ elif [ $1 = "--version" ] ; then
 elif [ $# -eq 1 ] ; then
     dir=$1
     [ -d "$dir" ] || err 2 "not a directory: $dir"
-    SCHEMA="$dir/schema-noformat.json"
+    SCHEMA="$dir/schema.json"
     INSTANCES="$dir/instances.jsonl"
 else
     SCHEMA=$1 INSTANCES=$2

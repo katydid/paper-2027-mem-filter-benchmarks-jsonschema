@@ -1,11 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"math"
 	"os"
@@ -26,7 +23,7 @@ func validateAll(instances []any, sch *jsonschema.Schema, want bool) error {
 		if want && err != nil {
 			result = err
 		} else if !want && err == nil {
-			result = fmt.Errorf("expected invalid, but got valid at %d", i)
+			result = fmt.Errorf("expected invalid, but got valid at %d: %s", i, instances[i])
 		}
 	}
 	return result
@@ -43,7 +40,7 @@ func main() {
 	log.Printf("folder %q with base %s expect %v", exampleFolder, filepath.Base(exampleFolder), want)
 
 	// Construct and canonicalize file paths
-	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema-noformat.json"))
+	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema.json"))
 	if err != nil {
 		log.Fatalf("Error constructing schema file path: %v", err)
 	}
@@ -52,17 +49,10 @@ func main() {
 		log.Fatalf("Error reading schema data: %v", err)
 	}
 
-	instanceFile, err := filepath.Abs(filepath.Join(exampleFolder, "instances.jsonl"))
-	if err != nil {
-		log.Fatalf("Error constructing instance file path: %v", err)
-	}
-
 	// Compile the JSON schema
 	c := jsonschema.NewCompiler()
 	c.AssertFormat()
-
 	compile_start := time.Now()
-
 	doc, err := jsonschema.UnmarshalJSON(bytes.NewReader(schemaData))
 	if err != nil {
 		log.Fatalf("Error unmarshaling schema: %v", err)
@@ -76,32 +66,26 @@ func main() {
 	}
 	compile_duration := time.Since(compile_start)
 
+	instanceFile, err := filepath.Abs(filepath.Join(exampleFolder, "instances.jsonl"))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error constructing instance file path: %v", err)
 	}
-
-	// Open the JSONL file
 	data, err := os.ReadFile(instanceFile)
 	if err != nil {
 		log.Fatal(err)
 	}
-	f := bytes.NewBuffer(data)
-	reader := bufio.NewReader(f)
+	lines := bytes.Split(data, []byte("\n"))
+	lines = lines[:len(lines)-1]
+	log.Printf("number of instances: %d", len(lines))
 
-	// Decode and store JSON objects
 	parsingStart := time.Now()
-	var instances []any
-	decoder := json.NewDecoder(reader)
-
-	for {
-		var inst any
-		if err := decoder.Decode(&inst); err != nil {
-			if err == io.EOF {
-				break
-			}
-			log.Fatalf("Error decoding JSON: %v", err)
+	instances := make([]any, 0, len(lines))
+	for i := range lines {
+		instance, err := jsonschema.UnmarshalJSON(bytes.NewReader(lines[i]))
+		if err != nil {
+			log.Fatalf("Error unmarshaling instance: %v", err)
 		}
-		instances = append(instances, inst)
+		instances = append(instances, instance)
 	}
 	parsingDuration := time.Since(parsingStart)
 

@@ -33,8 +33,6 @@ import (
 	medium "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/jsck_medium"
 	advanced "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/zschema_advanced"
 	basic "github.com/katydid/validator-jsonschema-benchmarks/generator/schemas/zschema_basic"
-
-	"github.com/katydid/validator-jsonschema-benchmarks/generator/std"
 )
 
 type schemaGenerator struct {
@@ -364,10 +362,9 @@ func newValidator(schemaJSON string) (*jsonschema.Schema, error) {
 }
 
 func isValid(validator *jsonschema.Schema, jsonData []byte) (bool, error) {
-	a, err := std.UnmarshalToAny(jsonData)
+	a, err := jsonschema.UnmarshalJSON(bytes.NewReader(jsonData))
 	if err != nil {
 		return false, err
 	}
-	err = validator.Validate(a)
-	return err == nil, nil
+	return validator.Validate(a) == nil, nil
 }
