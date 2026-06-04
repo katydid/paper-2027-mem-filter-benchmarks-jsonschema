@@ -39,6 +39,7 @@ fn main() -> Result<(), Box<dyn Error>> {
   // Compile the schema
   let mut schemas = Schemas::new();
   let mut compiler = Compiler::new();
+  compiler.enable_format_assertions();
 
   let compile_start = Instant::now();
   let sch_index = compiler.compile(schema_file.to_str().ok_or("NULL")?, &mut schemas)?;
