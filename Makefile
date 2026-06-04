@@ -170,7 +170,6 @@ implementations/ajv-bun/.dockertimestamp: \
 	implementations/ajv-bun/memory-wrapper.sh \
 	implementations/ajv/main.mjs \
 	implementations/ajv-bun/package.json \
-	implementations/ajv-bun/bun.lockb \
 	implementations/ajv-bun/Dockerfile
 	cp implementations/ajv/main.mjs implementations/ajv-bun
 	docker build -t jsonschema-benchmark/ajv-bun implementations/ajv-bun

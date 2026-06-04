@@ -7,6 +7,6 @@ RUN apt-get update -qq \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . /app
-RUN bun install --production --frozen-lockfile --cwd /app
+RUN bun install --production --cwd /app
 ENTRYPOINT ["/app/memory-wrapper.sh", "bun", "run", "/app/main.mjs"]
 CMD []
