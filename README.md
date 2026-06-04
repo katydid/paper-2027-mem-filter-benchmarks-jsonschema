@@ -98,7 +98,6 @@ So far we have filtered out the following implementations for not supporting `fo
 * jsv
 * kmp
 * opis
-* py-jsonschema
 * schemasafe
 
 ### TODO these need to handle format or be removed from the curated list
@@ -109,7 +108,6 @@ So far we have filtered out the following implementations for not supporting `fo
 * kmp
 * networknt
 * opis
-* py-jsonschema
 * schemasafe
 
 ### TODO these need to add a measurement for parsing time
@@ -127,7 +125,6 @@ So far we have filtered out the following implementations for not supporting `fo
 * kmp
 * networknt
 * opis
-* py-jsonschema
 * schemasafe
 
 ### Adding a new implementation
