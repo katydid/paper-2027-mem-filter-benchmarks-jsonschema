@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := all
-SCHEMAS = $(notdir $(wildcard schemas/*))
+# Rather than `SCHEMAS = $(notdir $(wildcard schemas/*))`, we create a curated list of schemas:
+SCHEMAS = $(shell cat schemas.txt)
 ALL_IMPLEMENTATIONS = $(notdir $(wildcard implementations/*))
 ifeq ($(NO_IGNORE),yes)
 IMPLEMENTATIONS ?= $(ALL_IMPLEMENTATIONS)
@@ -41,6 +42,10 @@ define docker_run
 		rm -f $@.tmp ; \
 	done
 endef
+
+.PHONY: list_schemas
+list_schemas:
+	@echo ${SCHEMAS}
 
 list:
 	@echo $(IMPLEMENTATIONS) | tr ' ' '\n'

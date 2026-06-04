@@ -132,6 +132,10 @@ func collectFeatures(data []byte) []string {
 	if bytes.Contains(data, []byte(`"uniqueItems": true`)) || bytes.Contains(data, []byte(`"uniqueItems":true`)) {
 		features = append(features, "uniqueItems")
 	}
+	if bytes.Contains(data, []byte("$dynamicRef")) {
+		// cql2 and openapi
+		features = append(features, "dynamicRef")
+	}
 	return features
 }
 

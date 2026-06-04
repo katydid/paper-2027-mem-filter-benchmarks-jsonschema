@@ -91,6 +91,9 @@ Finally, appropriate targets must be added to the `Makefile` to build the Docker
 
 ## Schemas
 
+All schemas are found in the schemas folder
+We run a curated list of [schemas](./schemas.txt) where `uniqueItems` have been removed and we have totally excluded schemas that use `dynamicRef`.
+
 Some schemas had a collection of instances gathered from github.
 The rest we can regenerate `instances.jsonl` files for by running: `make generate`.
 
