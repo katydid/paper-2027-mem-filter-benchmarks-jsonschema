@@ -21,14 +21,17 @@ bool ValidateAll(JSB.Schema[] docs, bool want) {
 // Read and parse all instances
 var lines = File.ReadLines(args[0]);
 var want = !args[0].Contains("-invalid");
+Stopwatch stopWatch = new Stopwatch();
+
+stopWatch.Start();
 JSB.Schema[] docs = Array.Empty<JSB.Schema>();
 try  {
   docs = lines.Select(l => JSB.Schema.Parse(l)).ToArray();
 } catch (System.Text.Json.JsonException e) {
   Environment.Exit(1);
 }
-
-Stopwatch stopWatch = new Stopwatch();
+stopWatch.Stop();
+TimeSpan parseTs = stopWatch.Elapsed;
 
 // Loop and validate all instances
 stopWatch.Start();
@@ -47,5 +50,5 @@ stopWatch.Stop();
 TimeSpan warmTs = stopWatch.Elapsed;
 
 // Output file time and exit
-Console.WriteLine(coldTs.TotalNanoseconds + "," + warmTs.TotalNanoseconds + "," + "TODO");
+Console.WriteLine(coldTs.TotalNanoseconds + "," + warmTs.TotalNanoseconds + "," + parseTs.TotalNanoseconds);
 Environment.Exit(valid ? 0 : 1);
