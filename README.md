@@ -117,7 +117,6 @@ So far we have filtered out the following implementations for not supporting `fo
 * go-json-schema-spec
 * go-kaptinlin
 * hyperjump
-* jsdotnet
 * json_schemer
 * jsoncons
 * jsu-java, jsu-js, jsu-pl and jsu-py
