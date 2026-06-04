@@ -3,7 +3,10 @@ FROM alpine:3.21.2
 RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community time
 RUN apk add --update-cache git build-base cmake ninja ninja-build curl zip unzip pkgconf && rm -rf /var/cache/apk/*
 
+ENV VCPKG_FORCE_SYSTEM_BINARIES=1
+
 RUN git clone --branch 2024.04.26 https://github.com/microsoft/vcpkg /app/vcpkg && /app/vcpkg/bootstrap-vcpkg.sh
+
 ENV VCPKG_ROOT=/app/vcpkg
 ENV PATH=$VCPKG_ROOT:/usr/lib/ninja-build/bin:$PATH
 ENV CMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
