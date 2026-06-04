@@ -112,7 +112,6 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these need to add a measurement for parsing time
 
-* go-google
 * go-json-schema-spec
 * go-kaptinlin
 * hyperjump
