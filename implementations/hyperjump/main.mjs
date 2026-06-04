@@ -31,6 +31,15 @@ async function* readJSONLines(filePath) {
   }
 }
 
+function readFile(filePath) {
+  try {
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    return fileContent;
+  } catch (error) {
+    process.exit(1);
+  }
+}
+
 async function validateAll(instances, schemaId, want) {
   let failed = false;
   for (const instance of instances) {
@@ -53,10 +62,18 @@ async function validateSchema(schemaPath, instancePath, want) {
   const compileEnd = performance.now();
   const compileDurationNs = (compileEnd - compileStart) * 1e6;
 
+  const instanceData = readFile(instancePath);
+  const instanceDatas = instanceData.split(/\r?\n/);
+
+  const parseStartTime = performance.now();
   const instances = [];
-  for await (const instance of readJSONLines(instancePath)) {
-    instances.push(instance);
-  }
+  instanceDatas.forEach(function (item) {
+    if (item.length > 0) {
+      instances.push(JSON.parse(item));
+    }
+  })
+  const parseEndTime = performance.now();
+  const parseDurationNs = (parseEndTime - parseStartTime) * 1e6;
 
   const coldStartTime = performance.now();
   const failed = await validateAll(instances, schemaId, want);
@@ -73,7 +90,7 @@ async function validateSchema(schemaPath, instancePath, want) {
   const warmEndTime = performance.now();
   const warmDurationNs = (warmEndTime - warmStartTime) * 1e6;
 
-  console.log(coldDurationNs.toFixed(0) + ',' + warmDurationNs.toFixed(0) + ',' + 'TODO' + ',' + compileDurationNs.toFixed(0));
+  console.log(coldDurationNs.toFixed(0) + ',' + warmDurationNs.toFixed(0) + ',' + parseDurationNs.toFixed(0) + ',' + compileDurationNs.toFixed(0));
 
   // Exit with non-zero status on validation failure
   if (failed) {

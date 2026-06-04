@@ -110,7 +110,6 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these need to add a measurement for parsing time
 
-* hyperjump
 * json_schemer
 * jsu-java, jsu-js, jsu-pl and jsu-py
 * jsv
