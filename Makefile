@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := all
 # Rather than `SCHEMAS = $(notdir $(wildcard schemas/*))`, we create a curated list of schemas:
-SCHEMAS = $(shell cat schemas.txt)
+SCHEMAS = $(shell cat curated_schemas.txt)
 ALL_IMPLEMENTATIONS = $(notdir $(wildcard implementations/*))
 ifeq ($(NO_IGNORE),yes)
 IMPLEMENTATIONS ?= $(ALL_IMPLEMENTATIONS)

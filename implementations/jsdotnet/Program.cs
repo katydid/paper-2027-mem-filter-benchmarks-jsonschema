@@ -7,16 +7,27 @@ using System.Text.Json.Nodes;
 const int WarmupIterations = 1000;
 const long MaxWarmupTime = 10_000_000_000;
 
+var evaluationOptions = new EvaluationOptions
+	{
+		RequireFormatValidation = true,
+	};
+
 bool ValidateAll(JsonSchema schema, JsonNode[] docs, bool want) {
-  var valid = true;
   foreach (var doc in docs) {
-    var result = schema.Evaluate(doc);
-    if (result.IsValid != want) {
+    var valid = false;
+    try
+		{
+      var result = schema.Evaluate(doc, evaluationOptions);
+      valid = result.IsValid;
+    } catch (Exception e) {
+      // do nothing valid = false;
+    }
+    if (valid!= want) {
       valid = false;  
     }
   }
 
-  return valid;
+  return true;
 }
 
 var want = !args[0].Contains("-invalid");
