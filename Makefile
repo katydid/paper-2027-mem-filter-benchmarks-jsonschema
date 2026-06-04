@@ -153,7 +153,6 @@ implementations/ajv/.dockertimestamp: \
 	implementations/ajv/memory-wrapper.sh \
 	implementations/ajv/main.mjs \
 	implementations/ajv/package.json \
-	implementations/ajv/package-lock.json \
 	implementations/ajv/Dockerfile
 	docker build -t jsonschema-benchmark/ajv implementations/ajv
 	touch $@

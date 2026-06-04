@@ -7,6 +7,9 @@ const DRAFTS = {
   "https://json-schema.org/draft/2019-09/schema": (await import("ajv/dist/2019.js")).Ajv2019,
   "http://json-schema.org/draft-07/schema": (await import("ajv")).Ajv,
 };
+
+import addFormats from "ajv-formats"
+
 const WARMUP_ITERATIONS = 100;
 const MAX_WARMUP_TIME = 1e9 * 10; // 10 seconds
 
@@ -42,6 +45,7 @@ async function validateSchema(schemaPath, instancePath, want) {
   const schema = readJSONFile(schemaPath);
 
   const ajv = new DRAFTS[schema['$schema'].replace(/#$/, '')]({strict: false});
+  addFormats(ajv);
 
   const compileStart = performance.now();
   const validate = ajv.compile(schema);
