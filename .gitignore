@@ -21,4 +21,5 @@ schema.exe
 Schema.java
 schema.mjs
 schema.py
+schema.pm
 *.pyc
