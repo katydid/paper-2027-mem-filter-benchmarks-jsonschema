@@ -1,13 +1,11 @@
 package io.github.sourcemeta;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.Schema;
+import com.networknt.schema.SchemaRegistry;
+import com.networknt.schema.dialect.Dialects;
+import com.networknt.schema.SchemaRegistryConfig;
+import com.networknt.schema.InputFormat;
 import com.networknt.schema.OutputFormat;
-import com.networknt.schema.SchemaValidatorsConfig;
-import com.networknt.schema.SpecVersion;
 import com.networknt.schema.regex.GraalJSRegularExpressionFactory;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,24 +17,13 @@ public class App {
   static int WARMUP_ITERATIONS = 1000;
   static long MAX_WARMUP_TIME = (long) 1e9 * 10;
 
-  public static boolean validateAll(JsonSchema schema, List<JsonNode> docs, boolean want) {
-    for (JsonNode doc : docs) {
-      boolean got = schema.validate(doc, OutputFormat.BOOLEAN);
-      if (want != got) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   public static void main(String[] args) throws IOException {
     org.apache.log4j.BasicConfigurator.configure();
     org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
-    JsonSchemaFactory jsonSchemaFactory =
-        JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012);
-    SchemaValidatorsConfig.Builder builder = SchemaValidatorsConfig.builder();
-    builder.regularExpressionFactory(GraalJSRegularExpressionFactory.getInstance());
-    SchemaValidatorsConfig config = builder.build();
+    SchemaRegistryConfig schemaRegistryConfig = SchemaRegistryConfig.builder()
+      .regularExpressionFactory(GraalJSRegularExpressionFactory.getInstance()).build();
+    SchemaRegistry schemaRegistry = SchemaRegistry.withDialect(Dialects.getDraft202012(),
+      builder -> builder.schemaRegistryConfig(schemaRegistryConfig));
     boolean want = !args[0].contains("-invalid");
     if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets"))) {
       // skip files that take way too long
@@ -51,28 +38,14 @@ public class App {
 
     // Register the schema
     Long compileStart = System.nanoTime();
-    JsonSchema schema = jsonSchemaFactory.getSchema(schemaString, config);
+    Schema schema = schemaRegistry.getSchema(schemaString);
     Long compileEnd = System.nanoTime();
 
-    List<String> lines = Files.readAllLines(Paths.get(args[1]));
     // Load all documents
-    Long parseStart = System.nanoTime();
-    ObjectMapper mapper = new ObjectMapper();
-    List<JsonNode> docs =
-        lines.stream()
-            .map(
-                l -> {
-                  try {
-                    return mapper.readTree(l);
-                  } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                  }
-                })
-            .collect(Collectors.toList());
-    Long parseEnd = System.nanoTime();
+    List<String> lines = Files.readAllLines(Paths.get(args[1]));
 
     Long coldStart = System.nanoTime();
-    boolean valid = validateAll(schema, docs, want);
+    boolean valid = validateAll(schema, lines, want);
     Long coldEnd = System.nanoTime();
 
     if (!valid) {
@@ -82,14 +55,31 @@ public class App {
     // Warmup
     long iterations = (long) Math.ceil(((double) MAX_WARMUP_TIME) / (coldEnd - coldStart));
     for (int i = 0; i < WARMUP_ITERATIONS; i++) {
-      validateAll(schema, docs, want);
+      validateAll(schema, lines, want);
     }
 
     Long warmStart = System.nanoTime();
-    validateAll(schema, docs, want);
+    validateAll(schema, lines, want);
     Long warmEnd = System.nanoTime();
 
     System.out.println(
-        (coldEnd - coldStart) + "," + (warmEnd - warmStart) + "," + (parseEnd - parseStart) + "," + (compileEnd - compileStart));
+        (coldEnd - coldStart) + "," + (warmEnd - warmStart) + ",0," + (compileEnd - compileStart));
+  }
+
+  public static boolean validateAll(Schema schema, List<String> docs, boolean want) {
+    for (String doc : docs) {
+      boolean got = schema.validate(doc, InputFormat.JSON, OutputFormat.BOOLEAN, executionContext -> {
+        /*
+        * By default since Draft 2019-09 the format keyword only generates annotations
+        * and not assertions.
+        */
+        executionContext.executionConfig(executionConfig -> executionConfig.formatAssertionsEnabled(true));
+      });
+      if (want != got) {
+        System.err.println("error:" + doc);
+        return false;
+      }
+    }
+    return true;
   }
 }

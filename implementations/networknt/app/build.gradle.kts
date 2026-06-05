@@ -12,6 +12,9 @@ dependencies {
     // This dependency is used by the application.
     implementation("org.slf4j:slf4j-api:2.0.18")
     implementation("org.slf4j:slf4j-log4j12:2.0.18")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.22.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.0")
+    implementation("com.ethlo.time:itu:1.14.0")
     implementation(libs.graalJs)
     implementation(libs.networknt)  
 }

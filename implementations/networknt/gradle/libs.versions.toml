@@ -1,6 +1,6 @@
 [versions]
-graalJs = "24.1.2"
-networknt = "1.5.5"
+graalJs = "25.0.3"
+networknt = "3.0.3"
 
 [libraries]
 graalJs = { module = "org.graalvm.js:js", version.ref = "graalJs" }

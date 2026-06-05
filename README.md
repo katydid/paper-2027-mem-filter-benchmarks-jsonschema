@@ -92,10 +92,6 @@ So far we have filtered out the following implementations:
 * jsu-py (supports formats, but struggles with validating email)
 * jsu-pl (was broken when we forked, also does not handle invalid inputs or measure parsing time)
 
-### TODO these need to handle format or be removed from the curated list
-
-* networknt
-
 ### Adding a new implementation
 
 First, each implementation must have a `Dockerfile` that copies in any necessary scripts and installs dependencies.
