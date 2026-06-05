@@ -96,10 +96,6 @@ So far we have filtered out the following implementations:
 
 * networknt
 
-### TODO these need to add a measurement for parsing time
-
-* networknt
-
 ### Adding a new implementation
 
 First, each implementation must have a `Dockerfile` that copies in any necessary scripts and installs dependencies.

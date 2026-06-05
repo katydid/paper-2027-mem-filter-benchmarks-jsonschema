@@ -20,14 +20,13 @@ public class App {
   static long MAX_WARMUP_TIME = (long) 1e9 * 10;
 
   public static boolean validateAll(JsonSchema schema, List<JsonNode> docs, boolean want) {
-    boolean valid = true;
     for (JsonNode doc : docs) {
-      boolean res = schema.validate(doc, OutputFormat.BOOLEAN);
-      if (want != res) {
-        valid = false;
+      boolean got = schema.validate(doc, OutputFormat.BOOLEAN);
+      if (want != got) {
+        return false;
       }
     }
-    return valid;
+    return true;
   }
 
   public static void main(String[] args) throws IOException {
@@ -47,6 +46,7 @@ public class App {
       // unable to handle these and throws an exception
       System.exit(1);
     }
+    System.err.println("want" + want);
     String schemaString = new String(Files.readAllBytes(Paths.get(args[0])));
 
     // Register the schema
@@ -54,10 +54,12 @@ public class App {
     JsonSchema schema = jsonSchemaFactory.getSchema(schemaString, config);
     Long compileEnd = System.nanoTime();
 
+    List<String> lines = Files.readAllLines(Paths.get(args[1]));
     // Load all documents
+    Long parseStart = System.nanoTime();
     ObjectMapper mapper = new ObjectMapper();
     List<JsonNode> docs =
-        Files.readAllLines(Paths.get(args[1])).stream()
+        lines.stream()
             .map(
                 l -> {
                   try {
@@ -67,6 +69,7 @@ public class App {
                   }
                 })
             .collect(Collectors.toList());
+    Long parseEnd = System.nanoTime();
 
     Long coldStart = System.nanoTime();
     boolean valid = validateAll(schema, docs, want);
@@ -87,6 +90,6 @@ public class App {
     Long warmEnd = System.nanoTime();
 
     System.out.println(
-        (coldEnd - coldStart) + "," + (warmEnd - warmStart) + "," + "TODO" + "," + (compileEnd - compileStart));
+        (coldEnd - coldStart) + "," + (warmEnd - warmStart) + "," + (parseEnd - parseStart) + "," + (compileEnd - compileStart));
   }
 }
