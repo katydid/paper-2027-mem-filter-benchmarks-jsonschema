@@ -54,7 +54,7 @@ A summary of these implementations is given below:
 - [jsu-c](./implementations/jsu-c/) (generated C)
 - [jsu-java](./implementations/jsu-java/) (generated Java)
 - [jsu-js](./implementations/jsu-js/) (generated JS)
-- [jsu-pl](./implementations/jsu-pl/) (generated Perl)
+- [jsu-pl](./implementations/jsu-pl/) (generated Perl) (ignored)
 - [jsu-py](./implementations/jsu-py/) (generated Python)
 - [JSV](./implementations/jsv) (Elixir)
 - [kmp](./implementations/kmp) (Kotlin)
@@ -66,12 +66,14 @@ A summary of these implementations is given below:
 
 Compared to the original [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) the following libraries were added: 
 
-- [go-google](./implementations/go-google/) (Go)
-- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go)
+- [go-google](./implementations/go-google/) (Go) (ignored)
+- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go) (ignored)
 - [go-kaptinlin](./implementations/go-kaptinlin/) (Go)
-- [go-katydid-auto](./implementations/go-katydid-auto/) (Go)
-- [go-katydid-mem](./implementations/go-katydid-mem/) (Go)
-- [rapidjson](./implementations/rapidjson/) (C++)
+- [go-katydid-auto-json](./implementations/go-katydid-auto-json/) (Go)
+- [go-katydid-mem-json](./implementations/go-katydid-mem-json/) (Go)
+- [go-katydid-auto-reflect](./implementations/go-katydid-auto-reflect/) (Go)
+- [go-katydid-mem-reflect](./implementations/go-katydid-mem-reflect/) (Go)
+- [rapidjson](./implementations/rapidjson/) (C++) (ignored)
 
 Also note that [go-santhosh-tekuri](./implementations/go-santhosh-tekuri/) was renamed from [go-jsonschema](https://github.com/sourcemeta-research/jsonschema-benchmark/tree/main/implementations/go-jsonschema).
 
@@ -81,16 +83,6 @@ Then, at runtime, a folder containing the schema and the necessary dependencies 
 
 Implementations can be ignored by adding a `.benchmark-ignore` file in the implementation subdirectory.
 It also worth noting that some implementations compile schemas ahead of time into a more efficient representation, while others interpret the entire schema at runtime.
-
-### Curated implementations
-
-We also have a list of [curated_implemenatations.txt](./curated_implemenatations.txt).
-So far we have filtered out the following implementations: 
-* go-google (does not support format)
-* go-json-schema-spec (does not support format)
-* rapidjson (does not support format)
-* jsu-py (supports formats, but struggles with validating email)
-* jsu-pl (was broken when we forked, also does not handle invalid inputs or measure parsing time)
 
 ### Adding a new implementation
 
