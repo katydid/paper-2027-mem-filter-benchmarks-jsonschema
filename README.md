@@ -92,17 +92,12 @@ So far we have filtered out the following implementations:
 * jsu-py (supports formats, but struggles with validating email)
 * jsu-pl (was broken when we forked, also does not handle invalid inputs or measure parsing time)
 
-### TODO these to handle invalid inputs
-
-* jsu-java
-
 ### TODO these need to handle format or be removed from the curated list
 
 * networknt
 
 ### TODO these need to add a measurement for parsing time
 
-* jsu-java
 * networknt
 
 ### Adding a new implementation

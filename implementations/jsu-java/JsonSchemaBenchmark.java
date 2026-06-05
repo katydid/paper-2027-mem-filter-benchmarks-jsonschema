@@ -80,12 +80,14 @@ public class JsonSchemaBenchmark
         checker.init(json);
         Checker check = checker.get("");
 
-        List<Object> jsons = new ArrayList();
+        List<String> lines = new ArrayList();
 
         // process file arguments as jsonl
+        boolean want = true;
         for (int idx = g.getOptind(); idx < args.length; idx++)
         {
             String fname = args[idx];
+            want = !fname.contains("-invalid");
 
             // get file contents
             try {
@@ -93,13 +95,20 @@ public class JsonSchemaBenchmark
                     new InputStreamReader(System.in) : new FileReader(fname);
                 BufferedReader bf = new BufferedReader(reader);
                 for (String line: bf.lines().toList())
-                    jsons.add(json.fromJSON(line));
+                    lines.add(line);
             }
             catch (Exception e) {
                 exit(4, "error on file " + fname + ": " + e);
                 return;
             }
         }
+
+        long parse_start = System.nanoTime();
+        List<Object> jsons = new ArrayList();
+        for (int idx = 0; idx < lines.size(); idx++) {
+            jsons.add(json.fromJSON(lines.get(idx)));
+        }
+        double parse_run = 0.001 * (System.nanoTime() - parse_start);
 
         Object[] values = jsons.toArray();
 
@@ -115,9 +124,12 @@ public class JsonSchemaBenchmark
         if (debug)
             System.err.println("cold run");
         long cold_start = System.nanoTime();
-        for (Object value: values)
-            if (!check.call(value))
+        for (Object value: values) {
+            boolean got = check.call(value);
+            if (got != want) {
                 errors++;
+            }
+        }
         double cold_run = 0.001 * (System.nanoTime() - cold_start);
 
         // warmup
@@ -142,7 +154,7 @@ public class JsonSchemaBenchmark
         String odelay = String.format("%.03f", overhead_delay);
         System.err.println("Java validation: pass=" + (values.length - errors) +
                            " fail=" + errors + " " + sdelay + " µs [" + odelay + " µs]");
-        System.out.println((long) (1000 * cold_run + 0.5) + "," + (long) (1000 * hot_run + 0.5) + "," + "TODO");
+        System.out.println((long) (1000 * cold_run + 0.5) + "," + (long) (1000 * hot_run + 0.5) + "," + (long) (1000 * parse_run + 0.5));
 
         // cleanup
         checker.free();
