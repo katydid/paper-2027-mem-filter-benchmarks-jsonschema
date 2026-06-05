@@ -95,17 +95,14 @@ So far we have filtered out the following implementations:
 ### TODO these to handle invalid inputs
 
 * jsu-java
-* kmp
 
 ### TODO these need to handle format or be removed from the curated list
 
-* kmp
 * networknt
 
 ### TODO these need to add a measurement for parsing time
 
 * jsu-java
-* kmp
 * networknt
 
 ### Adding a new implementation
