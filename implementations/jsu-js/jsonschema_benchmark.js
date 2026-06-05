@@ -30,12 +30,18 @@ export default async function main()
     const checker = check_model_map.get("")
 
     // load files contents
-    const values = []
+    let want = true;
+    let lines = []
     for (const fname of args.positionals)
     {
+        want = !fname.includes("-invalid");
         const data = await fs.readFile(fname, {encoding: 'UTF-8'})
-        values.push(...data.split("\n").slice(0, -1).map(s => JSON.parse(s)))
+        lines.push(...data.split("\n").slice(0, -1))
     }
+
+    const parse_start = performance.now()
+    const values = lines.map(s => JSON.parse(s))
+    const parse_delay = performance.now() - parse_start  // ms
 
     // overhead estimation
     let count = 0
@@ -49,9 +55,12 @@ export default async function main()
     if (debug)
         console.error("cold run")
     const cold_start = performance.now()
-    for (const v of values)
-        if (!checker(v, "", null))
+    for (const v of values) {
+        const res = checker(v, "", null)
+        if (res != want) {
             errors++
+        }
+    }
     const cold_delay = performance.now() - cold_start  // ms
 
     // warm-up so as to trigger JIT
@@ -78,7 +87,7 @@ export default async function main()
     console.error(`js validation: pass=${values.length - errors} fail=${errors}`,
                   `${(1000.0 * delay).toFixed(3)} µs [${(1000.0 * overhead_delay).toFixed(3)} µs]`)
 
-    console.log((1000000.0 * cold_delay).toFixed(0) + ',' + (1000000.0 * delay).toFixed(0) + ',' + 'TODO')
+    console.log((1000000.0 * cold_delay).toFixed(0) + ',' + (1000000.0 * delay).toFixed(0) + ',' + (1000000.0 * parse_delay).toFixed(0))
 
     check_model_free()
     process.exit(errors ? 1 : 0)

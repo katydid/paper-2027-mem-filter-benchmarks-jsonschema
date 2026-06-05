@@ -92,7 +92,7 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these to handle invalid inputs
 
-* jsu-java, jsu-js, jsu-pl and jsu-py.
+* jsu-java, jsu-pl and jsu-py.
 * jsv
 * kmp
 * opis
@@ -106,7 +106,7 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these need to add a measurement for parsing time
 
-* jsu-java, jsu-js, jsu-pl and jsu-py
+* jsu-java, jsu-pl and jsu-py
 * jsv
 * kmp
 * networknt
