@@ -16,7 +16,6 @@ jsoncons
 jsu-c
 jsu-java
 jsu-js
-jsu-pl
 jsv
 kmp
 networknt

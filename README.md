@@ -85,16 +85,16 @@ It also worth noting that some implementations compile schemas ahead of time int
 ### Curated implementations
 
 We also have a list of [curated_implemenatations.txt](./curated_implemenatations.txt).
-So far we have filtered out the following implementations for not supporting `format`: 
-* go-google
-* go-json-schema-spec
-* rapidjson
+So far we have filtered out the following implementations: 
+* go-google (does not support format)
+* go-json-schema-spec (does not support format)
+* rapidjson (does not support format)
 * jsu-py (supports formats, but struggles with validating email)
+* jsu-pl (was broken when we forked, also does not handle invalid inputs or measure parsing time)
 
 ### TODO these to handle invalid inputs
 
 * jsu-java
-* jsu-pl
 * kmp
 
 ### TODO these need to handle format or be removed from the curated list
@@ -105,7 +105,6 @@ So far we have filtered out the following implementations for not supporting `fo
 ### TODO these need to add a measurement for parsing time
 
 * jsu-java
-* jsu-pl
 * kmp
 * networknt
 
