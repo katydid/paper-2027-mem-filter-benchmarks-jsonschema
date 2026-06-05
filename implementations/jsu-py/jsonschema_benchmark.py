@@ -66,6 +66,7 @@ def jsonschema_benchmark():
     for v in values:
         got = checker(v, None, None)
         if (got != want):
+            print(f"{v}", file=sys.stderr)
             errors += 1
     cold_delay = 1_000_000.0 * (time.clock_gettime(clock) - cold_start)
     log.debug(f"cold delay: {cold_delay:.03f} µs")
