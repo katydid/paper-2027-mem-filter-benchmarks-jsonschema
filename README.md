@@ -93,19 +93,16 @@ So far we have filtered out the following implementations for not supporting `fo
 ### TODO these to handle invalid inputs
 
 * jsu-java, jsu-pl and jsu-py.
-* jsv
 * kmp
 
 ### TODO these need to handle format or be removed from the curated list
 
-* jsv
 * kmp
 * networknt
 
 ### TODO these need to add a measurement for parsing time
 
 * jsu-java, jsu-pl and jsu-py
-* jsv
 * kmp
 * networknt
 

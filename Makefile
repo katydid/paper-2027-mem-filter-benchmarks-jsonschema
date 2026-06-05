@@ -615,7 +615,6 @@ implementations/jsv/.dockertimestamp: \
 	implementations/jsv/benchmark.exs \
 	implementations/jsv/config/config.exs \
 	implementations/jsv/mix.exs \
-	implementations/jsv/mix.lock \
 	implementations/jsv/Dockerfile
 	docker build -t jsonschema-benchmark/jsv implementations/jsv
 	touch $@
