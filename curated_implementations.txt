@@ -17,7 +17,6 @@ jsu-c
 jsu-java
 jsu-js
 jsu-pl
-jsu-py
 jsv
 kmp
 networknt

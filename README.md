@@ -89,10 +89,12 @@ So far we have filtered out the following implementations for not supporting `fo
 * go-google
 * go-json-schema-spec
 * rapidjson
+* jsu-py (supports formats, but struggles with validating email)
 
 ### TODO these to handle invalid inputs
 
-* jsu-java, jsu-pl and jsu-py.
+* jsu-java
+* jsu-pl
 * kmp
 
 ### TODO these need to handle format or be removed from the curated list
@@ -102,7 +104,8 @@ So far we have filtered out the following implementations for not supporting `fo
 
 ### TODO these need to add a measurement for parsing time
 
-* jsu-java, jsu-pl and jsu-py
+* jsu-java
+* jsu-pl
 * kmp
 * networknt
 
