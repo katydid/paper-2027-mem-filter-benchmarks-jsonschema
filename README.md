@@ -95,14 +95,12 @@ So far we have filtered out the following implementations for not supporting `fo
 * jsu-java, jsu-pl and jsu-py.
 * jsv
 * kmp
-* opis
 
 ### TODO these need to handle format or be removed from the curated list
 
 * jsv
 * kmp
 * networknt
-* opis
 
 ### TODO these need to add a measurement for parsing time
 
@@ -110,7 +108,6 @@ So far we have filtered out the following implementations for not supporting `fo
 * jsv
 * kmp
 * networknt
-* opis
 
 ### Adding a new implementation
 
