@@ -25,10 +25,6 @@ public class App {
     SchemaRegistry schemaRegistry = SchemaRegistry.withDefaultDialect(Dialects.getDraft202012(),
       builder -> builder.schemaRegistryConfig(schemaRegistryConfig));
     boolean want = !args[0].contains("-invalid");
-    if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets"))) {
-      // skip files that take way too long
-      System.exit(1);
-    }
     if ((args[0].contains("krakend")) || (args[0].contains("ui5-manifest"))) {
       // unable to handle these and throws an exception
       System.exit(1);
