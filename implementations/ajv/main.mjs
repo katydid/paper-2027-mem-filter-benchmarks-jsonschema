@@ -32,11 +32,10 @@ function readFile(filePath) {
 }
 
 function validateAll(instances, validator, want) {
-  for (const instance of instances) {
+  for (const [i, instance] of instances.entries()) {
     const result = validator(instance);
     if (result != want) {
-      console.error(instance);
-      console.error(validator.errors);
+      console.error(validator.errors, instance, i);
       return true;
     }
   }

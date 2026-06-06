@@ -40,7 +40,6 @@ jsconfig-rmUniqueItems
 jshintrc
 katydid-conf-invalid
 katydid-conf-valid
-krakend-rmUniqueItems
 lazygit-rmUniqueItems
 lerna
 nest-cli

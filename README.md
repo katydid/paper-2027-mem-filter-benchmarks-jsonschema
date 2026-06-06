@@ -97,7 +97,7 @@ Finally, appropriate targets must be added to the `Makefile` to build the Docker
 All schemas are found in the schemas folder
 We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
 * `uniqueItems` have been removed,
-* we have removed `cspell` and `ui5-manifest` for using Perl syntax regexes `(?=`
+* we have removed `cspell` and `ui5-manifest` for using Perl syntax regexes `(?=` and `krakend` for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`
 * we have deleted instances of `helm-chart-lock` that had empty strings for `repository` fields, since they are not valid uri's.
 * we have totally excluded schemas that use `dynamicRef`: `cql2` and `openapi`.
 

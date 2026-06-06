@@ -20,7 +20,8 @@
       "title": "Threshold",
       "type": [
         "integer",
-        "null"
+        "null",
+        "string"
       ]
     }
   },

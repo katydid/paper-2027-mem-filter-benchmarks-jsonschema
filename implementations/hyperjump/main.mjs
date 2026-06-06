@@ -45,6 +45,7 @@ async function validateAll(instances, schemaId, want) {
   for (const instance of instances) {
     const output = await validate(schemaId, instance);
     if (output.valid != want) {
+      console.error(output);
       failed = true;
     }
   }
