@@ -41,15 +41,14 @@ function readFile(filePath) {
 }
 
 async function validateAll(instances, schemaId, want) {
-  let failed = false;
   for (const instance of instances) {
     const output = await validate(schemaId, instance);
     if (output.valid != want) {
-      console.error(output);
-      failed = true;
+      console.error(instance);
+      return true;
     }
   }
-  return failed;
+  return false;
 }
 
 async function validateSchema(schemaPath, instancePath, want) {
