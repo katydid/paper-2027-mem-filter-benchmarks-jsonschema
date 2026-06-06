@@ -1,4 +1,4 @@
-import { registerSchema, validate } from "@hyperjump/json-schema/draft-2020-12";
+import { registerSchema, setShouldValidateFormat, validate } from "@hyperjump/json-schema/draft-2020-12";
 import fs from 'fs';
 import readline from 'readline';
 import { performance } from 'perf_hooks';
@@ -74,7 +74,8 @@ async function validateSchema(schemaPath, instancePath, want) {
   })
   const parseEndTime = performance.now();
   const parseDurationNs = (parseEndTime - parseStartTime) * 1e6;
-
+  
+  setShouldValidateFormat(true);
   const coldStartTime = performance.now();
   const failed = await validateAll(instances, schemaId, want);
   const coldEndTime = performance.now();
