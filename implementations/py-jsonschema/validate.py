@@ -29,6 +29,7 @@ if __name__ == "__main__":
     for instance in instances:
         got = validator.is_valid(instance)
         if got != want:
+            print(instance, file=sys.stderr)
             exit(1)
     cold_end = time.time_ns()
 

@@ -305,7 +305,6 @@ implementations/py-jsonschema/.dockertimestamp: \
 	implementations/py-jsonschema/memory-wrapper.sh \
 	implementations/py-jsonschema/validate.py \
 	implementations/py-jsonschema/pyproject.toml \
-	implementations/py-jsonschema/uv.lock \
 	implementations/py-jsonschema/Dockerfile
 	docker build -t jsonschema-benchmark/py-jsonschema implementations/py-jsonschema
 	touch $@
