@@ -116,6 +116,9 @@ int main(int argc, char* argv[])
             pch = strtok(NULL, "\r\n");
         }
     }
+    if (strlen(strs[nstrs-1]) < 3) {
+        nstrs--;
+    }
     
     
     int nvalues = nstrs;
