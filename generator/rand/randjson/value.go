@@ -240,8 +240,9 @@ func randNumber(r rand.Rand, c *config) string {
 	if !c.easyFloats {
 		return num
 	}
-	_, err := strconv.ParseFloat(num, 64)
-	if err == nil {
+	javaLong := 9223372036854775807.0
+	d, err := strconv.ParseFloat(num, 32)
+	if err == nil && d < javaLong && (-1*d < javaLong) {
 		return num
 	}
 	return randNumber(r, c)
