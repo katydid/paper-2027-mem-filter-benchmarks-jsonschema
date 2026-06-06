@@ -145,14 +145,22 @@ int main(int argc, char* argv[])
     // run once
     int nfail = 0;
     double cold_start = now();
-    for (int i = 0; i < nvalues; i++)
+    // jm_path_t path;
+    // jm_report_t report;
+    for (int i = 0; i < nvalues; i++) {
+        // path = (jm_path_t) { "", 0, NULL, NULL };
+        // report = (jm_report_t) { NULL };
         if (!checker(values[i], NULL, NULL)) {
             if (want) {
+                fprintf(stderr, "%d:%s\n", i, strs[i]);
                 nfail++;
             }
         } else if (!want) {
+            fprintf(stderr, "%d:%s\n", i, strs[i]);
             nfail++;
         }
+        // jm_report_free_entries(&report);
+    }
     double cold_delay = now() - cold_start;
     int npass = nvalues - nfail;
 
