@@ -30,7 +30,7 @@ func Email() Rand {
 var extensions = []string{"com", "org", "co.uk", "co.za"}
 
 func (o *randEmail) Right(r rand.Rand) string {
-	return strconv.Quote(randId(r, 10) + "@" + randId(r, 10) + extensions[r.Intn(len(extensions))])
+	return strconv.Quote(randId(r, 10) + "@" + randId(r, 10) + "." + extensions[r.Intn(len(extensions))])
 }
 
 func (o *randEmail) Wrong(r rand.Rand) string {

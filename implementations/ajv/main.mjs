@@ -35,6 +35,8 @@ function validateAll(instances, validator, want) {
   for (const instance of instances) {
     const result = validator(instance);
     if (result != want) {
+      console.error(instance);
+      console.error(validator.errors);
       return true;
     }
   }

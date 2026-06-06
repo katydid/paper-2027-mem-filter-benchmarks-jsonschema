@@ -36,33 +36,35 @@ Analytics currently requires Go to be installed:
 All implementations can be found in the `implementations/` subdirectory.
 A summary of these implementations is given below:
 
-- [ajv](./implementations/ajv/) (JS)
-- [ajv-bun](./implementations/ajv-bun/) (JS with BUN runtime)
-- [blaze](./implementations/blaze/) (C++)
-- [boon](./implementations/boon/) (Rust)
-- [corvus](./implementations/corvus/) (generated C#)
-- [go-google](./implementations/go-google/) (Go)
-- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go)
-- [go-kaptinlin](./implementations/go-kaptinlin/) (Go)
-- [go-katydid-auto](./implementations/go-katydid-auto/) (Go)
-- [go-katydid-mem](./implementations/go-katydid-mem/) (Go)
-- [go-santhosh-tekuri](./implementations/go-santhosh-tekuri/) (Go)
-- [hyperjump](./implementations/hyperjump/) (JS)
-- [jsdotnet](./implementations/jsdotnet/) (C#)
-- [json_schemer](./implementations/json_schemer/) (Ruby)
-- [jsoncons](./implementations/jsoncons/) (C++)
-- [jsu-c](./implementations/jsu-c/) (generated C)
-- [jsu-java](./implementations/jsu-java/) (generated Java)
-- [jsu-js](./implementations/jsu-js/) (generated JS)
+- [ajv](./implementations/ajv/) (JS) (returns bool)
+- [ajv-bun](./implementations/ajv-bun/) (JS with BUN runtime) (returns bool)
+- [blaze](./implementations/blaze/) (C++) (returns bool)
+- [boon](./implementations/boon/) (Rust) (returns Result)
+- [corvus](./implementations/corvus/) (generated C#) (returns Result)
+- [go-google](./implementations/go-google/) (Go) (returns error)
+- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go) (returns error)
+- [go-kaptinlin](./implementations/go-kaptinlin/) (Go) (returns error)
+- [go-katydid-auto-json](./implementations/go-katydid-auto-json/) (Go)  (returns bool)
+- [go-katydid-auto-reflect](./implementations/go-katydid-auto-reflect/) (Go)  (returns bool)
+- [go-katydid-mem-json](./implementations/go-katydid-mem-json/) (Go) (returns bool)
+- [go-katydid-mem-reflect](./implementations/go-katydid-mem-reflect/) (Go) (returns bool)
+- [go-santhosh-tekuri](./implementations/go-santhosh-tekuri/) (Go) (returns error)
+- [hyperjump](./implementations/hyperjump/) (JS) (returns Result)
+- [jsdotnet](./implementations/jsdotnet/) (C#) (returns Result)
+- [json_schemer](./implementations/json_schemer/) (Ruby) (returns bool)
+- [jsoncons](./implementations/jsoncons/) (C++) (throws Exception)
+- [jsu-c](./implementations/jsu-c/) (generated C) (returns bool, optionally can report errors)
+- [jsu-java](./implementations/jsu-java/) (generated Java) (returns bool)
+- [jsu-js](./implementations/jsu-js/) (generated JS) (returns bool, optionally can report errors)
 - [jsu-pl](./implementations/jsu-pl/) (generated Perl) (ignored)
-- [jsu-py](./implementations/jsu-py/) (generated Python)
-- [JSV](./implementations/jsv) (Elixir)
-- [kmp](./implementations/kmp) (Kotlin)
-- [networknt](./implementations/networknt/) (Java)
-- [opis](./implementations/opis/) (PHP)
-- [py-jsonschema](./implementations/py-jsonschema/) (Python)
-- [rapidjson](./implementations/rapidjson/) (C++)
-- [schemasafe](./implementations/schemasafe/) (JS)
+- [jsu-py](./implementations/jsu-py/) (generated Python) (returns bool, optionally can report errors)
+- [JSV](./implementations/jsv) (Elixir) (returns Result)
+- [kmp](./implementations/kmp) (Kotlin) (returns Result)
+- [networknt](./implementations/networknt/) (Java) (returns bool, optionally can return result)
+- [opis](./implementations/opis/) (PHP) (returns Result)
+- [py-jsonschema](./implementations/py-jsonschema/) (Python) (returns bool)
+- [rapidjson](./implementations/rapidjson/) (C++) (returns bool)
+- [schemasafe](./implementations/schemasafe/) (JS) (returns bool)
 
 Compared to the original [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) the following libraries were added: 
 
@@ -97,7 +99,7 @@ We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
 * `uniqueItems` have been removed,
 * we have removed `cspell` and `ui5-manifest` for using Perl syntax regexes `(?=`
 * we have deleted instances of `helm-chart-lock` that had empty strings for `repository` fields, since they are not valid uri's.
-* we have totally excluded schemas that use `dynamicRef`.
+* we have totally excluded schemas that use `dynamicRef`: `cql2` and `openapi`.
 
 Some schemas had a collection of instances gathered from github.
 The rest we can regenerate `instances.jsonl` files for by running: `make generate`.
