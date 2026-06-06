@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using Json.More;
 
 const int WarmupIterations = 1000;
 const long MaxWarmupTime = 10_000_000_000;
@@ -10,6 +12,7 @@ const long MaxWarmupTime = 10_000_000_000;
 var evaluationOptions = new EvaluationOptions
 	{
 		RequireFormatValidation = true,
+    // OutputFormat = OutputFormat.Hierarchical, // uncomment for more detailed error reporting.
 	};
 
 bool ValidateAll(JsonSchema schema, JsonNode[] docs, bool want) {
@@ -18,6 +21,8 @@ bool ValidateAll(JsonSchema schema, JsonNode[] docs, bool want) {
 		{
       var result = schema.Evaluate(doc, evaluationOptions);
       if (result.IsValid != want) {
+        Console.Error.WriteLine(doc);
+        Console.Error.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions{}));
         return false; 
       }
     } catch (Exception e) {
