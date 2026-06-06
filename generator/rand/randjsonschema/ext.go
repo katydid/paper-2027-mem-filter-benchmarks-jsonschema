@@ -14,27 +14,11 @@
 
 package randjsonschema
 
-import (
-	"strconv"
-	"strings"
+import "github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
 
-	"github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
-)
+// TODO add more valid extensions.
+var extensions = []string{"com", "org", "co.uk", "co.za"}
 
-type randEmail struct{}
-
-func Email() Rand {
-	return &randEmail{}
-}
-
-func (o *randEmail) Right(r rand.Rand) string {
-	return strconv.Quote(randId(r, 10) + "@" + randId(r, 10) + "." + randExtension(r))
-}
-
-func (o *randEmail) Wrong(r rand.Rand) string {
-	s := strconv.Quote(randId(r, 20))
-	for strings.Contains(s, "@") {
-		s = strconv.Quote(randId(r, 20))
-	}
-	return s
+func randExtension(r rand.Rand) string {
+	return extensions[r.Intn(len(extensions))]
 }

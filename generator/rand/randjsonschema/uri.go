@@ -32,7 +32,7 @@ func (o *randURI) Right(r rand.Rand) string {
 	if r.Intn(2) == 0 {
 		scheme = "https://"
 	}
-	path := randID(r) + "." + randID(r)
+	path := randID(r) + "." + randExtension(r)
 	fragment := ""
 	if r.Intn(4) == 0 {
 		fragment = "#" + randID(r)
