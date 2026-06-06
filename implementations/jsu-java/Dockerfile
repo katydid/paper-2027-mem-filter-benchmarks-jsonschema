@@ -4,15 +4,15 @@ LABEL description="JSON Schema Utils Compiler Setup for Benchmarking with Java"
 RUN mkdir -p /app
 WORKDIR /app
 
-# install this version from source
-ARG JMC=main
-ARG JSU=main
-
 RUN apt update ; \
     apt upgrade -y ; \
     apt install -y --no-install-recommends --fix-missing \
         python3 python-is-python3 python3-venv python3-pip git \
         time jq curl vim ca-certificates
+
+# install this version from source
+ARG JMC=main
+ARG JSU=main
 
 # version caching and force install, otherwise it would require a virtual environment
 RUN curl -s "https://api.github.com/repos/clairey-zx81/json-model/commits/${JMC}" | \

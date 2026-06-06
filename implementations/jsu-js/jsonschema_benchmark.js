@@ -58,6 +58,7 @@ export default async function main()
     for (const v of values) {
         const res = checker(v, "", null)
         if (res != want) {
+            console.error(v)
             errors++
         }
     }

@@ -59,7 +59,7 @@ A summary of these implementations is given below:
 - [jsu-pl](./implementations/jsu-pl/) (generated Perl) (ignored)
 - [jsu-py](./implementations/jsu-py/) (generated Python) (returns bool, optionally can report errors)
 - [JSV](./implementations/jsv) (Elixir) (returns Result)
-- [kmp](./implementations/kmp) (Kotlin) (returns Result)
+- [kmp](./implementations/kmp) (Kotlin) (returns bool, optionally can return report errors)
 - [networknt](./implementations/networknt/) (Java) (returns bool, optionally can return result)
 - [opis](./implementations/opis/) (PHP) (returns Result)
 - [py-jsonschema](./implementations/py-jsonschema/) (Python) (returns bool)
