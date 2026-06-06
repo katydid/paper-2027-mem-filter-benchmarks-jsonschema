@@ -64,7 +64,7 @@ A summary of these implementations is given below:
 - [opis](./implementations/opis/) (PHP) (returns Result)
 - [py-jsonschema](./implementations/py-jsonschema/) (Python) (returns bool)
 - [rapidjson](./implementations/rapidjson/) (C++) (returns bool)
-- [schemasafe](./implementations/schemasafe/) (JS) (returns bool)
+- [schemasafe](./implementations/schemasafe/) (JS) (returns bool) (ignored)
 
 Compared to the original [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) the following libraries were added: 
 

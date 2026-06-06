@@ -37,6 +37,7 @@ function validateAll(instances, validate, want) {
   for (const instance of instances) {
     const result = validate(instance);
     if (result != want) {
+      console.error(instance);
       return true;
     }
   }
@@ -55,6 +56,7 @@ async function validateSchema(schemaPath, instancePath, want) {
       isJSON: true
     });
   } catch (error) {
+    console.error(error);
     process.exit(1);
   }
   const compileEnd = performance.now();
