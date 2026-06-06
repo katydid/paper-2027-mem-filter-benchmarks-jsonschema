@@ -22,7 +22,7 @@ public class App {
     org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
     SchemaRegistryConfig schemaRegistryConfig = SchemaRegistryConfig.builder()
       .regularExpressionFactory(GraalJSRegularExpressionFactory.getInstance()).build();
-    SchemaRegistry schemaRegistry = SchemaRegistry.withDialect(Dialects.getDraft202012(),
+    SchemaRegistry schemaRegistry = SchemaRegistry.withDefaultDialect(Dialects.getDraft202012(),
       builder -> builder.schemaRegistryConfig(schemaRegistryConfig));
     boolean want = !args[0].contains("-invalid");
     if ((args[0].contains("geojson")) || (args[0].contains("cql2")) || (args[0].contains("cmake-presets"))) {
