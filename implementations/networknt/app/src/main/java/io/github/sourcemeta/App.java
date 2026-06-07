@@ -50,7 +50,7 @@ public class App {
 
     // Warmup
     long iterations = (long) Math.ceil(((double) MAX_WARMUP_TIME) / (coldEnd - coldStart));
-    for (int i = 0; i < WARMUP_ITERATIONS; i++) {
+    for (int i = 0; i < iterations; i++) {
       validateAll(schema, lines, want);
     }
 
