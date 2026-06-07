@@ -41,8 +41,8 @@ A summary of these implementations is given below:
 - [blaze](./implementations/blaze/) (C++) (returns bool)
 - [boon](./implementations/boon/) (Rust) (returns Result)
 - [corvus](./implementations/corvus/) (generated C#) (returns Result)
-- [go-google](./implementations/go-google/) (Go) (returns error)
-- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go) (returns error)
+- [go-google](./implementations/go-google/) (Go) (returns error) (ignored)
+- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go) (returns error) (ignored)
 - [go-kaptinlin](./implementations/go-kaptinlin/) (Go) (returns error)
 - [go-katydid-auto-json](./implementations/go-katydid-auto-json/) (Go)  (returns bool)
 - [go-katydid-auto-reflect](./implementations/go-katydid-auto-reflect/) (Go)  (returns bool)
@@ -63,7 +63,7 @@ A summary of these implementations is given below:
 - [networknt](./implementations/networknt/) (Java) (returns bool, optionally can return result)
 - [opis](./implementations/opis/) (PHP) (returns Result)
 - [py-jsonschema](./implementations/py-jsonschema/) (Python) (returns bool)
-- [rapidjson](./implementations/rapidjson/) (C++) (returns bool)
+- [rapidjson](./implementations/rapidjson/) (C++) (returns bool) (ignored)
 - [schemasafe](./implementations/schemasafe/) (JS) (returns bool) (ignored)
 
 Compared to the original [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) the following libraries were added: 
