@@ -58,3 +58,9 @@ zschema-advanced-rmUniqueItems-invalid
 zschema-advanced-rmUniqueItems-valid
 zschema-basic-rmUniqueItems-invalid
 zschema-basic-rmUniqueItems-valid
+cspell
+cspell-rmUniqueItems
+ui5-manifest
+ui5-manifest-rmUniqueItems
+krakend
+krakend-rmUniqueItems
