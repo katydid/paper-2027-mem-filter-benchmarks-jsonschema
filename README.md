@@ -94,15 +94,16 @@ Finally, appropriate targets must be added to the `Makefile` to build the Docker
 
 ## Schemas
 
-All schemas are found in the schemas folder
-We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
-* `uniqueItems` have been removed,
-* we have removed `cspell` and `ui5-manifest` for using Perl syntax regexes `(?=` and `krakend` for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`
-* we have deleted instances of `helm-chart-lock` that had empty strings for `repository` fields, since they are not valid uri's.
-* we have totally excluded schemas that use `dynamicRef`: `cql2` and `openapi`.
-
+All schemas are found in the schemas folder.
 Some schemas had a collection of instances gathered from github.
 The rest we can regenerate `instances.jsonl` files for by running: `make generate`.
+
+We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
+* schemas with `uniqueItems` have been removed and replaced with schemes where `uniqueItems` have been removed from the schema,
+* we have totally excluded schemas that use `dynamicRef`: `cql2` and `openapi`.
+* we have removed `cspell`, since the following implementations all have problems with it: boon, go-kaptinlin, go-santhosh-tekuri, json_schemer and kmp. One problem is for using Perl syntax regexes `(?=`.
+* we have removed `ui5-manifest`, since the following implementations all have problems with it: ajv, ajv-bun, boon, go-kaptinlin, go-santhosh-tekuri, hyperjump, networknt. One problem is for using Perl syntax regexes `(?=`.
+* we have removed `krakend`, since the following implementaionts all have problems with it: ajv, ajv-bun, hyperjump, networknt.  One problem is for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`.
 
 ### Shortcomings of document generator
 

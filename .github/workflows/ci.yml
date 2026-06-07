@@ -57,7 +57,7 @@ jobs:
         id: cache-report
         with:
           path: dist/report.csv
-          key: new-key-${{ matrix.impl }}-${{ hashFiles(format('implementations/{0}/**/*', matrix.impl), 'schemas/**/*', 'report.sh') }}-${{ inputs.runs || 3 }}
+          key: key1-${{ matrix.impl }}-${{ hashFiles(format('implementations/{0}/**/*', matrix.impl), 'schemas/**/*', 'report.sh') }}-${{ inputs.runs || 3 }}
           lookup-only: ${{ matrix.skip_cache || github.event_name == 'schedule' || inputs.skip_cache }}
 
       - name: Run benchmarks
