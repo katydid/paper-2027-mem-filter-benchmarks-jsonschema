@@ -107,6 +107,7 @@ func main() {
 	parsingStart := time.Now()
 	var instances []goreflect.Value
 	decoder := json.NewDecoder(reader)
+	decoder.UseNumber()
 
 	for {
 		var inst any
