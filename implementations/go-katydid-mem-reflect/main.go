@@ -35,29 +35,6 @@ func validateAll(parser reflect.Parser, matcher jsonschema.Matcher, instances []
 	return nil
 }
 
-var notSupported = map[string]string{
-	"ajv-cosmicrealms-invalid": "uniqueItems not supported",
-	"ajv-cosmicrealms-valid":   "uniqueItems not supported",
-	"cspell":                   "uniqueItems not supported",
-	"deno":                     "uniqueItems not supported",
-	"draft-04":                 "uniqueItems not supported",
-	"jsconfig":                 "uniqueItems not supported",
-	"krakend":                  "uniqueItems not supported",
-	"lazygit":                  "uniqueItems not supported",
-	"stylecop":                 "uniqueItems not supported",
-	"ui5-manifest":             "uniqueItems not supported",
-	"unreal-engine-uproject":   "uniqueItems not supported",
-	"zschema-advanced-invalid": "uniqueItems not supported",
-	"zschema-advanced-valid":   "uniqueItems not supported",
-	"zschema-basic-invalid":    "uniqueItems not supported",
-	"zschema-basic-valid":      "uniqueItems not supported",
-
-	"ansible-meta":  "json: cannot unmarshal bool into Go struct field Schema.Object.properties of type schema.Schema",
-	"cmake-presets": "just takes long",
-	"cql2":          "could not find schema for #/$defs/andOrExpression",
-	"geojson":       "timed out",
-}
-
 func main() {
 	log.SetFlags(log.Lshortfile)
 	if len(os.Args) < 2 {
@@ -67,9 +44,6 @@ func main() {
 	exampleFolder := os.Args[1]
 	want := !strings.Contains(exampleFolder, "-invalid")
 	log.Printf("folder %q with base %s expect %v", exampleFolder, filepath.Base(exampleFolder), want)
-	if reason, ok := notSupported[filepath.Base(exampleFolder)]; ok {
-		log.Fatalf("%s is not supported, because %s", exampleFolder, reason)
-	}
 
 	// Construct and canonicalize file paths
 	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema.json"))
