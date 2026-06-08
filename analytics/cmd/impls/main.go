@@ -123,41 +123,17 @@ func fprintMarkdown(
 		fmt.Fprintf(w, format, a...)
 	}
 
+	p(`## Filtering use case (invalid docs and parsing time included)`)
+	p("\n")
+	p("\n")
+	p(`| impl | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
+	p("\n")
+	p(`| ---  | ---       | ---      | ---        | ---       | ---         | ---           | `)
+	p("\n")
 	for i, impls := range implss {
-		p(`## Exclude Parse Time (%s)`, getKind(implss[i]))
-		p("\n")
-		p("\n")
-		p(`| impl | completed | mean/doc | median/doc | mean rank | median rank | not completed |`)
-		p("\n")
-		p(`| ---  | ---       | ---      | ---        | ---       | ---         | ---           | `)
-		p("\n")
-		for _, impl := range impls {
-			p("| ")
-			p("%s", impl.Name)
-			p(" | ")
-			p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
-			p(" | ")
-			p("%.0f", impl.MeanWarmNsPerDoc)
-			p(" | ")
-			p("%.0f", impl.MedianWarmNsPerDoc)
-			p(" | ")
-			p("%.0f", impl.MeanWarmRank)
-			p(" | ")
-			p("%.0f", impl.MedianWarmRank)
-			p(" | ")
-			p("%v", impl.NotCompletedSchemas)
-			p(" |")
-			p("\n")
+		if getKind(implss[i]) != "invalid" {
+			continue
 		}
-
-		p("\n")
-		p(`## Include Parse Time (%s)`, getKind(implss[i]))
-		p("\n")
-		p("\n")
-		p(`| impl | completed    | mean/doc  | median/doc | mean rank | median rank | not completed |`)
-		p("\n")
-		p(`| ---  | ---          | ---       | ---        | ---       | ---         | ---           |`)
-		p("\n")
 		for _, impl := range impls {
 			if !impl.ParseTODO {
 				p("| ")
@@ -165,13 +141,13 @@ func fprintMarkdown(
 				p(" | ")
 				p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
 				p(" | ")
-				p("%.0f", impl.MeanParsePlusWarmNsPerDoc)
-				p(" | ")
 				p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
 				p(" | ")
-				p("%.0f", impl.MeanParsePlusWarmRank)
+				p("%.0f", impl.MeanParsePlusWarmNsPerDoc)
 				p(" | ")
 				p("%.0f", impl.MedianParsePlusWarmRank)
+				p(" | ")
+				p("%.0f", impl.MeanParsePlusWarmRank)
 				p(" | ")
 				p("%v", impl.NotCompletedSchemas)
 				p(" |")
@@ -195,7 +171,89 @@ func fprintMarkdown(
 				p("\n")
 			}
 		}
+	}
+
+	p("\n")
+	p(`## API Gateway with generic reuse use case (valid docs and parsing time excluded)`)
+	for i, impls := range implss {
+		if getKind(implss[i]) != "valid" {
+			continue
+		}
 		p("\n")
+		p("\n")
+		p(`| impl | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
+		p("\n")
+		p(`| ---  | ---       | ---      | ---        | ---       | ---         | ---           | `)
+		p("\n")
+		for _, impl := range impls {
+			p("| ")
+			p("%s", impl.Name)
+			p(" | ")
+			p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
+			p(" | ")
+			p("%.0f", impl.MedianWarmNsPerDoc)
+			p(" | ")
+			p("%.0f", impl.MeanWarmNsPerDoc)
+			p(" | ")
+			p("%.0f", impl.MedianWarmRank)
+			p(" | ")
+			p("%.0f", impl.MeanWarmRank)
+			p(" | ")
+			p("%v", impl.NotCompletedSchemas)
+			p(" |")
+			p("\n")
+		}
+	}
+
+	p("\n")
+	p(`## API Gateway with no reuse use case (valid docs and parsing time included)`)
+	for i, impls := range implss {
+		if getKind(implss[i]) != "valid" {
+			continue
+		}
+		p("\n")
+		p("\n")
+		p(`| impl | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
+		p("\n")
+		p(`| ---  | ---       | ---      | ---        | ---       | ---         | ---           | `)
+		p("\n")
+		for _, impl := range impls {
+			if !impl.ParseTODO {
+				p("| ")
+				p("%s", impl.Name)
+				p(" | ")
+				p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
+				p(" | ")
+				p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
+				p(" | ")
+				p("%.0f", impl.MeanParsePlusWarmNsPerDoc)
+				p(" | ")
+				p("%.0f", impl.MedianParsePlusWarmRank)
+				p(" | ")
+				p("%.0f", impl.MeanParsePlusWarmRank)
+				p(" | ")
+				p("%v", impl.NotCompletedSchemas)
+				p(" |")
+				p("\n")
+			} else {
+				p("| ")
+				p("%s", impl.Name)
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" | ")
+				p("TODO")
+				p(" |")
+				p("\n")
+			}
+		}
 	}
 }
 
