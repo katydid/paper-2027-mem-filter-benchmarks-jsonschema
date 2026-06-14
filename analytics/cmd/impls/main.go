@@ -356,7 +356,7 @@ func fprintLatex(
 
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing excluded\n", getKind(implss[i]))
-		p("\\begin{tabular}{ll|ll}\n")
+		p("\\begin{tabular}{ll|l|ll}\n")
 		p(`\# & impl & median ns/doc & mean ns/doc \\`)
 		p("\n")
 		p(`\hline`)
