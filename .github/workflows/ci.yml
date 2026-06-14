@@ -124,7 +124,6 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-go@v6
         with:
-          go-version: 1.26.2
           go-version-file: ./analytics/go.mod
           cache-dependency-path: ./analytics/go.sum
       - name: Download Report
