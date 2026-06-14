@@ -19,19 +19,15 @@ import "slices"
 type ScoredLine struct {
 	Line                  *Line
 	WarmRank              int
-	WarmSlowDown          float64
 	WarmNsPerDoc          float64
 	ColdRank              int
-	ColdSlowDown          float64
 	ColdNsPerDoc          float64
 	ParseTODO             bool
 	ParseNsPerDoc         float64
 	ParsePlusWarmNsPerDoc float64
 	ParsePlusWarmRank     int
-	ParsePlusWarmSlowDown float64
 	ParsePlusColdNsPerDoc float64
 	ParsePlusColdRank     int
-	ParsePlusColdSlowDown float64
 }
 
 func ScoreGroups(groups [][]*Line) []*ScoredLine {
@@ -63,12 +59,8 @@ func Score(lines []*Line) []*ScoredLine {
 	slices.SortFunc(sortedWarmPerDoc, func(i, j int) int {
 		return FloatCompare(res[i].WarmNsPerDoc, res[j].WarmNsPerDoc)
 	})
-	fastestWarmNsPerDoc := res[sortedWarmPerDoc[0]].WarmNsPerDoc
 	for i := range sortedWarmPerDoc {
 		res[sortedWarmPerDoc[i]].WarmRank = i + 1
-	}
-	for i := range res {
-		res[i].WarmSlowDown = float64(res[i].WarmNsPerDoc) / float64(fastestWarmNsPerDoc)
 	}
 
 	for i := range lines {
@@ -78,12 +70,8 @@ func Score(lines []*Line) []*ScoredLine {
 	slices.SortFunc(sortedColdPerDoc, func(i, j int) int {
 		return FloatCompare(res[i].ColdNsPerDoc, res[j].ColdNsPerDoc)
 	})
-	fastestColdNsPerDoc := res[sortedColdPerDoc[0]].ColdNsPerDoc
 	for i := range sortedColdPerDoc {
 		res[sortedColdPerDoc[i]].ColdRank = i + 1
-	}
-	for i := range lines {
-		res[i].ColdSlowDown = float64(res[i].ColdNsPerDoc) / float64(fastestColdNsPerDoc)
 	}
 
 	const verySlow = float64(10e20)
@@ -104,24 +92,16 @@ func Score(lines []*Line) []*ScoredLine {
 	slices.SortFunc(sortedParsePlusWarm, func(i, j int) int {
 		return FloatCompare(res[i].ParsePlusWarmNsPerDoc, res[j].ParsePlusWarmNsPerDoc)
 	})
-	fastestParsePlusWarmNsPerDoc := res[sortedParsePlusWarm[0]].ParsePlusWarmNsPerDoc
 	for i := range sortedParsePlusWarm {
 		res[sortedParsePlusWarm[i]].ParsePlusWarmRank = i + 1
-	}
-	for i := range res {
-		res[i].ParsePlusWarmSlowDown = float64(lines[i].WarmNs) / float64(fastestParsePlusWarmNsPerDoc)
 	}
 
 	sortedParsePlusCold := nums(len(res))
 	slices.SortFunc(sortedParsePlusCold, func(i, j int) int {
 		return FloatCompare(res[i].ParsePlusColdNsPerDoc, res[j].ParsePlusColdNsPerDoc)
 	})
-	fastestParsePlusColdNsPerDoc := res[sortedParsePlusCold[0]].ParsePlusColdNsPerDoc
 	for i := range sortedParsePlusCold {
 		res[sortedParsePlusCold[i]].ParsePlusColdRank = i + 1
-	}
-	for i := range res {
-		res[i].ParsePlusColdSlowDown = float64(lines[i].ColdNs) / float64(fastestParsePlusColdNsPerDoc)
 	}
 
 	return res

@@ -122,7 +122,7 @@ func fprintLatex(
 
 	p("%% BEGIN Generated tabular\n")
 	p("\\begin{tabular}{lll|ll|ll}\n")
-	p(`name & valid & impl & rank (with parsing) & \%% slower (with parsing) & rank (without parsing) & \%% slower (without parsing) \\`)
+	p(`name & valid & impl & rank (with parsing) & rank (without parsing) \\`)
 	p("\n")
 	currentSchemaName := ""
 	for _, score := range scores {
@@ -137,13 +137,9 @@ func fprintLatex(
 		p(" & ")
 		p("%d", score.ParsePlusWarmRank)
 		p(" & ")
-		p("%.0f\\%%", score.ParsePlusWarmSlowDown*100)
-		p(" & ")
 		p("%s", score.Line.Implementation)
 		p(" & ")
 		p("%d", score.WarmRank)
-		p(" & ")
-		p("%.0f\\%%", score.WarmSlowDown*100)
 		p(" \\\\\n")
 
 	}
@@ -161,9 +157,9 @@ func fprintMarkdown(
 		fmt.Fprintf(w, format, a...)
 	}
 
-	p(`| name | valid | impl | rank (with parsing) | %% slower (with parsing) | rank (without parsing) | %% slower (without parsing) | ns/op |`)
+	p(`| name | valid | impl | rank (with parsing) | rank (without parsing) | ns/op |`)
 	p("\n")
-	p(`| ---  | ---   | ---  | ---                 | ---                      | ---                    | ---                         | ---   |`)
+	p(`| ---  | ---   | ---  | ---                 | ---                    | ---   |`)
 	p("\n")
 	for _, score := range scores {
 		p("| ")
@@ -175,11 +171,7 @@ func fprintMarkdown(
 		p(" | ")
 		p("%d", score.ParsePlusWarmRank)
 		p(" | ")
-		p("%.0f%%", score.ParsePlusWarmSlowDown*100)
-		p(" | ")
 		p("%d", score.WarmRank)
-		p(" | ")
-		p("%.0f%%", score.WarmSlowDown*100)
 		p(" | ")
 		p("%.0f", score.WarmNsPerDoc)
 		p(" |")
