@@ -115,6 +115,44 @@ func getKind(impls []*analytics.Implementation) string {
 	return ""
 }
 
+type details struct {
+	Name string
+	Lang string
+	Link string
+}
+
+var implDetails = map[string]*details{
+	"ajv":                     {Name: "Ajv", Lang: "Javascript", Link: "https://ajv.js.org/"},
+	"ajv-bun":                 {Name: "Ajv", Lang: "Javascript (Bun)", Link: "https://ajv.js.org/"},
+	"blaze":                   {Name: "Blaze", Lang: "C++", Link: "https://github.com/sourcemeta/blaze"},
+	"boon":                    {Name: "boon", Lang: "Rust", Link: "https://github.com/santhosh-tekuri/boon"},
+	"corvus":                  {Name: "Corvus.JsonSchema", Lang: "C# (gen)", Link: "https://github.com/corvus-dotnet/Corvus.JsonSchema"},
+	"go-google":               {Name: "Google", Lang: "Golang", Link: "https://github.com/google/jsonschema-go"},
+	"go-json-schema-spec":     {Name: "json-schema-spec", Lang: "Golang", Link: "https://github.com/json-schema-spec/json-schema-go"},
+	"go-kaptinlin":            {Name: "kaptinlin", Lang: "Golang", Link: "https://github.com/kaptinlin/jsonschema"},
+	"go-katydid-auto-json":    {Name: "Katydid-Comp-Fused", Lang: "Golang", Link: "https://github.com/katydid/validator-go-jsonschema"},
+	"go-katydid-auto-reflect": {Name: "Katydid-Comp-Steps", Lang: "Golang", Link: "https://github.com/katydid/validator-go-jsonschema"},
+	"go-katydid-mem-json":     {Name: "Katydid-Memo-Fused", Lang: "Golang", Link: "https://github.com/katydid/validator-go-jsonschema"},
+	"go-katydid-mem-reflect":  {Name: "Katydid-Memo-Steps", Lang: "Golang", Link: "https://github.com/katydid/validator-go-jsonschema"},
+	"go-santhosh-tekuri":      {Name: "santhosh-tekuri", Lang: "Golang", Link: "https://github.com/santhosh-tekuri/jsonschema/"},
+	"hyperjump":               {Name: "Hyperjump", Lang: "Javascript", Link: "https://github.com/hyperjump-io/json-schema"},
+	"jsdotnet":                {Name: "json-everything", Lang: "C#", Link: "https://github.com/json-everything/json-everything"},
+	"json_schemer":            {Name: "json_schemer", Lang: "Ruby", Link: "https://github.com/davishmcclurg/json_schemer"},
+	"jsoncons":                {Name: "jsoncons", Lang: "C++", Link: "https://github.com/danielaparker/jsoncons"},
+	"jsu-c":                   {Name: "JSON Schema Utils", Lang: "C++ (gen)", Link: "https://github.com/zx80/json-schema-utils"},
+	"jsu-java":                {Name: "JSON Schema Utils", Lang: "Java (gen)", Link: "https://github.com/zx80/json-schema-utils"},
+	"jsu-js":                  {Name: "JSON Schema Utils", Lang: "Javascript (gen)", Link: "https://github.com/zx80/json-schema-utils"},
+	"jsu-pl":                  {Name: "JSON Schema Utils", Lang: "Perl (gen)", Link: "https://github.com/zx80/json-schema-utils"},
+	"jsu-py":                  {Name: "JSON Schema Utils", Lang: "Python (gen)", Link: "https://github.com/zx80/json-schema-utils"},
+	"jsv":                     {Name: "JSV", Lang: "Elixir", Link: "https://github.com/lud/jsv"},
+	"kmp":                     {Name: "OptimumCode", Lang: "Kotlin", Link: "https://github.com/OptimumCode/json-schema-validator"},
+	"networknt":               {Name: "networknt", Lang: "Java", Link: "https://github.com/networknt/json-schema-validator"},
+	"opis":                    {Name: "Opis", Lang: "PHP", Link: "https://opis.io/json-schema"},
+	"py-jsonschema":           {Name: "python-jsonschema", Lang: "Python", Link: "https://github.com/python-jsonschema/jsonschema/"},
+	"rapidjson":               {Name: "RapidJSON", Lang: "C++", Link: "https://github.com/Tencent/rapidjson/"},
+	"schemasafe":              {Name: "schemasafe", Lang: "Javascript", Link: "https://github.com/ExodusMovement/schemasafe"},
+}
+
 func fprintMarkdown(
 	w io.Writer,
 	implss [][]*analytics.Implementation,
@@ -126,18 +164,23 @@ func fprintMarkdown(
 	p(`## Filtering use case (invalid docs and parsing time included)`)
 	p("\n")
 	p("\n")
-	p(`| impl | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
+	p(`| impl | language  | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
 	p("\n")
-	p(`| ---  | ---       | ---      | ---        | ---       | ---         | ---           | `)
+	p(`| ---  | ---       | ---       | ---      | ---        | ---       | ---         | ---           | `)
 	p("\n")
 	for i, impls := range implss {
 		if getKind(implss[i]) != "invalid" {
 			continue
 		}
+		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
+			return analytics.FloatCompare(x.MedianParsePlusWarmNsPerDoc, y.MedianParsePlusWarmNsPerDoc)
+		})
 		for _, impl := range impls {
 			if !impl.ParseTODO {
 				p("| ")
-				p("%s", impl.Name)
+				p("[%s](%s)", implDetails[impl.Name].Name, implDetails[impl.Name].Link)
+				p(" | ")
+				p("%s", implDetails[impl.Name].Lang)
 				p(" | ")
 				p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
 				p(" | ")
@@ -155,6 +198,8 @@ func fprintMarkdown(
 			} else {
 				p("| ")
 				p("%s", impl.Name)
+				p(" | ")
+				p("%s", implDetails[impl.Name].Lang)
 				p(" | ")
 				p("TODO")
 				p(" | ")
@@ -181,13 +226,18 @@ func fprintMarkdown(
 		}
 		p("\n")
 		p("\n")
-		p(`| impl | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
+		p(`| impl | language  | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
 		p("\n")
-		p(`| ---  | ---       | ---      | ---        | ---       | ---         | ---           | `)
+		p(`| ---  | ---       | ---       | ---      | ---        | ---       | ---         | ---           | `)
 		p("\n")
+		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
+			return analytics.FloatCompare(x.MedianWarmNsPerDoc, y.MedianWarmNsPerDoc)
+		})
 		for _, impl := range impls {
 			p("| ")
-			p("%s", impl.Name)
+			p("[%s](%s)", implDetails[impl.Name].Name, implDetails[impl.Name].Link)
+			p(" | ")
+			p("%s", implDetails[impl.Name].Lang)
 			p(" | ")
 			p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
 			p(" | ")
@@ -213,14 +263,19 @@ func fprintMarkdown(
 		}
 		p("\n")
 		p("\n")
-		p(`| impl | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
+		p(`| impl | language  | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
 		p("\n")
-		p(`| ---  | ---       | ---      | ---        | ---       | ---         | ---           | `)
+		p(`| ---  | ---       | ---       | ---      | ---        | ---       | ---         | ---           | `)
 		p("\n")
+		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
+			return analytics.FloatCompare(x.MedianParsePlusWarmNsPerDoc, y.MedianParsePlusWarmNsPerDoc)
+		})
 		for _, impl := range impls {
 			if !impl.ParseTODO {
 				p("| ")
-				p("%s", impl.Name)
+				p("[%s](%s)", implDetails[impl.Name].Name, implDetails[impl.Name].Link)
+				p(" | ")
+				p("%s", implDetails[impl.Name].Lang)
 				p(" | ")
 				p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
 				p(" | ")
@@ -239,7 +294,9 @@ func fprintMarkdown(
 				p("| ")
 				p("%s", impl.Name)
 				p(" | ")
-				p("TODO")
+				p("[%s](%s)", implDetails[impl.Name].Name, implDetails[impl.Name].Link)
+				p(" | ")
+				p("%s", implDetails[impl.Name].Lang)
 				p(" | ")
 				p("TODO")
 				p(" | ")
@@ -257,51 +314,17 @@ func fprintMarkdown(
 	}
 }
 
-var messagePrinter *message.Printer = message.NewPrinter(language.English)
-
-type details struct {
-	Name string
-	Lang string
-}
-
-var implDetails = map[string]*details{
-	"ajv":                     {Name: "Ajv", Lang: "Javascript"},
-	"ajv-bun":                 {Name: "Ajv", Lang: "Javascript (Bun)"},
-	"blaze":                   {Name: "Blaze", Lang: "C++"},
-	"boon":                    {Name: "boon", Lang: "Rust"},
-	"corvus":                  {Name: "Corvus.JsonSchema", Lang: "C\\# (generated)"},
-	"go-google":               {Name: "Google", Lang: "Golang"},
-	"go-json-schema-spec":     {Name: "json-schema-spec", Lang: "Golang"},
-	"go-kaptinlin":            {Name: "kaptinlin", Lang: "Golang"},
-	"go-katydid-auto-json":    {Name: "Katydid-comp-fused", Lang: "Golang"},
-	"go-katydid-auto-reflect": {Name: "Katydid-comp-steps", Lang: "Golang"},
-	"go-katydid-mem-json":     {Name: "Katydid-memo-fused", Lang: "Golang"},
-	"go-katydid-mem-reflect":  {Name: "Katydid-memo-steps", Lang: "Golang"},
-	"go-santhosh-tekuri":      {Name: "santhosh-tekuri", Lang: "Golang"},
-	"hyperjump":               {Name: "Hyperjump", Lang: "Javascript"},
-	"jsdotnet":                {Name: "json-everything", Lang: "C\\#"},
-	"json_schemer":            {Name: "json\\_schemer", Lang: "Ruby"},
-	"jsoncons":                {Name: "jsoncons", Lang: "C++"},
-	"jsu-c":                   {Name: "JSON Schema Utils", Lang: "C++ (generated)"},
-	"jsu-java":                {Name: "JSON Schema Utils", Lang: "Java (generated)"},
-	"jsu-js":                  {Name: "JSON Schema Utils", Lang: "Javascript (generated)"},
-	"jsu-pl":                  {Name: "JSON Schema Utils", Lang: "Perl (generated)"},
-	"jsu-py":                  {Name: "JSON Schema Utils", Lang: "Python (generated)"},
-	"jsv":                     {Name: "JSV", Lang: "Elixir"},
-	"kmp":                     {Name: "OptimumCode", Lang: "Kotlin"},
-	"networknt":               {Name: "networknt", Lang: "Java"},
-	"opis":                    {Name: "Opis", Lang: "PHP"},
-	"py-jsonschema":           {Name: "python-jsonschema", Lang: "Python"},
-	"rapidjson":               {Name: "RapidJSON", Lang: "C++"},
-	"schemasafe":              {Name: "schemasafe", Lang: "Javascript"},
-}
-
 func fprintLatex(
 	w io.Writer,
 	implss [][]*analytics.Implementation,
 ) {
+	var messagePrinter *message.Printer = message.NewPrinter(language.English)
 	p := func(format string, a ...any) {
 		messagePrinter.Fprintf(w, format, a...)
+	}
+	sprint := func(name string) string {
+		name = strings.Replace(name, "#", "\\#", -1)
+		return strings.Replace(name, "_", "\\_", -1)
 	}
 
 	for i, impls := range implss {
@@ -317,9 +340,9 @@ func fprintLatex(
 		for i, impl := range impls {
 			p("%d", i)
 			p(" & ")
-			p("%s", implDetails[impl.Name].Name)
+			p("%s", sprint(implDetails[impl.Name].Name))
 			p(" & ")
-			p("%s", implDetails[impl.Name].Lang)
+			p("%s", sprint(implDetails[impl.Name].Lang))
 			p(" & ")
 			p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
 			p(" & ")
@@ -344,9 +367,9 @@ func fprintLatex(
 		for i, impl := range impls {
 			p("%d", i)
 			p(" & ")
-			p("%s", implDetails[impl.Name].Name)
+			p("%s", sprint(implDetails[impl.Name].Name))
 			p(" & ")
-			p("%s", implDetails[impl.Name].Lang)
+			p("%s", sprint(implDetails[impl.Name].Lang))
 			p(" & ")
 			p("%.0f", impl.MedianWarmNsPerDoc)
 			p(" & ")
