@@ -1,1 +1,1 @@
-[jsonschema](https://python-jsonschema.readthedocs.io/en/stable/) (Python)
+[jsonschema](https://github.com/python-jsonschema/jsonschema/) (Python)
