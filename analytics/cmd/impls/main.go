@@ -219,43 +219,6 @@ func fprintMarkdown(
 	}
 
 	p("\n")
-	p(`## API Gateway with generic reuse use case (valid docs and parsing time excluded)`)
-	for i, impls := range implss {
-		if getKind(implss[i]) != "valid" {
-			continue
-		}
-		p("\n")
-		p("\n")
-		p(`| impl | language  | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
-		p("\n")
-		p(`| ---  | ---       | ---       | ---      | ---        | ---       | ---         | ---           | `)
-		p("\n")
-		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
-			return analytics.FloatCompare(x.MedianWarmNsPerDoc, y.MedianWarmNsPerDoc)
-		})
-		for _, impl := range impls {
-			p("| ")
-			p("[%s](%s)", implDetails[impl.Name].Name, implDetails[impl.Name].Link)
-			p(" | ")
-			p("%s", implDetails[impl.Name].Lang)
-			p(" | ")
-			p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
-			p(" | ")
-			p("%.0f", impl.MedianWarmNsPerDoc)
-			p(" | ")
-			p("%.0f", impl.MeanWarmNsPerDoc)
-			p(" | ")
-			p("%.0f", impl.MedianWarmRank)
-			p(" | ")
-			p("%.0f", impl.MeanWarmRank)
-			p(" | ")
-			p("%v", impl.NotCompletedSchemas)
-			p(" |")
-			p("\n")
-		}
-	}
-
-	p("\n")
 	p(`## API Gateway with no reuse use case (valid docs and parsing time included)`)
 	for i, impls := range implss {
 		if getKind(implss[i]) != "valid" {
@@ -312,6 +275,49 @@ func fprintMarkdown(
 			}
 		}
 	}
+
+	// remove katydid-auto-json and katydid-mem-json, since they both do not create any structures that can be reused
+	for i := range implss {
+		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-auto-json" })
+		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-mem-json" })
+	}
+
+	p("\n")
+	p(`## API Gateway with generic reuse use case (valid docs and parsing time excluded)`)
+	for i, impls := range implss {
+		if getKind(implss[i]) != "valid" {
+			continue
+		}
+		p("\n")
+		p("\n")
+		p(`| impl | language  | completed | median/doc | mean/doc | median rank | mean rank | not completed |`)
+		p("\n")
+		p(`| ---  | ---       | ---       | ---      | ---        | ---       | ---         | ---           | `)
+		p("\n")
+		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
+			return analytics.FloatCompare(x.MedianWarmNsPerDoc, y.MedianWarmNsPerDoc)
+		})
+		for _, impl := range impls {
+			p("| ")
+			p("[%s](%s)", implDetails[impl.Name].Name, implDetails[impl.Name].Link)
+			p(" | ")
+			p("%s", implDetails[impl.Name].Lang)
+			p(" | ")
+			p("%d/%d", len(impl.CompletedSchemas), len(impl.AllSchemas))
+			p(" | ")
+			p("%.0f", impl.MedianWarmNsPerDoc)
+			p(" | ")
+			p("%.0f", impl.MeanWarmNsPerDoc)
+			p(" | ")
+			p("%.0f", impl.MedianWarmRank)
+			p(" | ")
+			p("%.0f", impl.MeanWarmRank)
+			p(" | ")
+			p("%v", impl.NotCompletedSchemas)
+			p(" |")
+			p("\n")
+		}
+	}
 }
 
 func fprintLatex(
@@ -354,6 +360,11 @@ func fprintLatex(
 		p("%% END Generated tabular\n")
 	}
 
+	// remove katydid-auto-json and katydid-mem-json, since they both do not create any structures that can be reused
+	for i := range implss {
+		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-auto-json" })
+		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-mem-json" })
+	}
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing excluded\n", getKind(implss[i]))
 		p("\\begin{tabular}{ll|l|ll}\n")
