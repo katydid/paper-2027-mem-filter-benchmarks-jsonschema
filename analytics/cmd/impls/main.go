@@ -259,6 +259,43 @@ func fprintMarkdown(
 
 var messagePrinter *message.Printer = message.NewPrinter(language.English)
 
+type details struct {
+	Name string
+	Lang string
+}
+
+var implDetails = map[string]*details{
+	"ajv":                     {Name: "Ajv", Lang: "Javascript"},
+	"ajv-bun":                 {Name: "Ajv", Lang: "Javascript (Bun)"},
+	"blaze":                   {Name: "Blaze", Lang: "C++"},
+	"boon":                    {Name: "boon", Lang: "Rust"},
+	"corvus":                  {Name: "Corvus.JsonSchema", Lang: "C\\# (generated)"},
+	"go-google":               {Name: "Google", Lang: "Golang"},
+	"go-json-schema-spec":     {Name: "json-schema-spec", Lang: "Golang"},
+	"go-kaptinlin":            {Name: "kaptinlin", Lang: "Golang"},
+	"go-katydid-auto-json":    {Name: "Katydid-comp-fused", Lang: "Golang"},
+	"go-katydid-auto-reflect": {Name: "Katydid-comp-steps", Lang: "Golang"},
+	"go-katydid-mem-json":     {Name: "Katydid-memo-fused", Lang: "Golang"},
+	"go-katydid-mem-reflect":  {Name: "Katydid-memo-steps", Lang: "Golang"},
+	"go-santhosh-tekuri":      {Name: "santhosh-tekuri", Lang: "Golang"},
+	"hyperjump":               {Name: "Hyperjump", Lang: "Javascript"},
+	"jsdotnet":                {Name: "json-everything", Lang: "C\\#"},
+	"json_schemer":            {Name: "json\\_schemer", Lang: "Ruby"},
+	"jsoncons":                {Name: "jsoncons", Lang: "C++"},
+	"jsu-c":                   {Name: "JSON Schema Utils", Lang: "C++ (generated)"},
+	"jsu-java":                {Name: "JSON Schema Utils", Lang: "Java (generated)"},
+	"jsu-js":                  {Name: "JSON Schema Utils", Lang: "Javascript (generated)"},
+	"jsu-pl":                  {Name: "JSON Schema Utils", Lang: "Perl (generated)"},
+	"jsu-py":                  {Name: "JSON Schema Utils", Lang: "Python (generated)"},
+	"jsv":                     {Name: "JSV", Lang: "Elixir"},
+	"kmp":                     {Name: "OptimumCode", Lang: "Kotlin"},
+	"networknt":               {Name: "networknt", Lang: "Java"},
+	"opis":                    {Name: "Opis", Lang: "PHP"},
+	"py-jsonschema":           {Name: "python-jsonschema", Lang: "Python"},
+	"rapidjson":               {Name: "RapidJSON", Lang: "C++"},
+	"schemasafe":              {Name: "schemasafe", Lang: "Javascript"},
+}
+
 func fprintLatex(
 	w io.Writer,
 	implss [][]*analytics.Implementation,
@@ -269,8 +306,8 @@ func fprintLatex(
 
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing included\n", getKind(implss[i]))
-		p("\\begin{tabular}{ll|ll}\n")
-		p(`\# & impl & median ns/doc & mean ns/doc \\`)
+		p("\\begin{tabular}{ll|l|ll}\n")
+		p(`\# & impl & language & median ns/doc & mean ns/doc \\`)
 		p("\n")
 		p(`\hline`)
 		p("\n")
@@ -280,7 +317,9 @@ func fprintLatex(
 		for i, impl := range impls {
 			p("%d", i)
 			p(" & ")
-			p("%s", impl.Name)
+			p("%s", implDetails[impl.Name].Name)
+			p(" & ")
+			p("%s", implDetails[impl.Name].Lang)
 			p(" & ")
 			p("%.0f", impl.MedianParsePlusWarmNsPerDoc)
 			p(" & ")
@@ -305,7 +344,9 @@ func fprintLatex(
 		for i, impl := range impls {
 			p("%d", i)
 			p(" & ")
-			p("%s", impl.Name)
+			p("%s", implDetails[impl.Name].Name)
+			p(" & ")
+			p("%s", implDetails[impl.Name].Lang)
 			p(" & ")
 			p("%.0f", impl.MedianWarmNsPerDoc)
 			p(" & ")
