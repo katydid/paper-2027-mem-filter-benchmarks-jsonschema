@@ -43,7 +43,6 @@ func main() {
 
 	exampleFolder := os.Args[1]
 	want := !strings.Contains(exampleFolder, "-invalid")
-	log.Printf("folder %q with base %s expect %v", exampleFolder, filepath.Base(exampleFolder), want)
 
 	// Construct and canonicalize file paths
 	schemaFile, err := filepath.Abs(filepath.Join(exampleFolder, "schema.json"))
