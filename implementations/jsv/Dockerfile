@@ -1,4 +1,4 @@
-FROM elixir:1.18.1-otp-27
+FROM elixir:1.20.1-otp-29
 
 RUN apt-get update -qq \
     && apt-get install -qq --no-install-recommends \
