@@ -28,7 +28,6 @@ type Line struct {
 	ColdNs         int
 	WarmNs         int
 	ParseNs        int
-	ParseTODO      bool
 	CompileNs      int
 	Memory         int
 	ExitStatus     int
@@ -85,13 +84,9 @@ func parseLine(schemas []*Schema, record []string) (*Line, error) {
 	if err != nil {
 		return nil, err
 	}
-	if record[5] != "TODO" {
-		line.ParseNs, err = strconv.Atoi(record[5])
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		line.ParseTODO = true
+	line.ParseNs, err = strconv.Atoi(record[5])
+	if err != nil {
+		return nil, err
 	}
 	line.CompileNs, err = strconv.Atoi(record[6])
 	if err != nil {
@@ -157,7 +152,6 @@ func MeanRuns(lines []*Line) []*Line {
 			ColdNs:         meanColdNs,
 			WarmNs:         meanWarmNs,
 			ParseNs:        meanParseNs,
-			ParseTODO:      line.ParseTODO,
 			CompileNs:      meanCompileNs,
 			Memory:         meanMemory,
 			ExitStatus:     line.ExitStatus,

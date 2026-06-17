@@ -10,7 +10,7 @@ import { check_model_init, check_model_map, check_model_free } from './schema.js
 export default async function main()
 {
     const options = {
-      // TODO --help --list
+      // --help --list
       'debug': { type: 'boolean', short: 'D' },
       're2': { type: 'boolean' },
       'regexp': { type: 'boolean' },

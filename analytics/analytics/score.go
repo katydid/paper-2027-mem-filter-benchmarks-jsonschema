@@ -22,7 +22,6 @@ type ScoredLine struct {
 	WarmNsPerDoc          float64
 	ColdRank              int
 	ColdNsPerDoc          float64
-	ParseTODO             bool
 	ParseNsPerDoc         float64
 	ParsePlusWarmNsPerDoc float64
 	ParsePlusWarmRank     int
@@ -74,18 +73,10 @@ func Score(lines []*Line) []*ScoredLine {
 		res[sortedColdPerDoc[i]].ColdRank = i + 1
 	}
 
-	const verySlow = float64(10e20)
 	for i := range lines {
-		res[i].ParseTODO = lines[i].ParseTODO
-		if !res[i].ParseTODO {
-			res[i].ParseNsPerDoc = float64(lines[i].ParseNs) / float64(lines[i].Schema.NumInstances)
-			res[i].ParsePlusWarmNsPerDoc = res[i].ParseNsPerDoc + res[i].WarmNsPerDoc
-			res[i].ParsePlusColdNsPerDoc = res[i].ParseNsPerDoc + res[i].ColdNsPerDoc
-		} else {
-			res[i].ParseNsPerDoc = verySlow
-			res[i].ParsePlusWarmNsPerDoc = verySlow
-			res[i].ParsePlusColdNsPerDoc = verySlow
-		}
+		res[i].ParseNsPerDoc = float64(lines[i].ParseNs) / float64(lines[i].Schema.NumInstances)
+		res[i].ParsePlusWarmNsPerDoc = res[i].ParseNsPerDoc + res[i].WarmNsPerDoc
+		res[i].ParsePlusColdNsPerDoc = res[i].ParseNsPerDoc + res[i].ColdNsPerDoc
 	}
 
 	sortedParsePlusWarm := nums(len(res))

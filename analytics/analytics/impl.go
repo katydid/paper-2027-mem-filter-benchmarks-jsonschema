@@ -35,7 +35,6 @@ type Implementation struct {
 	MeanColdRank       float64
 	MedianColdRank     float64
 
-	ParseTODO                   bool
 	MeanParsePlusWarmNsPerDoc   float64
 	MedianParsePlusWarmNsPerDoc float64
 	MeanParsePlusWarmRank       float64
@@ -142,14 +141,6 @@ func AnalyseImplementation(scores []*ScoredLine, allSchemas []string, completedS
 	res.MeanColdRank = Mean(len(scores), func(index int) float64 {
 		return float64(scores[index].ColdRank)
 	})
-
-	hasParseTODO := false
-	for i := range scores {
-		if scores[i].ParseTODO {
-			hasParseTODO = true
-		}
-	}
-	res.ParseTODO = hasParseTODO
 
 	res.MedianParsePlusWarmNsPerDoc = MedianFloat(len(scores), func(index int) float64 {
 		return scores[index].ParsePlusWarmNsPerDoc
