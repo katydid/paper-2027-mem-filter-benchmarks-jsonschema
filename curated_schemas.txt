@@ -29,7 +29,6 @@ example-userprofile-valid
 fabric-mod
 geojson
 gitpod-configuration
-helm-chart-lock
 importmap
 jasmine
 jsck-complex-invalid

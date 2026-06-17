@@ -103,7 +103,8 @@ We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
 * we have totally excluded schemas that use `dynamicRef`: `cql2` and `openapi`.
 * we have removed `cspell`, since the following implementations all have problems with it: boon, go-kaptinlin, go-santhosh-tekuri, json_schemer and kmp. One problem is for using Perl syntax regexes `(?=`.
 * we have removed `ui5-manifest`, since the following implementations all have problems with it: ajv, ajv-bun, boon, go-kaptinlin, go-santhosh-tekuri, hyperjump, networknt. One problem is for using Perl syntax regexes `(?=`.
-* we have removed `krakend`, since the following implementaionts all have problems with it: ajv, ajv-bun, hyperjump, networknt.  One problem is for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`.
+* we have removed `krakend`, since the following implementations all have problems with it: ajv, ajv-bun, hyperjump, networknt.  One problem is for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`.
+* we have removed `helm-chart-lock` since the following implementations all have problems with it: [jsu-py, jsu-java](https://github.com/clairey-zx81/json-model/issues/5), [opis](https://github.com/opis/json-schema/issues/166), [json-everything](https://github.com/json-everything/json-everything/issues/1043).
 
 ### Shortcomings of document generator
 
