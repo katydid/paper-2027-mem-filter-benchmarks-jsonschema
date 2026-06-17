@@ -8,7 +8,7 @@ github.com/katydid/parser-go-reflect v0.3.3 h1:SnD0KG5QW03hTzdvs6HfKE67XWSJ7ynfc
 github.com/katydid/parser-go-reflect v0.3.3/go.mod h1:3+IIyYwoamoGO4nTqcRVAzt9pqm4PdnjmEyp+A+/h4A=
 github.com/katydid/validator-go v0.6.5-0.20260617072152-1a78a2f81a19 h1:cbuKR6qGkVlPUNtkfc5+bCGq0F1gbkwhqeQrD4zcxZw=
 github.com/katydid/validator-go v0.6.5-0.20260617072152-1a78a2f81a19/go.mod h1:h4xDyd4wqR0vHTxsWxJvLo3OheRk0e/KVBKPyc0YNZA=
-github.com/katydid/validator-go-jsonschema v0.0.0-20260617090946-1bdd28620d7c h1:vzjn8DG/PczBPsLMdr+0hvU6pYq0fTF4qKFMXd8kjDA=
-github.com/katydid/validator-go-jsonschema v0.0.0-20260617090946-1bdd28620d7c/go.mod h1:DKMLcznQhV8/H78F0rRy3lLv+5XfXePpotbEHtGSuQk=
+github.com/katydid/validator-go-jsonschema v0.0.0-20260617112544-8e19207da820 h1:Gs26NYZkk4X6hkI785+vzsOwHRqC5N/08OcP42RpiA4=
+github.com/katydid/validator-go-jsonschema v0.0.0-20260617112544-8e19207da820/go.mod h1:DKMLcznQhV8/H78F0rRy3lLv+5XfXePpotbEHtGSuQk=
 github.com/qri-io/jsonpointer v0.1.1 h1:prVZBZLL6TW5vsSB9fFHFAMBLI4b0ri5vribQlTJiBA=
 github.com/qri-io/jsonpointer v0.1.1/go.mod h1:DnJPaYgiKu56EuDp8TU5wFLdZIcAnb/uH9v37ZaMV64=
