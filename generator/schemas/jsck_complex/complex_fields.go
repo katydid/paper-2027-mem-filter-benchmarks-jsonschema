@@ -149,7 +149,7 @@ func (o *randAddress) Right(r rand.Rand) string {
 }
 
 func (o *randAddress) Wrong(r rand.Rand) string {
-	l := 34 + r.Intn(5) - 2 // maybe vary the length
+	l := 34 + 4 - r.Intn(9) // maybe vary the length
 	ss := make([]rune, l)
 	wrongIndex := r.Intn(l)
 	for i := range l {
@@ -162,7 +162,7 @@ func (o *randAddress) Wrong(r rand.Rand) string {
 			ss[i] = '0' + rune(r.Intn(10))
 		}
 		if wrongIndex == i {
-			ss[i] = '"'
+			ss[i] = '_'
 		}
 	}
 	return strconv.Quote(string(ss))
@@ -193,7 +193,7 @@ func (o *randTxID) Right(r rand.Rand) string {
 }
 
 func (o *randTxID) Wrong(r rand.Rand) string {
-	l := 64 + r.Intn(5) - 2 // maybe vary the length
+	l := 64 + 4 - r.Intn(9) // maybe vary the length
 	ss := make([]rune, l)
 	wrongIndex := r.Intn(l)
 	for i := range l {
@@ -206,7 +206,7 @@ func (o *randTxID) Wrong(r rand.Rand) string {
 			ss[i] = '0' + rune(r.Intn(10))
 		}
 		if wrongIndex == i {
-			ss[i] = '"'
+			ss[i] = '_'
 		}
 	}
 	return strconv.Quote(string(ss))
@@ -237,7 +237,7 @@ func (o *randSignature) Right(r rand.Rand) string {
 }
 
 func (o *randSignature) Wrong(r rand.Rand) string {
-	l := 128 + r.Intn(5) - 2 // maybe vary the length
+	l := 128 + 4 - r.Intn(9) // maybe vary the length
 	ss := make([]rune, l)
 	wrongIndex := r.Intn(l)
 	for i := range l {
@@ -250,7 +250,7 @@ func (o *randSignature) Wrong(r rand.Rand) string {
 			ss[i] = '0' + rune(r.Intn(10))
 		}
 		if wrongIndex == i {
-			ss[i] = '"'
+			ss[i] = '_'
 		}
 	}
 	return strconv.Quote(string(ss))
