@@ -326,7 +326,7 @@ func genWrong(r rand.Rand, gen randjsonschema.Rand, validator *jsonschema.Schema
 	s := gen.Wrong(r)
 	v, err := isValid(validator, []byte(s))
 	if err != nil {
-		panic(err)
+		panic(fmt.Sprintf("got err: %v for input: %s", err, s))
 	}
 	if v {
 		log.Fatalf("regenerating, since we expected invalid for %s", s)

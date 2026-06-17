@@ -16,7 +16,6 @@ package randjsonschema
 
 import "github.com/katydid/validator-jsonschema-benchmarks/generator/rand"
 
-// TODO add more valid extensions.
 var extensions = []string{"com", "org", "co.uk", "co.za"}
 
 func randExtension(r rand.Rand) string {

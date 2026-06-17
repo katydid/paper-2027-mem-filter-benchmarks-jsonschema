@@ -34,8 +34,5 @@ func (o *randIPv4) Right(r rand.Rand) string {
 
 func (o *randIPv4) Wrong(r rand.Rand) string {
 	s := strconv.Quote(randId(r, 20))
-	for strings.Contains(s, ".") {
-		s = strconv.Quote(randId(r, 20))
-	}
-	return s
+	return strings.Replace(s, ".", "@", -1)
 }

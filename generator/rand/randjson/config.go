@@ -50,7 +50,7 @@ func newConfig(opts ...Option) *config {
 		numberEdgeCaseOdds: 100,
 		maxSpaces:          5,
 		easyStrings:        true, // TODO make this false, but currently lots of engines struggle with unicode
-		noNewlines:         true, // TODO make this more configurable, but this is the default for now to support the jsonl format.
+		noNewlines:         true, // This is to support jsonl format and implementations being able to naively split .jsonl files on newline.
 		easyFloats:         true, // TODO make these false by default. This is currently true since not all engines support large numbers. For example blaze struggles with `{"extendedAddress":"4Bj","region":"7qc0B1","postOfficeBox":"T1Q7C4","streetAddress":"6\udD74H38tHlS","countryName":"3","locality":"B"}`.
 	}
 	// apply options
