@@ -1594,7 +1594,6 @@
     "meta/main.yml"
   ],
   "properties": {
-    "additionalProperties": false,
     "allow_duplicates": {
       "title": "Allow Duplicates",
       "type": "boolean"
