@@ -8,7 +8,9 @@ RUN apt update ; \
     apt upgrade -y ; \
     apt install -y --no-install-recommends --fix-missing \
         python3 python-is-python3 python3-venv python3-pip git \
-        time jq curl vim ca-certificates
+        time jq curl vim ca-certificates \
+        perl \
+        libre-engine-re2-perl libjson-maybexs-perl libcpanel-json-xs-perl libdatetime-hires-perl
 
 # install this version from source
 ARG JMC=dev
@@ -25,10 +27,6 @@ RUN pip install --break-system-packages "git+https://github.com/zx80/json-schema
 
 RUN echo "export JSU_RUNTIME=$(jsu-compile --runtime)" > .env
 
-# perl-specific setup
-RUN apt install -y --no-install-recommends --fix-missing \
-        perl \
-        libre-engine-re2-perl libjson-maybexs-perl libcpanel-json-xs-perl libdatetime-hires-perl
 RUN echo 'export PERLLIB=$JSU_RUNTIME/pl/lib' >> .env
 
 COPY . .

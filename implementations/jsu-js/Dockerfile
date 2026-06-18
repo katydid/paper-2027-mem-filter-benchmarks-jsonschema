@@ -4,11 +4,15 @@ LABEL description="JSON Schema Utils Compiler Setup for Benchmarking with JavaSc
 RUN mkdir -p /app
 WORKDIR /app
 
+ARG nodejs=stable
+ARG nre2=
+
 RUN apt update ; \
     apt upgrade -y ; \
     apt install -y --no-install-recommends --fix-missing \
         python3 python-is-python3 python3-venv python3-pip git \
-        time jq curl vim ca-certificates
+        time jq curl vim ca-certificates \
+        libatomic1
 
 # install this version from source
 ARG JMC=dev
@@ -26,9 +30,6 @@ RUN pip install --break-system-packages "git+https://github.com/zx80/json-schema
 RUN echo "export JSU_RUNTIME=$(jsu-compile --runtime)" > .env
 
 # javascript specifc setup, nodejs >= 20.0.0
-ARG nodejs=stable
-ARG nre2=
-RUN apt install libatomic1
 ENV NVM_DIR=/usr/local/nvm
 RUN mkdir -p $NVM_DIR
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash

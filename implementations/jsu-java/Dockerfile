@@ -8,11 +8,12 @@ RUN apt update ; \
     apt upgrade -y ; \
     apt install -y --no-install-recommends --fix-missing \
         python3 python-is-python3 python3-venv python3-pip git \
-        time jq curl vim ca-certificates
+        time jq curl vim ca-certificates \
+        openjdk-21-jdk maven
 
 # install this version from source
 ARG JMC=dev
-ARG JSU=dev
+ARG JSU=dev        
 
 # version caching and force install, otherwise it would require a virtual environment
 RUN curl -s "https://api.github.com/repos/clairey-zx81/json-model/commits/${JMC}" | \
@@ -25,9 +26,6 @@ RUN pip install --break-system-packages "git+https://github.com/zx80/json-schema
 
 RUN echo "export JSU_RUNTIME=$(jsu-compile --runtime)" > .env
 
-# java-specific setup
-RUN apt install -y --no-install-recommends --fix-missing \
-        openjdk-21-jdk maven
 RUN . /app/.env && cd $JSU_RUNTIME/java && mvn install
 RUN echo -n "export CLASSPATH=/workspace:" >> .env
 RUN find / -type f -name '*.jar' -print | \
