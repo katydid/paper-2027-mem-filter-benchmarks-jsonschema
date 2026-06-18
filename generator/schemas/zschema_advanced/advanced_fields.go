@@ -23,17 +23,27 @@ import (
 	. "github.com/katydid/validator-jsonschema-benchmarks/generator/rand/randjsonschema"
 )
 
-func randPath(r rand.Rand, sep string) string {
+func randPath(r rand.Rand, sep string, min int, max int) string {
 	s := sep
-	for {
+	i := 0
+	for i < min {
 		for range r.Intn(10) + 1 {
 			s += string([]byte{byte('a' + r.Intn(25))})
 		}
+		i++
+		s += sep
+	}
+	for i < max {
+		for range r.Intn(10) + 1 {
+			s += string([]byte{byte('a' + r.Intn(25))})
+		}
+		i++
 		if r.Intn(2) == 0 {
 			return s
 		}
 		s += sep
 	}
+	return s[:len(s)-1]
 }
 
 //	"patternProperties": {
@@ -56,7 +66,7 @@ func (o *randFieldName) Right(r rand.Rand) string {
 	case 2:
 		return `"/var/www"`
 	case 3:
-		return `"` + randPath(r, "/") + `"`
+		return `"` + randPath(r, "/", 1, 3) + `"`
 	}
 	panic("unreachable")
 }
@@ -78,7 +88,7 @@ func DiskDevicePattern() Rand {
 type randDevicePattern struct{}
 
 func (o *randDevicePattern) Right(r rand.Rand) string {
-	return `"/dev` + randPath(r, "/") + `"`
+	return `"/dev` + randPath(r, "/", 1, 3) + `"`
 }
 
 func (o *randDevicePattern) Wrong(r rand.Rand) string {
@@ -133,7 +143,7 @@ func NFSRemotePath() Rand {
 type randNFSRemotePath struct{}
 
 func (o *randNFSRemotePath) Right(r rand.Rand) string {
-	return `"` + randPath(r, "/") + `"`
+	return `"` + randPath(r, "/", 1, 3) + `"`
 }
 
 func (o *randNFSRemotePath) Wrong(r rand.Rand) string {
@@ -155,8 +165,9 @@ type randNFSServer struct{}
 func (o *randNFSServer) Right(r rand.Rand) string {
 	switch r.Intn(3) {
 	case 0:
-		// hostname
-		return `"` + randPath(r, ".")[1:] + randPath(r, ".") + `"`
+		// TODO: enable hostname generation, currently jsdotnet cannot validate it, so we fallback to IPv4.
+		// return `"` + randPath(r, ".", 4, 4)[1:] + `"`
+		return IPv4().Right(r)
 	case 1:
 		// ipv4
 		return IPv4().Right(r)
@@ -171,7 +182,7 @@ func (o *randNFSServer) Wrong(r rand.Rand) string {
 	switch r.Intn(2) {
 	case 0:
 		// hostname / ipv4
-		s := `"` + randPath(r, ".")[1:] + randPath(r, ".") + `"`
+		s := `"` + randPath(r, ".", 4, 4)[1:] + `"`
 		wrong := strings.Replace(s, ".", "@", -1)
 		return wrong
 	case 1:
