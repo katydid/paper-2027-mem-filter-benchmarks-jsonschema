@@ -4,7 +4,7 @@ go 1.26.3
 
 require (
 	github.com/katydid/parser-go-json v0.5.6
-	github.com/katydid/validator-go-jsonschema v0.0.0-20260618152542-4ffb06de6b80
+	github.com/katydid/validator-go-jsonschema v0.0.0-20260618175030-4f5bbbbedf17
 )
 
 require (
