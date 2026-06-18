@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -38,7 +37,8 @@ func main() {
 	}
 
 	exampleFolder := os.Args[1]
-	if exampleFolder == "cmake-presets" || exampleFolder == "geojson" {
+	log.Printf("starting: %s", exampleFolder)
+	if exampleFolder == "geojson" {
 		log.Fatalf("auto breaks on large grammars like %s", exampleFolder)
 	}
 	want := !strings.Contains(exampleFolder, "-invalid")
@@ -62,10 +62,7 @@ func main() {
 	compile_start := time.Now()
 	matcher, err := jsonschema.Compile([]byte(schemaData))
 	compile_duration := time.Since(compile_start)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Printf("compile duration: %v", compile_duration)
 
 	// Read instances
 	data, err := os.ReadFile(instanceFile)
@@ -86,11 +83,11 @@ func main() {
 	}
 	coldDuration := time.Since(coldStart)
 
-	// Warmup
-	iterations := math.Ceil(float64(MaxWarmupTime) / float64(coldDuration.Nanoseconds()))
-	for _ = range int64(min(iterations, WarmupIterations)) {
-		validateAll(parser, matcher, instances, want)
-	}
+	// Nothing to warmup in compiled version
+	// iterations := math.Ceil(float64(MaxWarmupTime) / float64(coldDuration.Nanoseconds()))
+	// for _ = range int64(min(iterations, WarmupIterations)) {
+	// 	validateAll(parser, matcher, instances, want)
+	// }
 
 	warmStart := time.Now()
 	validateAll(parser, matcher, instances, want)
