@@ -343,7 +343,16 @@ func randHex(r rand.Rand) string {
 
 // ws := "" | '0020' ws | '000A' ws | '000D' ws | '0009' ws
 func randWs(r rand.Rand, c *config) string {
-	l := r.Intn(c.maxSpaces)
+	// skew towards a single or no space
+	noSpace := 100
+	singleSpace := 50
+	l := r.Intn(noSpace + singleSpace + c.maxSpaces)
+	if l < noSpace {
+		return ""
+	} else if l < noSpace+singleSpace {
+		return string(randW(r, c))
+	}
+	l = l - (noSpace + singleSpace)
 	ss := make([]rune, l)
 	for i := 0; i < l; i++ {
 		ss[i] = randW(r, c)

@@ -38,9 +38,6 @@ func main() {
 
 	exampleFolder := os.Args[1]
 	log.Printf("starting: %s", exampleFolder)
-	if exampleFolder == "geojson" {
-		log.Fatalf("auto breaks on large grammars like %s", exampleFolder)
-	}
 	want := !strings.Contains(exampleFolder, "-invalid")
 
 	// Construct and canonicalize file paths
