@@ -46,8 +46,8 @@ func main() {
 	num := flag.Int("num", -1, "number of random json lines to generate (defaults to the number of items in the valid instances.jsonl)")
 	addFields := flag.Bool("addFields", true, "when mutating also add consider adding fields to objects")
 	rmFields := flag.Bool("rmFields", true, "when mutating also add consider removing fields from objects")
-	addItems := flag.Bool("addItems", false, "when mutating also add consider adding items to arrays")
-	rmItems := flag.Bool("rmItems", false, "when mutating also add consider removing items from arrays")
+	addItems := flag.Bool("addItems", true, "when mutating also add consider adding items to arrays")
+	rmItems := flag.Bool("rmItems", true, "when mutating also add consider removing items from arrays")
 	flag.Parse()
 	args := flag.Args()
 	if len(args) == 0 {
@@ -180,7 +180,7 @@ func mutatePoint(c *config, r rand.Rand, a any, p *int) any {
 				}
 				*p = *p - 1
 			}
-			if c.rmFields {
+			if c.rmFields && len(t) > 0 {
 				if *p == 0 {
 					k := keys[r.Intn(len(keys))]
 					delete(t, k)
@@ -202,7 +202,7 @@ func mutatePoint(c *config, r rand.Rand, a any, p *int) any {
 			}
 			*p = *p - 1
 		}
-		if c.rmItems {
+		if c.rmItems && len(t) > 0 {
 			if *p == 0 {
 				index := r.Intn(len(t))
 				t = slices.Delete(t, index, index)
