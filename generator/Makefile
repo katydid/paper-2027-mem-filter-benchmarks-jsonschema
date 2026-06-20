@@ -15,7 +15,6 @@
 generate:
 	go run ./cmd/generator -seed=123456 -num=10000 ../schemas/
 
-# draft-04-rmUniqueItems-invalid: limit generation to 500 instances to avoid issues with go-kaptinlin. https://github.com/kaptinlin/jsonschema/issues/120
 # jsconfig-rmUniqueItems-invalid: limit generation to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # importmap-invalid: limit generation to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # ui5-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/8
@@ -30,7 +29,7 @@ mutate:
 	((rm -rf ../schemas/cypress-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/cypress)
 	((rm -rf ../schemas/deno-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/deno-rmUniqueItems)
 	((rm -rf ../schemas/dependabot-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/dependabot)
-	((rm -rf ../schemas/draft-04-rmUniqueItems-invalid || true) && go run ./cmd/mutator -addFields=false -rmFields=false -addItems=false -rmItems=false -num=500 -seed=123456 ../schemas/draft-04-rmUniqueItems)
+	((rm -rf ../schemas/draft-04-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/draft-04-rmUniqueItems)
 	((rm -rf ../schemas/fabric-mod-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/fabric-mod)
 	((rm -rf ../schemas/geojson-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/geojson)
 	((rm -rf ../schemas/gitpod-configuration-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/gitpod-configuration)

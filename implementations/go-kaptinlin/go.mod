@@ -2,7 +2,7 @@ module implementations/go-kaptinlin
 
 go 1.26.4
 
-require github.com/kaptinlin/jsonschema v0.9.0
+require github.com/kaptinlin/jsonschema v0.9.2
 
 require (
 	github.com/go-json-experiment/json v0.0.0-20260601182631-00ed12fed2a6 // indirect
