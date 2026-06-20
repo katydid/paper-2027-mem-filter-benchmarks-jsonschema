@@ -45,7 +45,7 @@ func main() {
 	seed := flag.Int64("seed", time.Now().UnixNano(), "seed for random generator (defaults to now)")
 	num := flag.Int("num", -1, "number of random json lines to generate (defaults to the number of items in the valid instances.jsonl)")
 	addFields := flag.Bool("addFields", true, "when mutating also add consider adding fields to objects")
-	rmFields := flag.Bool("rmFields", false, "when mutating also add consider removing fields from objects")
+	rmFields := flag.Bool("rmFields", true, "when mutating also add consider removing fields from objects")
 	addItems := flag.Bool("addItems", false, "when mutating also add consider adding items to arrays")
 	rmItems := flag.Bool("rmItems", false, "when mutating also add consider removing items from arrays")
 	flag.Parse()

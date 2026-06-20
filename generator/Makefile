@@ -18,6 +18,7 @@ generate:
 # jsconfig-rmUniqueItems-invalid: limit generation to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # importmap-invalid: limit generation to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # ui5-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/8
+# deno-rmUniqueItems-invalid: do not add fields to avoid issues with networknt.
 
 mutate:
 	((rm -rf ../schemas/ansible-meta-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/ansible-meta)
@@ -27,7 +28,7 @@ mutate:
 	((rm -rf ../schemas/cmake-presets-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/cmake-presets)
 	((rm -rf ../schemas/code-climate-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/code-climate)
 	((rm -rf ../schemas/cypress-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/cypress)
-	((rm -rf ../schemas/deno-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/deno-rmUniqueItems)
+	((rm -rf ../schemas/deno-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 -addFields=false ../schemas/deno-rmUniqueItems)
 	((rm -rf ../schemas/dependabot-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/dependabot)
 	((rm -rf ../schemas/draft-04-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/draft-04-rmUniqueItems)
 	((rm -rf ../schemas/fabric-mod-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/fabric-mod)
