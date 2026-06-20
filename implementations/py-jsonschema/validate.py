@@ -3,6 +3,7 @@ import json
 import os
 import pathlib
 import sys
+import logging
 import time
 
 import jsonschema
@@ -11,7 +12,13 @@ WARMUP_ITERATIONS = 1000
 MAX_WARMUP_TIME = 1e9 * 10
 
 if __name__ == "__main__":
+
+    logging.basicConfig()
+    log = logging.getLogger("py-jsonschema")
+    log.setLevel(logging.DEBUG)
+
     example_dir = pathlib.Path(sys.argv[1])
+    log.debug(example_dir)
     schema = json.load(open(example_dir / "schema.json"))
     want = not ("-invalid" in example_dir.__str__())
     lines = open(example_dir / "instances.jsonl").readlines()

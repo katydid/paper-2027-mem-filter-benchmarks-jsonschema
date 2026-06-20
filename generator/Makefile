@@ -15,10 +15,11 @@
 generate:
 	go run ./cmd/generator -seed=123456 -num=10000 ../schemas/
 
-# jsconfig-rmUniqueItems-invalid: limit generation to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
-# importmap-invalid: limit generation to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
-# ui5-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/8
-# deno-rmUniqueItems-invalid: do not add fields to avoid issues with networknt.
+# TODO fix jsconfig-rmUniqueItems-invalid: generation is limited to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
+# TODO fix importmap-invalid: generation is limited to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
+# TODO fix ui5-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/8
+# TODO fix deno-rmUniqueItems-invalid: fields are not added to avoid issues with networknt.
+# TODO fix vercel-invalid: jsu-c, jsu-java, jsu-js, jsu-py items are not added or removed to avoid issues with jsu
 
 mutate:
 	((rm -rf ../schemas/ansible-meta-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/ansible-meta)
@@ -50,5 +51,5 @@ mutate:
 	((rm -rf ../schemas/tmuxinator-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/tmuxinator)
 	((rm -rf ../schemas/ui5-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/ui5)
 	((rm -rf ../schemas/unreal-engine-uproject-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/unreal-engine-uproject-rmUniqueItems)
-	((rm -rf ../schemas/vercel-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/vercel)
+	((rm -rf ../schemas/vercel-invalid || true) && go run ./cmd/mutator -seed=123456 -rmItems=false -addItems=false ../schemas/vercel)
 	((rm -rf ../schemas/yamllint-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/yamllint)
