@@ -18,7 +18,6 @@ generate:
 # draft-04-rmUniqueItems-invalid: limit generation to 500 instances to avoid issues with go-kaptinlin. https://github.com/kaptinlin/jsonschema/issues/120
 # jsconfig-rmUniqueItems-invalid: limit generation to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # importmap-invalid: limit generation to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
-# fabric-mod-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/9
 # ui5-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/8
 
 mutate:

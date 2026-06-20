@@ -1,0 +1,5 @@
+Struggles with the following schemas:
+* helm-chart-lock https://github.com/opis/json-schema/issues/166
+* dependabot-invalid
+* jasmine-invalid
+* unreal-engine-uproject-rmUniqueItems-invalid

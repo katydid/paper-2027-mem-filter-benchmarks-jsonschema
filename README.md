@@ -41,8 +41,8 @@ A summary of these implementations is given below:
 - [blaze](./implementations/blaze/) (C++) (returns bool)
 - [boon](./implementations/boon/) (Rust) (returns Result)
 - [corvus](./implementations/corvus/) (generated C#) (returns Result)
-- [go-google](./implementations/go-google/) (Go) (returns error) (ignored)
-- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go) (returns error) (ignored)
+- [go-google](./implementations/go-google/) (Go) (returns error) ([ignored](./implementations/go-google/.benchmark-ignore))
+- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go) (returns error) ([ignored](./implementations/go-json-schema-spec/.benchmark-ignore))
 - [go-kaptinlin](./implementations/go-kaptinlin/) (Go) (returns error)
 - [go-katydid-auto-json](./implementations/go-katydid-auto-json/) (Go)  (returns bool)
 - [go-katydid-auto-reflect](./implementations/go-katydid-auto-reflect/) (Go)  (returns bool)
@@ -56,26 +56,15 @@ A summary of these implementations is given below:
 - [jsu-c](./implementations/jsu-c/) (generated C) (returns bool, optionally can report errors)
 - [jsu-java](./implementations/jsu-java/) (generated Java) (returns bool)
 - [jsu-js](./implementations/jsu-js/) (generated JS) (returns bool, optionally can report errors)
-- [jsu-pl](./implementations/jsu-pl/) (generated Perl) (ignored)
+- [jsu-pl](./implementations/jsu-pl/) (generated Perl) ([ignored](./implementations/jsu-pl/.benchmark-ignore))
 - [jsu-py](./implementations/jsu-py/) (generated Python) (returns bool, optionally can report errors)
 - [JSV](./implementations/jsv) (Elixir) (returns Result)
 - [kmp](./implementations/kmp) (Kotlin) (returns bool, optionally can return report errors)
 - [networknt](./implementations/networknt/) (Java) (returns bool, optionally can return result)
-- [opis](./implementations/opis/) (PHP) (returns Result)
+- [opis](./implementations/opis/) (PHP) (returns Result) ([ignored](./implementations/opis/.benchmark-ignore))
 - [py-jsonschema](./implementations/py-jsonschema/) (Python) (returns bool)
-- [rapidjson](./implementations/rapidjson/) (C++) (returns bool) (ignored)
-- [schemasafe](./implementations/schemasafe/) (JS) (returns bool) (ignored)
-
-Compared to the original [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) the following libraries were added: 
-
-- [go-google](./implementations/go-google/) (Go) (ignored)
-- [go-json-schema-spec](./implementations/go-json-schema-spec/) (Go) (ignored)
-- [go-kaptinlin](./implementations/go-kaptinlin/) (Go)
-- [go-katydid-auto-json](./implementations/go-katydid-auto-json/) (Go)
-- [go-katydid-mem-json](./implementations/go-katydid-mem-json/) (Go)
-- [go-katydid-auto-reflect](./implementations/go-katydid-auto-reflect/) (Go)
-- [go-katydid-mem-reflect](./implementations/go-katydid-mem-reflect/) (Go)
-- [rapidjson](./implementations/rapidjson/) (C++) (ignored)
+- [rapidjson](./implementations/rapidjson/) (C++) (returns bool) ([ignored](./implementations/rapidjson/.benchmark-ignore))
+- [schemasafe](./implementations/schemasafe/) (JS) (returns bool) ([ignored](./implementations/schemasafe/.benchmark-ignore))
 
 Each implementation is run via Docker.
 First, a Docker container is built with all the necessary dependencies.
@@ -97,15 +86,15 @@ Some schemas had a collection of instances gathered from github, which are mutat
 The rest we can regenerate valid and invalid instances for by running: `make generate`.
 
 We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
-* schemas with `uniqueItems` have been removed and replaced with schemes where `uniqueItems` have been removed from the schema,
-* we have totally excluded schemas that use `dynamicRef`: `cql2` and `openapi`.
-* we have removed `cspell`, since the following implementations all have problems with it: boon, go-kaptinlin, go-santhosh-tekuri, json_schemer and kmp. One problem is for using Perl syntax regexes `(?=`.
-* we have removed `ui5-manifest`, since the following implementations all have problems with it: ajv, ajv-bun, boon, go-kaptinlin, go-santhosh-tekuri, hyperjump, networknt. One problem is for using Perl syntax regexes `(?=`.
-* we have removed `krakend`, since the following implementations all have problems with it: ajv, ajv-bun, hyperjump, networknt.  One problem is for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`.
-* we have removed `helm-chart-lock` since the following implementations all have problems with it: [jsu-py, jsu-java](https://github.com/clairey-zx81/json-model/issues/5), [opis](https://github.com/opis/json-schema/issues/166), [jsdotnet](https://github.com/json-everything/json-everything/issues/1043).
+* Schemas with `uniqueItems` have been removed and replaced with schemes where `uniqueItems` have been removed from the schema, because katydid cannot handle uniqueItems;
+* We have totally excluded schemas that use `dynamicRef`, which are the `cql2` and `openapi` schemas.
+* We have removed `cspell`, since the following implementations all have problems with it: boon, go-kaptinlin, go-santhosh-tekuri, json_schemer and kmp. One problem is for using Perl syntax regexes `(?=`.
+* We have removed `ui5-manifest`, since the following implementations all have problems with it: ajv, ajv-bun, boon, go-kaptinlin, go-santhosh-tekuri, hyperjump, networknt. One problem is for using Perl syntax regexes `(?=`.
+* We have removed `krakend`, since the following implementations all have problems with it: ajv, ajv-bun, hyperjump, networknt.  One problem is for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`.
+* We have removed `helm-chart-lock` since the following implementations all have problems with it: [jsu-py, jsu-java](https://github.com/clairey-zx81/json-model/issues/5), [opis](https://github.com/opis/json-schema/issues/166), [jsdotnet](https://github.com/json-everything/json-everything/issues/1043).
 
 ### Shortcomings of document generator
 
 * Lots of libraries do not support unicode strings properly, so random generation of documents has been limited to ascii strings.
 * Since we using JSONL for documents, we do not generate newlines in strings.
-* Number generation has been limited to 64 bit floats.
+* Number generation has been limited to 64 bit floats for the generator and ints for the mutator, to avoid issues some implementations we having.

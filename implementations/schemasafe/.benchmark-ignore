@@ -1,1 +1,5 @@
-It does not support the following schemas: cmake-presets, dependabot, ui5, vercel. https://github.com/ExodusOSS/schemasafe/issues/190
+It does not support the following schemas https://github.com/ExodusOSS/schemasafe/issues/190 : 
+* cmake-presets
+* dependabot
+* ui5
+* vercel 
