@@ -16,7 +16,6 @@ generate:
 	go run ./cmd/generator -seed=123456 -num=10000 ../schemas/
 
 # draft-04-rmUniqueItems-invalid: limit generation to 500 instances to avoid issues with go-kaptinlin. https://github.com/kaptinlin/jsonschema/issues/120
-# vercel-invalid: (update blaze to get fixes) limit generation and change seed to avoid issues with blaze. https://github.com/sourcemeta/blaze/issues/878
 # jsconfig-rmUniqueItems-invalid: limit generation to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # importmap-invalid: limit generation to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # fabric-mod-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/9
@@ -52,5 +51,5 @@ mutate:
 	((rm -rf ../schemas/tmuxinator-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/tmuxinator)
 	((rm -rf ../schemas/ui5-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/ui5)
 	((rm -rf ../schemas/unreal-engine-uproject-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/unreal-engine-uproject-rmUniqueItems)
-	((rm -rf ../schemas/vercel-invalid || true) && go run ./cmd/mutator -seed=1 -num=500 ../schemas/vercel)
+	((rm -rf ../schemas/vercel-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/vercel)
 	((rm -rf ../schemas/yamllint-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/yamllint)

@@ -10,8 +10,8 @@ ARG nre2=
 RUN apt update ; \
     apt upgrade -y ; \
     apt install -y --no-install-recommends --fix-missing \
-        python3 python-is-python3 python3-venv python3-pip git \
-        time jq curl vim ca-certificates \
+        python3 python-is-python3 python3-venv python3-pip \
+        git time jq curl vim ca-certificates \
         libatomic1
 
 # install this version from source

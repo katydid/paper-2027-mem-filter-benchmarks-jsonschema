@@ -14,18 +14,16 @@ import (
 	jsonschema "github.com/kaptinlin/jsonschema"
 )
 
-// Does not support: "dependencies"
-
 const WarmupIterations = 1000
 const MaxWarmupTime = 10_000_000_000
 
 func validateAll(instances []any, sch *jsonschema.Schema, want bool) error {
 	var result error
 	for i := range instances {
-		err := sch.Validate(instances[i])
-		if want && !err.IsValid() {
-			result = err
-		} else if !want && err.IsValid() {
+		res := sch.Validate(instances[i])
+		if want && !res.IsValid() {
+			result = fmt.Errorf("%v", res)
+		} else if !want && res.IsValid() {
 			result = fmt.Errorf("expected invalid, but got valid at line %d", i+1)
 		}
 	}
