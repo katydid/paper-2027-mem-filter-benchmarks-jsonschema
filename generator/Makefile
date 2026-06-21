@@ -18,7 +18,7 @@ generate:
 # TODO fix jsconfig-rmUniqueItems-invalid: generation is limited to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # TODO fix importmap-invalid: generation is limited to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # TODO fix deno-rmUniqueItems-invalid: fields are not added to avoid issues with networknt.
-# TODO fix vercel-invalid: jsu-c, jsu-java, jsu-js, jsu-py items are not added or removed to avoid issues with jsu
+# TODO fix vercel-invalid: jsu-c, jsu-java, jsu-js, jsu-py: https://github.com/clairey-zx81/json-model/issues/10
 
 mutate:
 	((rm -rf ../schemas/ansible-meta-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/ansible-meta)
@@ -50,5 +50,5 @@ mutate:
 	((rm -rf ../schemas/tmuxinator-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/tmuxinator)
 	((rm -rf ../schemas/ui5-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/ui5)
 	((rm -rf ../schemas/unreal-engine-uproject-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/unreal-engine-uproject-rmUniqueItems)
-	((rm -rf ../schemas/vercel-invalid || true) && go run ./cmd/mutator -seed=123456 -rmItems=false -addItems=false ../schemas/vercel)
+	((rm -rf ../schemas/vercel-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/vercel)
 	((rm -rf ../schemas/yamllint-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/yamllint)
