@@ -15,9 +15,6 @@
 generate:
 	go run ./cmd/generator -seed=123456 -num=10000 ../schemas/
 
-# TODO fix jsconfig-rmUniqueItems-invalid: generation is limited to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
-# TODO fix importmap-invalid: generation is limited to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
-# TODO fix deno-rmUniqueItems-invalid: fields are not added to avoid issues with networknt.
 # TODO fix vercel-invalid: jsu-c, jsu-java, jsu-js, jsu-py: https://github.com/clairey-zx81/json-model/issues/10
 
 mutate:
@@ -28,15 +25,15 @@ mutate:
 	((rm -rf ../schemas/cmake-presets-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/cmake-presets)
 	((rm -rf ../schemas/code-climate-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/code-climate)
 	((rm -rf ../schemas/cypress-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/cypress)
-	((rm -rf ../schemas/deno-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 -addFields=false ../schemas/deno-rmUniqueItems)
+	((rm -rf ../schemas/deno-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/deno-rmUniqueItems)
 	((rm -rf ../schemas/dependabot-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/dependabot)
 	((rm -rf ../schemas/draft-04-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/draft-04-rmUniqueItems)
 	((rm -rf ../schemas/fabric-mod-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/fabric-mod)
 	((rm -rf ../schemas/geojson-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/geojson)
 	((rm -rf ../schemas/gitpod-configuration-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/gitpod-configuration)
-	((rm -rf ../schemas/importmap-invalid || true) && go run ./cmd/mutator -seed=123456 -addFields=false -rmFields=false -addItems=false -rmItems=false -num=500 ../schemas/importmap)
+	((rm -rf ../schemas/importmap-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/importmap)
 	((rm -rf ../schemas/jasmine-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/jasmine)
-	((rm -rf ../schemas/jsconfig-rmUniqueItems-invalid || true) && go run ./cmd/mutator -addFields=false -rmFields=false -addItems=false -rmItems=false -num=400 -seed=123456 ../schemas/jsconfig-rmUniqueItems)
+	((rm -rf ../schemas/jsconfig-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/jsconfig-rmUniqueItems)
 	((rm -rf ../schemas/jshintrc-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/jshintrc)
 	((rm -rf ../schemas/lazygit-rmUniqueItems-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/lazygit-rmUniqueItems)
 	((rm -rf ../schemas/lerna-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/lerna)

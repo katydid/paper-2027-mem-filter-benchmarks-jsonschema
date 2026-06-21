@@ -98,4 +98,3 @@ We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
 * Lots of libraries do not support unicode strings properly, so random generation of documents has been limited to ascii strings.
 * Since we using JSONL for documents, we do not generate newlines in strings.
 * Number generation has been limited to 64 bit floats for the generator and ints for the mutator, to avoid issues some implementations we having.
-* Mutation is [limited in some cases to avoid issues with certain implementations](./generator/Makefile) until they can be fixed.
