@@ -15,8 +15,6 @@
 generate:
 	go run ./cmd/generator -seed=123456 -num=10000 ../schemas/
 
-# TODO fix vercel-invalid: jsu-c, jsu-java, jsu-js, jsu-py: https://github.com/clairey-zx81/json-model/issues/10
-
 mutate:
 	((rm -rf ../schemas/ansible-meta-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/ansible-meta)
 	((rm -rf ../schemas/aws-cdk-invalid || true) && go run ./cmd/mutator -seed=123456 ../schemas/aws-cdk)
