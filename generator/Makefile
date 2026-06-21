@@ -17,7 +17,6 @@ generate:
 
 # TODO fix jsconfig-rmUniqueItems-invalid: generation is limited to 400 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
 # TODO fix importmap-invalid: generation is limited to 500 instances to avoid issues with networknt. https://github.com/networknt/json-schema-validator/issues/1252
-# TODO fix ui5-invalid: jsu-c, jsu-java, jsu-js, jsu-py https://github.com/clairey-zx81/json-model/issues/8
 # TODO fix deno-rmUniqueItems-invalid: fields are not added to avoid issues with networknt.
 # TODO fix vercel-invalid: jsu-c, jsu-java, jsu-js, jsu-py items are not added or removed to avoid issues with jsu
 

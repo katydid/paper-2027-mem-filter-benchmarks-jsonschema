@@ -99,6 +99,9 @@ func collectSchema(folder string) (*Schema, error) {
 		return nil, err
 	}
 	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
 		basename := file.Name()
 		filename := filepath.Join(folder, basename)
 		data, err := os.ReadFile(filename)

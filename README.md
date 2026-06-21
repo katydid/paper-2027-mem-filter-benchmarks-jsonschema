@@ -91,10 +91,11 @@ We run a curated list of [curated_schemas.txt](./curated_schemas.txt) where:
 * We have removed `cspell`, since the following implementations all have problems with it: boon, go-kaptinlin, go-santhosh-tekuri, json_schemer and kmp. One problem is for using Perl syntax regexes `(?=`.
 * We have removed `ui5-manifest`, since the following implementations all have problems with it: ajv, ajv-bun, boon, go-kaptinlin, go-santhosh-tekuri, hyperjump, networknt. One problem is for using Perl syntax regexes `(?=`.
 * We have removed `krakend`, since the following implementations all have problems with it: ajv, ajv-bun, hyperjump, networknt.  One problem is for `Invalid regular expression: /^\/[^\*\?\&\%]*(\/\*)?$/u`.
-* We have removed `helm-chart-lock` since the following implementations all have problems with it: [jsu-py, jsu-java](https://github.com/clairey-zx81/json-model/issues/5), [opis](https://github.com/opis/json-schema/issues/166), [jsdotnet](https://github.com/json-everything/json-everything/issues/1043).
+* We have removed `helm-chart-lock` since the following implementations all have problems with it: [jsu-py, jsu-java](https://github.com/clairey-zx81/json-model/issues/5), [opis](https://github.com/opis/json-schema/issues/166), [jsdotnet](https://github.com/json-everything/json-everything/issues/1043), which might be because it uses invalid uri's that start out with relative paths `file://../../`.
 
 ### Shortcomings of document generator
 
 * Lots of libraries do not support unicode strings properly, so random generation of documents has been limited to ascii strings.
 * Since we using JSONL for documents, we do not generate newlines in strings.
 * Number generation has been limited to 64 bit floats for the generator and ints for the mutator, to avoid issues some implementations we having.
+* Mutation is [limited in some cases to avoid issues with certain implementations](./generator/Makefile) until they can be fixed.
