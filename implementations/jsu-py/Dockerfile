@@ -11,8 +11,8 @@ RUN apt update ; \
         git time jq curl vim ca-certificates
 
 # install from source
-ARG JSU=dev
-ARG JMC=dev
+ARG JSU=0.9.11
+ARG JMC=2.0.51
 
 # version caching and force install, otherwise it would require a virtual environment
 RUN curl -s "https://api.github.com/repos/clairey-zx81/json-model/commits/${JMC}" | \

@@ -15,8 +15,8 @@ RUN apt update ; \
         libatomic1
 
 # install this version from source
-ARG JMC=dev
-ARG JSU=dev
+ARG JSU=0.9.11
+ARG JMC=2.0.51
 
 # version caching and force install, otherwise it would require a virtual environment
 RUN curl -s "https://api.github.com/repos/clairey-zx81/json-model/commits/${JMC}" | \
