@@ -157,9 +157,9 @@ func fprintMarkdown(
 		fmt.Fprintf(w, format, a...)
 	}
 
-	p(`| name | valid | impl | rank (with parsing) | rank (without parsing) | ns/op |`)
+	p(`| name | valid | impl | rank (with parsing) | ns/op (with parsing) |`)
 	p("\n")
-	p(`| ---  | ---   | ---  | ---                 | ---                    | ---   |`)
+	p(`| ---  | ---   | ---  | ---                 | ---                  |`)
 	p("\n")
 	for _, score := range scores {
 		p("| ")
@@ -171,9 +171,7 @@ func fprintMarkdown(
 		p(" | ")
 		p("%d", score.ParsePlusWarmRank)
 		p(" | ")
-		p("%d", score.WarmRank)
-		p(" | ")
-		p("%.0f", score.WarmNsPerDoc)
+		p("%.0f", score.ParsePlusWarmNsPerDoc)
 		p(" |")
 		p("\n")
 
