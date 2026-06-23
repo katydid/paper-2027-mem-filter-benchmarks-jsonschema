@@ -792,4 +792,3 @@
 {"plugins":[["@babel/plugin-proposal-decorators",{"decoratorsBeforeExport":true}],"@babel/plugin-proposal-class-properties",526266]}
 {"presets":[[{"BONJQ1Or9lZW":null,"DpwBT65fD02JHSkICwT6VXM4j2LC8gdDfp96913F3i4ZO7l3KTN86vJ":"23IA7Rjf34gPgkuh8j4","NJuu4ASq5ty3EOgxjBNnN3lq24oaadDVd3An25XxxKMxyhtfSc7XHMbIy221U6v8f1":"C478FtD6t1z2593z2E0ACRsK2Bq3DZNrmM4aueAYPlcpi2GKs8W1T2x2oK","Yx0m55zACfAD0RrB8P3":1,"syV2K4sVGQ85Zg2P2jGd3FYSgx9vo2uWjE4kKS":true},{"targets":{"node":"6.0"}}]]}
 {"plugins":["add-module-exports","transform-es2015-modules-umd",[null,"2046y9is853f0aVPXkabM9UOKG9t5WMkWA1G5",false,true,"zYYxh8JL814h13ra0ft2WI8k5Bn","1P910w56gP7H86LWgz6mHE15"]],"presets":["es2015-loose"]}
-{"plugins":["add-module-exports"],"presets":null}

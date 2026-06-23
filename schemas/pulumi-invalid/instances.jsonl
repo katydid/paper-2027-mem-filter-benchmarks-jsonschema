@@ -3805,4 +3805,3 @@
 {"description":true,"name":"${PROJECT}","runtime":"python","template":{"config":{"aws:region":{"default":"us-east-1","description":"The AWS region to deploy into"}},"description":"JSON Classifier"}}
 {"config":{"pulumi:tags":{"value":{"pulumi:template":"digitalocean-python"}}},"description":"A minimal DigitalOcean Python Pulumi program","name":"pulumi-external-secret-operator","runtime":{"j5faU2xd80M4OL93p18d2K2U1rmmI38M7Yb922vZY379eJXp4iek":"python","options":{"toolchain":"pip","virtualenv":"venv"}}}
 {"description":"Work with Azure Storage Queue","name":"azure-queue","runtime":null}
-{"description":"Basic example of creating a slackbot","name":"aws-ts-slack","runtime":"nodejs","template":{"config":{"aws:region":{"default":"us-east-2","description":[-1,true,"IU3eY0SPvqf7YvU0jg4SXA5NIMXchjB6A67jUE67RK15yOZLy7SolBDsQ1tG5YBhJK3PPi5xgu75IKi6dd5862mvo",false,"Gwz7NjIJel53792O4nrgtx1f1N57Da10K","I6egf27mNN1YB6Tq"]}}}}

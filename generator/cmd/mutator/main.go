@@ -81,7 +81,7 @@ func main() {
 	lines := bytes.Split(instancesBytes, []byte("\n"))
 	lines = lines[:len(lines)-1]
 	if (num == nil) || (*num == -1) {
-		n := len(lines)
+		n := len(lines) - 1
 		num = &n
 	}
 	if err := os.Mkdir(dstfolder, 0755); err != nil {
@@ -102,7 +102,7 @@ func main() {
 		}
 		i++
 	}
-	newbytes := []byte(strings.Join(newlines, "\n"))
+	newbytes := []byte(strings.Join(newlines, "\n") + "\n")
 	if err := os.WriteFile(filepath.Join(dstfolder, "instances.jsonl"), newbytes, 0644); err != nil {
 		panic(err)
 	}

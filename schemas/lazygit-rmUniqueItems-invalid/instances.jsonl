@@ -278,4 +278,3 @@
 {"customCommands":[{"command":"git remote prune {{.SelectedRemote.Name}}","context":"remotes","description":"prune remote","key":"p","loadingText":"pruning remote"},false],"gui":{"theme":{"activeBorderColor":["#a6e3a1","bold"],"cherryPickedCommitBgColor":["#94e2d5"],"cherryPickedCommitFgColor":["#89b4fa"],"defaultFgColor":["default"],"inactiveBorderColor":["#cdd6f4"],"optionsTextColor":["#89b4fa"],"selectedLineBgColor":["#313260","bold"],"selectedRangeBgColor":["#313260","bold"],"unstagedChangesColor":["red"]}}}
 {"git":{"commit":{"signOff":[true,7,true,"8K05lVlW1x923SKS9qC",true,"mCtKYkKKe9P68k38O6Mbx6kQj92TpoDC6t7WN47S0cFPI6W4929NKrBx86qK1oIZ5M3y4d75aOz4x",5]}}}
 {"keybinding":{"universal":{"XoG4J8KbJ8iTfKxDRmB22k5A08i5AVGMDc9PP06849304BnfK469wmmgX8ej81L4pk0AeSiI7A5":"p","pullFiles":"P"}}}
-{"git":{"paging":{"colorArg":"always","pager":"delta --dark --paging=never"}},"gui":{"nerdFontsVersion":null}}

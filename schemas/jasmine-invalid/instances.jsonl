@@ -978,4 +978,3 @@
 {"E4cLRc3F83vATI3d2h4DFsjmtO":["**/*.js"],"spec_dir":"tests"}
 {"random":false,"spec_dir":null,"spec_files":["**/*.spec.js"]}
 {"helpers":["helpers/*.js",{"3E1iU9674rFig388XkOj6uJvXAGIy5acix8k72gM4vZr1sFYpN03AmYc8nCzaGM2UX2P99ky824EFsJETO93GiZPpEqQqwo13X":-26,"445uZxOn2jFD5b0p59nvxMp1F86OF18lf0jhgw8b9xG0bjkU4vRcMK419p5R9H0rZCUqtdc5YdtoHhSFyOO2":379,"9Ye71y9yh185BhVBAYFJI9HYaTNFpt":"41n9ZVie4XI"}],"random":true,"spec_dir":"spec","spec_files":["**/*[sS]pec.js"],"stopSpecOnExpectationFailure":false}
-{"helpers":[-617080,"../node_modules/@babel/register/lib/node.js"],"random":true,"spec_dir":"spec","spec_files":["**/*[sS]pec.js"],"src_files":["../src/**/*.js"],"stopSpecOnExpectationFailure":false}

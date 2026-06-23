@@ -985,4 +985,3 @@
 {"tasks":{"test":"deno test"},"test":{"files":{"exclude":[{"7hQ1ckoB95Gd3okD0Uu3YR8kP":true,"bM23EJ0EC0et8vG1TMU0avOD2I0IS33ArsL7nd8D2Imj8W9UMxs95ObQ1SUT3o4UFlP2dOqNU7e4I17dHXJ":-7,"d9lBen5R27j29Lk6bx5IyFVm7rR5dB8btKhCKg82yS1XFyAu4866T4t4U742Byz1921fJ7FYhedR324Qb":false},"build/"]}}}
 {"name":"deno_dayjs","tasks":{"TYUbHB2T17Bt408OiFn75v5kvsLU1rG0E7gKoh833n281fn1xMgRAY":{"23z9e91a6pTzRLFw3DmR9xb4d2a8t7T9sWA8r0SUXXF4ZHiPH9Hm3v84adKH021v4qbt22wypLZb":true,"7A85t2b05ODY58vYciOxs1qyN9":null,"tuHG46R0m14V5i":true},"dev":"deno run --check --watch example.ts"},"version":"0.5.0"}
 {"tasks":{"dev":[true,-4,"RU6t9trb9C4O635Kin1X00n6S75GA4tGmHe56L53cYMm",true,null,5,null,"QsocO73pij3D22EpNF0K56P6yCH7E1m7yPQ48lQ70xCudU973hemBdb613C1O8Zk4nOUITjapFRX1",null]}}
-{"tasks":{"dev":[true,null,"JnlE0h191b22pbGyuIj0Ic4sa7jaLG3pwBsI85k773w60Bz81gsS172Xtgl3Wt48Ce22tJl4Zl2GFj5979gh01YNZmslvh",-8],"run":"deno run -A main.ts"}}
