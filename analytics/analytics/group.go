@@ -41,7 +41,7 @@ func GroupByKind(lines []*Line) [][]*Line {
 	groupIndexes := make(map[string]int)
 	groups := [][]*Line{}
 	for i, line := range lines {
-		kind := line.Schema.GeneratedKind
+		kind := line.Schema.ValidationKind
 		if kind == "" {
 			kind = "valid"
 		}

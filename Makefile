@@ -59,10 +59,10 @@ mutate:
 	(cd generator && make mutate)
 
 analytics-schemas-latex:
-	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --groupGen ../../../schemas > ../../../schemas.tex)
+	(cd analytics/cmd/schemas && go run main.go --format=latex --latex.pifont --rmUniqueItems --rmSource --groupGen ../../../ > ../../../schemas.tex)
 
 analytics-schemas-md:
-	(cd analytics/cmd/schemas && go run main.go --format=md ../../../schemas > ../../../schemas.md)
+	(cd analytics/cmd/schemas && go run main.go --curated --format=md ../../../ > ../../../schemas.md)
 
 analytics-results-latex:
 	(cd analytics/cmd/result && go run main.go \
@@ -71,7 +71,7 @@ analytics-results-latex:
 	  --rmUniqueItems \
 	  --shortSchemaName \
 	  --filterSchema1 \
-	  --schemasFolder=../../../schemas \
+	  --rootFolder=../../../ \
 	  ../../../dist/report.csv \
 	  > ../../../results.tex)
 
@@ -81,7 +81,7 @@ analytics-results-md:
 	  --rmUniqueItems \
 	  --shortSchemaName \
 	  --filterSchema1 \
-	  --schemasFolder=../../../schemas \
+	  --rootFolder=../../../ \
 	  ../../../dist/report.csv \
 	  > ../../../results.md)
 
@@ -89,7 +89,7 @@ analytics-impls-md:
 	(cd analytics/cmd/impls && go run main.go \
 	  --format=md \
 	  --filterSchema1 \
-	  --schemasFolder=../../../schemas \
+	  --rootFolder=../../../ \
 	  ../../../dist/report.csv \
 	  > ../../../impls.md)
 
@@ -97,7 +97,7 @@ analytics-impls-latex:
 	(cd analytics/cmd/impls && go run main.go \
 	  --format=latex \
 	  --filterSchema1 \
-	  --schemasFolder=../../../schemas \
+	  --rootFolder=../../../ \
 	  ../../../dist/report.csv \
 	  > ../../../impls.tex)
 

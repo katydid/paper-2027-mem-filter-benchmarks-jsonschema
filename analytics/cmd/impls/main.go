@@ -20,6 +20,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"slices"
 	"strings"
 
@@ -32,7 +33,7 @@ func main() {
 	log.SetFlags(log.Lshortfile)
 	format := flag.String("format", "latex", "output format (md|latex)")
 	rmSchema1 := flag.Bool("filterSchema1", false, "filter all schemas where one implementation had an non zero exit code")
-	schemasFolder := flag.String("schemasFolder", "./schemas", "location of schemas folder")
+	rootFolder := flag.String("rootFolder", "./schemas", "location of schemas folder")
 	impl := flag.String("impls", "", "space separated list of implementations to filter")
 	flag.Parse()
 	reportFilename := "./dist/report.csv"
@@ -42,8 +43,10 @@ func main() {
 		reportFilename = flag.Args()[0]
 	}
 
-	log.Printf("analysing schemas folder at %s\n", *schemasFolder)
-	schemas, err := analytics.CollectSchemas(*schemasFolder)
+	log.Printf("analysing schemas folder at %s\n", *rootFolder)
+	curated := analytics.GetCuratedSchemas(*rootFolder)
+	schemasFolder := filepath.Join(*rootFolder, "schemas")
+	schemas, err := analytics.CollectSchemas(schemasFolder, curated)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -74,7 +77,7 @@ func main() {
 	kindGroups := analytics.GroupByKind(lines)
 	analyseds := [][]*analytics.Implementation{}
 	for i := range kindGroups {
-		kind := kindGroups[i][0].Schema.GeneratedKind
+		kind := kindGroups[i][0].Schema.ValidationKind
 		if kind == "" {
 			kind = "valid"
 		}
@@ -104,7 +107,7 @@ func getKind(impls []*analytics.Implementation) string {
 			log.Fatalf("no scores for %s", impl.Name)
 		}
 		for _, score := range impl.Scores {
-			kind := score.Line.Schema.GeneratedKind
+			kind := score.Line.Schema.ValidationKind
 			if kind == "" {
 				return "valid"
 			}

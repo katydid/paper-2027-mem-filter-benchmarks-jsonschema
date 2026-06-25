@@ -19,15 +19,16 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
 type SchemaName struct {
-	Name          string
-	PrefixName    string
-	RmUniqueItems bool
-	GeneratedKind string
-	ShortName     string
+	Name           string
+	PrefixName     string
+	RmUniqueItems  bool
+	ValidationKind string
+	ShortName      string
 }
 
 type Schema struct {
@@ -35,13 +36,16 @@ type Schema struct {
 	Features               []string
 	Source                 string
 	Generated              bool
+	Mutated                bool
+	Collected              bool
+	Curated                bool
 	SchemaSizeBytes        int
 	NumInstances           int
 	MeanInstanceSizeBytes  float64
 	HasExistingReplacement bool
 }
 
-func CollectSchemas(folder string) ([]*Schema, error) {
+func CollectSchemas(folder string, curated []string) ([]*Schema, error) {
 	dirs, err := os.ReadDir(folder)
 	if err != nil {
 		log.Fatalf("problem reading folder %s got error: %v", folder, err)
@@ -57,6 +61,7 @@ func CollectSchemas(folder string) ([]*Schema, error) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		s.Curated = slices.Contains(curated, dir.Name())
 		schemas = append(schemas, s)
 		for _, schema := range schemas {
 			if ContainsRmUniqueItems(schemas, schema.Name) {
@@ -71,10 +76,10 @@ func ParseSchemaName(name string) (*SchemaName, error) {
 	s := &SchemaName{Name: name}
 	shortName := name
 	if strings.Contains(name, "-invalid") {
-		s.GeneratedKind = "invalid"
+		s.ValidationKind = "invalid"
 		shortName = strings.Replace(shortName, "-invalid", "", 1)
 	} else if strings.Contains(name, "-valid") {
-		s.GeneratedKind = "valid"
+		s.ValidationKind = "valid"
 		shortName = strings.Replace(shortName, "-valid", "", 1)
 	}
 	if strings.Contains(name, "-rmUniqueItems") {
@@ -117,6 +122,10 @@ func collectSchema(folder string) (*Schema, error) {
 			s.Source = string(data)
 		case ".generated":
 			s.Generated = true
+		case ".mutated":
+			s.Mutated = true
+		case ".collected":
+			s.Collected = true
 		case "instances.jsonl":
 			instances := bytes.Split(data, []byte("\n"))
 			s.NumInstances = len(instances)
@@ -211,11 +220,11 @@ func GroupGenerated(schemas []*Schema) []*Schema {
 			invalidSchema := FindSchema(schemas, invalidName)
 			groupSchema := &Schema{
 				SchemaName: SchemaName{
-					Name:          name,
-					PrefixName:    validSchema.PrefixName,
-					RmUniqueItems: validSchema.RmUniqueItems,
-					GeneratedKind: "",
-					ShortName:     validSchema.ShortName,
+					Name:           name,
+					PrefixName:     validSchema.PrefixName,
+					RmUniqueItems:  validSchema.RmUniqueItems,
+					ValidationKind: "",
+					ShortName:      validSchema.ShortName,
 				},
 				Features:               validSchema.Features,
 				Source:                 validSchema.Source,

@@ -20,6 +20,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/analytics/analytics"
@@ -32,7 +33,7 @@ func main() {
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
 	shortSchemaName := flag.Bool("shortSchemaName", false, "write short schema name")
 	rmSchema1 := flag.Bool("filterSchema1", false, "filter all schemas where one implementation had an non zero exit code")
-	schemasFolder := flag.String("schemasFolder", "./schemas", "location of schemas folder")
+	rootFolder := flag.String("rootFolder", "./schemas", "location of schemas folder")
 	impl := flag.String("impls", "", "space separated list of implementations to filter")
 	flag.Parse()
 	reportFilename := "./dist/report.csv"
@@ -42,8 +43,10 @@ func main() {
 		reportFilename = flag.Args()[0]
 	}
 
-	log.Printf("analysing schemas folder at %s\n", *schemasFolder)
-	schemas, err := analytics.CollectSchemas(*schemasFolder)
+	log.Printf("analysing schemas folder at %s\n", *rootFolder)
+	curated := analytics.GetCuratedSchemas(*rootFolder)
+	schemasFolder := filepath.Join(*rootFolder, "schemas")
+	schemas, err := analytics.CollectSchemas(schemasFolder, curated)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -133,7 +136,7 @@ func fprintLatex(
 		}
 		p("%s", sprintName(score.Line.Schema.Name))
 		p(" & ")
-		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "valid" || score.Line.Schema.GeneratedKind == ""))
+		p("%s", sprintBool(score.Line.Schema.ValidationKind == "valid" || score.Line.Schema.ValidationKind == ""))
 		p(" & ")
 		p("%d", score.ParsePlusWarmRank)
 		p(" & ")
@@ -165,7 +168,7 @@ func fprintMarkdown(
 		p("| ")
 		p("%s", sprintName(score.Line.Schema.ShortName))
 		p(" | ")
-		p("%s", sprintBool(score.Line.Schema.GeneratedKind == "valid" || score.Line.Schema.GeneratedKind == ""))
+		p("%s", sprintBool(score.Line.Schema.ValidationKind == "valid" || score.Line.Schema.ValidationKind == ""))
 		p(" | ")
 		p("%s", score.Line.Implementation)
 		p(" | ")

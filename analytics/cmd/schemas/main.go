@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/katydid/validator-jsonschema-benchmarks/analytics/analytics"
@@ -18,13 +20,16 @@ func main() {
 	latexPifont := flag.Bool("latex.pifont", false, "replace yes/no in with \\cmark/\\xmark, requires adding the following to your latex: \\usepackage{pifont}\\newcommand{\\cmark}{\\ding{51}}\\newcommand{\\xmark}{\\ding{55}}")
 	rmSource := flag.Bool("rmSource", false, "remove prefix source from schema name, for example example-x becomes x")
 	groupGen := flag.Bool("groupGen", false, "group generated schemas together")
+	onlyCurated := flag.Bool("curated", true, "only show curated schemas")
 	flag.Parse()
-	if len(flag.Args()) == 0 {
-		log.Fatalf("expected location of schemas folder as first argument to command")
+	rootFolder := "."
+	if len(flag.Args()) > 0 {
+		rootFolder = flag.Args()[0]
 	}
-	schemasFolder := flag.Args()[0]
+	curated := analytics.GetCuratedSchemas(rootFolder)
+	schemasFolder := filepath.Join(rootFolder, "schemas")
 	log.Printf("analysing schemas folder at %s\n", schemasFolder)
-	schemas, err := analytics.CollectSchemas(schemasFolder)
+	schemas, err := analytics.CollectSchemas(schemasFolder, curated)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,6 +41,11 @@ func main() {
 	}
 	if *groupGen {
 		schemas = analytics.GroupGenerated(schemas)
+	}
+	if *onlyCurated {
+		schemas = slices.DeleteFunc(schemas, func(s *analytics.Schema) bool {
+			return !s.Curated
+		})
 	}
 	switch *format {
 	case "html":
@@ -86,11 +96,33 @@ func fprintMarkdown(w io.Writer, schemas []*analytics.Schema) {
 	p := func(format string, a ...any) {
 		fmt.Fprintf(w, format, a...)
 	}
-	p("|Dataset name|# Docs|Schema Size (KB)|Mean Doc. Size (B)|\n")
-	p("|---|---|---|---|\n")
-	for _, schema := range schemas {
+	p("|#|Dataset name|Source|Valid/InValid|uniqueItems|# Docs|Schema Size (KB)|Mean Doc. Size (B)|\n")
+	p("|---|---|---|---|---|---|---|---|\n")
+	for i, schema := range schemas {
 		p("| ")
+		p("%d", i+1)
+		p(" | ")
 		p("%s", schema.Name)
+		p(" | ")
+		if schema.Generated {
+			p("generated")
+		} else if schema.Mutated {
+			p("mutated")
+		} else {
+			p("collected")
+		}
+		p(" | ")
+		if schema.ValidationKind == "invalid" {
+			p("invalid")
+		} else {
+			p("valid")
+		}
+		p(" | ")
+		if strings.Contains(schema.Name, "-rmUniqueItems") {
+			p("removed")
+		} else {
+			p("none")
+		}
 		p(" | ")
 		p("%d", schema.NumInstances)
 		p(" | ")

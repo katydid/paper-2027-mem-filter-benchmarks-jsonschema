@@ -106,6 +106,9 @@ func main() {
 	if err := os.WriteFile(filepath.Join(dstfolder, "instances.jsonl"), newbytes, 0644); err != nil {
 		panic(err)
 	}
+	if err := os.WriteFile(filepath.Join(dstfolder, ".mutated"), []byte{}, 0644); err != nil {
+		panic(err)
+	}
 }
 
 func mutate(c *config, r rand.Rand, v *jsonschema.Schema, line string) *string {
