@@ -10,5 +10,5 @@ github.com/katydid/parser-go-reflect v0.3.5 h1:M74uwcsGBboleYnsoZgFKVfsf6+fEHCXo
 github.com/katydid/parser-go-reflect v0.3.5/go.mod h1:BY97hzM9BnqraDHZJkrsTRQ2WXlizZKX+I84LbX98BY=
 github.com/katydid/validator-go v0.6.5-0.20260626075427-48d22ab296eb h1:Xdk79RJ1UUm41kMt59AWq8cl3Q0gtQnZGOribsgPwjU=
 github.com/katydid/validator-go v0.6.5-0.20260626075427-48d22ab296eb/go.mod h1:ynv0Bda23kvggMEfPP2CIknEXtFulVQy6/3FPuHMYG4=
-github.com/katydid/validator-go-jsonschema v0.0.0-20260626075551-7cfc2a852f88 h1:OTVzeDzbr68xyfllw870B8cL1Gj8y18AX3AV3wSbLD0=
-github.com/katydid/validator-go-jsonschema v0.0.0-20260626075551-7cfc2a852f88/go.mod h1:pek0Z7CTO2XzGYQlEgLAPrwPscnZW1q9mAdFq78CIOk=
+github.com/katydid/validator-go-jsonschema v0.0.0-20260626124019-f63502db1aed h1:u8JCZTFMfWIbVWgrAEQBsPx5GHFhAHsG9Oo7WffchXY=
+github.com/katydid/validator-go-jsonschema v0.0.0-20260626124019-f63502db1aed/go.mod h1:pek0Z7CTO2XzGYQlEgLAPrwPscnZW1q9mAdFq78CIOk=
