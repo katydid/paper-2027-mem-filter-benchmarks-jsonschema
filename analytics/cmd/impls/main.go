@@ -242,7 +242,6 @@ func fprintMarkdown(
 		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-auto-json" })
 		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-mem-json" })
 	}
-
 	p("\n")
 	p(`## API Gateway with generic reuse use case (valid docs and parsing time excluded)`)
 	for i, impls := range implss {
@@ -304,8 +303,14 @@ func fprintLatex(
 		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
 			return analytics.FloatCompare(x.MedianParsePlusWarmNsPerDoc, y.MedianParsePlusWarmNsPerDoc)
 		})
-		for i, impl := range impls {
-			p("%d", i)
+		j := 0
+		for _, impl := range impls {
+			if impl.Name == "go-katydid-auto-reflect" || impl.Name == "go-katydid-mem-reflect" {
+				// remove katydid-auto-reflect and katydid-mem-reflect the objects they create will be discard and -json alternatives are faster.
+				continue
+			}
+			j++
+			p("%d", j)
 			p(" & ")
 			p("%s", sprint(implDetails[impl.Name].Name))
 			p(" & ")
@@ -321,11 +326,6 @@ func fprintLatex(
 		p("%% END Generated tabular\n")
 	}
 
-	// remove katydid-auto-json and katydid-mem-json, since they both do not create any structures that can be reused
-	for i := range implss {
-		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-auto-json" })
-		implss[i] = slices.DeleteFunc(implss[i], func(impl *analytics.Implementation) bool { return impl.Name == "go-katydid-mem-json" })
-	}
 	for i, impls := range implss {
 		p("%% BEGIN Generated tabular for kind: %s and parsing excluded\n", getKind(implss[i]))
 		p("\\begin{tabular}{ll|l|ll}\n")
@@ -336,8 +336,14 @@ func fprintLatex(
 		slices.SortFunc(impls, func(x, y *analytics.Implementation) int {
 			return analytics.FloatCompare(x.MedianWarmNsPerDoc, y.MedianWarmNsPerDoc)
 		})
-		for i, impl := range impls {
-			p("%d", i)
+		j := 0
+		for _, impl := range impls {
+			if impl.Name == "go-katydid-auto-json" || impl.Name == "go-katydid-mem-json" {
+				// remove katydid-auto-json and katydid-mem-json, since they both do not create any structures that can be reused
+				continue
+			}
+			j++
+			p("%d", j)
 			p(" & ")
 			p("%s", sprint(implDetails[impl.Name].Name))
 			p(" & ")
