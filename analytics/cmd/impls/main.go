@@ -125,11 +125,11 @@ type details struct {
 }
 
 var implDetails = map[string]*details{
-	"ajv":                     {Name: "Ajv", Lang: "Javascript", Link: "https://ajv.js.org/"},
-	"ajv-bun":                 {Name: "Ajv", Lang: "Javascript (Bun)", Link: "https://ajv.js.org/"},
+	"ajv":                     {Name: "Ajv", Lang: "Javascript (gen)", Link: "https://ajv.js.org/"},
+	"ajv-bun":                 {Name: "Ajv-Bun", Lang: "Javascript (gen)", Link: "https://ajv.js.org/"},
 	"blaze":                   {Name: "Blaze", Lang: "C++", Link: "https://github.com/sourcemeta/blaze"},
 	"boon":                    {Name: "boon", Lang: "Rust", Link: "https://github.com/santhosh-tekuri/boon"},
-	"corvus":                  {Name: "Corvus.JsonSchema", Lang: "C# (gen)", Link: "https://github.com/corvus-dotnet/Corvus.JsonSchema"},
+	"corvus":                  {Name: "Corvus", Lang: "C# (gen)", Link: "https://github.com/corvus-dotnet/Corvus.JsonSchema"},
 	"go-google":               {Name: "Google", Lang: "Golang", Link: "https://github.com/google/jsonschema-go"},
 	"go-json-schema-spec":     {Name: "json-schema-spec", Lang: "Golang", Link: "https://github.com/json-schema-spec/json-schema-go"},
 	"go-kaptinlin":            {Name: "kaptinlin", Lang: "Golang", Link: "https://github.com/kaptinlin/jsonschema"},
@@ -151,7 +151,7 @@ var implDetails = map[string]*details{
 	"kmp":                     {Name: "OptimumCode", Lang: "Kotlin", Link: "https://github.com/OptimumCode/json-schema-validator"},
 	"networknt":               {Name: "networknt", Lang: "Java", Link: "https://github.com/networknt/json-schema-validator"},
 	"opis":                    {Name: "Opis", Lang: "PHP", Link: "https://opis.io/json-schema"},
-	"py-jsonschema":           {Name: "python-jsonschema", Lang: "Python", Link: "https://github.com/python-jsonschema/jsonschema/"},
+	"py-jsonschema":           {Name: "py-jsonschema", Lang: "Python", Link: "https://github.com/python-jsonschema/jsonschema/"},
 	"rapidjson":               {Name: "RapidJSON", Lang: "C++", Link: "https://github.com/Tencent/rapidjson/"},
 	"schemasafe":              {Name: "schemasafe", Lang: "Javascript", Link: "https://github.com/ExodusMovement/schemasafe"},
 }
@@ -305,7 +305,7 @@ func fprintLatex(
 		})
 		j := 0
 		for _, impl := range impls {
-			if impl.Name == "go-katydid-auto-reflect" || impl.Name == "go-katydid-mem-reflect" {
+			if impl.Name == "go-katydid-auto-reflect" || impl.Name == "go-katydid-mem-reflect" || impl.Name == "go-katydid-mem-json" {
 				// remove katydid-auto-reflect and katydid-mem-reflect the objects they create will be discard and -json alternatives are faster.
 				continue
 			}
@@ -338,7 +338,7 @@ func fprintLatex(
 		})
 		j := 0
 		for _, impl := range impls {
-			if impl.Name == "go-katydid-auto-json" || impl.Name == "go-katydid-mem-json" {
+			if impl.Name == "go-katydid-auto-json" || impl.Name == "go-katydid-mem-json" || impl.Name == "go-katydid-mem-reflect" {
 				// remove katydid-auto-json and katydid-mem-json, since they both do not create any structures that can be reused
 				continue
 			}
