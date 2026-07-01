@@ -1,4 +1,4 @@
-# JSON Schema Benchmark
+# Memoized Derivatives for Fast Filtering and Schema Validation of Semi-Structured Data (JSON Schema Benchmarks)
 
 This benchmark suite builds on the amazing work of [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) for the purpose of benchmarking Katydid's JSONSchema implementation against other JSONSchema validators.
 Each validator is run with multiple schemas and a collection of documents that might be valid or invalid.
