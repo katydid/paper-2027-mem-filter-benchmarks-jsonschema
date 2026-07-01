@@ -3,6 +3,8 @@
 This benchmark suite builds on the amazing work of [SourceMeta's JSONSchema Benchmarks](https://github.com/sourcemeta-research/jsonschema-benchmark/) for the purpose of benchmarking Katydid's JSONSchema implementation against other JSONSchema validators.
 Each validator is run with multiple schemas and a collection of documents that might be valid or invalid.
 
+This repo is a clone of https://github.com/katydid/validator-jsonschema-benchmarks at b17d2fb3a09341ed868a189f1a4914fe2184f6e6
+
 ## Results
 
 See the [most recent recorded results](./recorded/2026-06-24/Readme.md).
